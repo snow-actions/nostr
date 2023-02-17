@@ -40,15 +40,13 @@ const nostr = async (relay, privateKey, content) => {
   let done = false;
 
   const ws = new WebSocket(relay);
-  ws.on('error', () => {
+  ws.on('error', data => {
     console.error('Error');
+    throw new Error(data);
   });
   ws.on('open', () => {
     console.info('Opened');
     ws.send(message);
-  });
-  ws.on('close', () => {
-    console.info('Closed');
   });
   ws.on('message', json => {
     console.info('Message');
@@ -63,7 +61,7 @@ const nostr = async (relay, privateKey, content) => {
     done = true;
   });
 
-  while (!done && ws.readyState !== ws.CLOSED) {
+  while (!done) {
     console.info('waiting...');
     await setTimeout(100);
   }
