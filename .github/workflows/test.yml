@@ -25,7 +25,7 @@ jobs:
     - uses: ./
       with:
         relay: ${{ vars.NOSTR_RELAY }}
-        private_key: ${{ secrets.NOSTR_PRIVATE_KEY }}
+        private-key: ${{ secrets.NOSTR_PRIVATE_KEY }}
         content: |
           test
           https://github.com/snow-actions/nostr
