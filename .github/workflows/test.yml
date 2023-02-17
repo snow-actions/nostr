@@ -6,7 +6,7 @@ on:
       - main
 
 jobs:
-  test:
+  unit-test:
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
@@ -16,3 +16,16 @@ jobs:
         env:
           NOSTR_RELAY: ${{ vars.NOSTR_RELAY }}
           NOSTR_PRIVATE_KEY: ${{ secrets.NOSTR_PRIVATE_KEY }}
+
+  e2e-test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+    - uses: actions/checkout@v3
+    - uses: ./
+      with:
+        relay: ${{ vars.NOSTR_RELAY }}
+        private_key: ${{ secrets.NOSTR_PRIVATE_KEY }}
+        content: |
+          test
+          https://github.com/snow-actions/nostr
