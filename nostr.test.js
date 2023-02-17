@@ -1,4 +1,4 @@
-import { nostr } from './nostr.js';
+const nostr = require('./nostr');
 
 test('test', async () => {
   const relay = process.env.NOSTR_RELAY;

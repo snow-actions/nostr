@@ -1,5 +1,5 @@
-import core from '@actions/core';
-import { nostr } from './nostr.js';
+const core = require('@actions/core');
+const nostr = require('./nostr');
 
 async function run() {
   try {

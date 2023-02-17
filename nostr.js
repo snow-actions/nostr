@@ -1,6 +1,7 @@
-import * as secp from '@noble/secp256k1';
-import { setTimeout } from 'timers/promises';
-import WebSocket from 'ws';
+const secp = require('@noble/secp256k1');
+console.log(secp);
+const { setTimeout } = require('node:timers/promises');
+const WebSocket = require('ws');
 
 const nostr = async (relay, privateKey, content) => {
   console.info(`Connect to ${relay}`);
@@ -67,4 +68,4 @@ const nostr = async (relay, privateKey, content) => {
   }
 };
 
-export { nostr };
+module.exports = nostr;
