@@ -1,18 +1,13 @@
 import core from '@actions/core';
-import { wait } from './wait.js';
+import { nostr } from './nostr.js';
 
-
-// most @actions toolkit packages have async methods
 async function run() {
   try {
-    const ms = core.getInput('milliseconds');
-    core.info(`Waiting ${ms} milliseconds ...`);
-
-    core.debug((new Date()).toTimeString()); // debug is only output if you set the secret `ACTIONS_RUNNER_DEBUG` to true
-    await wait(parseInt(ms));
-    core.info((new Date()).toTimeString());
-
-    core.setOutput('time', new Date().toTimeString());
+    const relay = core.getInput('relay');
+    const privateKey = core.getInput('private-key');
+    const payload = core.getInput('payload');
+    core.setSecret(privateKey);
+    await nostr(relay, privateKey, payload);
   } catch (error) {
     core.setFailed(error.message);
   }
