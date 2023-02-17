@@ -7,4 +7,4 @@ let wait = function (milliseconds) {
   });
 };
 
-module.exports = wait;
+export { wait };

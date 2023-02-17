@@ -3,10 +3,11 @@
   "version": "1.0.0",
   "description": "JavaScript Action Template",
   "main": "index.js",
+  "type": "module",
   "scripts": {
     "lint": "eslint .",
     "prepare": "ncc build index.js -o dist --source-map --license licenses.txt",
-    "test": "jest",
+    "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js",
     "all": "npm run lint && npm run prepare && npm run test"
   },
   "repository": {

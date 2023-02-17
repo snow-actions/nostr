@@ -1,7 +1,11 @@
-const wait = require('./wait');
-const process = require('process');
-const cp = require('child_process');
-const path = require('path');
+import { wait } from './wait.js';
+import process from 'process';
+import cp from 'child_process';
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 test('throws invalid number', async () => {
   await expect(wait('foo')).rejects.toThrow('milliseconds not a number');

@@ -1,5 +1,5 @@
-const core = require('@actions/core');
-const wait = require('./wait');
+import core from '@actions/core';
+import { wait } from './wait.js';
 
 
 // most @actions toolkit packages have async methods
