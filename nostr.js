@@ -1,8 +1,12 @@
 const secp = require('@noble/secp256k1');
-console.log(secp);
 const { setTimeout } = require('node:timers/promises');
 const WebSocket = require('ws');
 
+/**
+ * @param {string} relay
+ * @param {string} privateKey
+ * @param {string} content
+ */
 const nostr = async (relay, privateKey, content) => {
   console.info(`Connect to ${relay}`);
 
