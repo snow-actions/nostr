@@ -1,4 +1,4 @@
-name: Nostr
+name: Nostr Action
 description: Send EVENT to Nostr
 branding:
   icon: message-circle
