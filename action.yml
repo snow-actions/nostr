@@ -1,5 +1,8 @@
 name: Nostr
 description: Send EVENT to Nostr
+branding:
+  icon: message-circle
+  color: purple
 inputs:
   relay:
     description: Relay URL `wss://...`
