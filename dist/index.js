@@ -8560,10 +8560,14 @@ function socketOnError() {
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 const secp = __nccwpck_require__(451);
-console.log(secp);
 const { setTimeout } = __nccwpck_require__(9397);
 const WebSocket = __nccwpck_require__(8867);
 
+/**
+ * @param {string} relay
+ * @param {string} privateKey
+ * @param {string} content
+ */
 const nostr = async (relay, privateKey, content) => {
   console.info(`Connect to ${relay}`);
 
