@@ -1,13 +1,18 @@
-name: 'Wait'
-description: 'Wait a designated number of milliseconds'
+name: Nostr
+description: Send EVENT to Nostr
+branding:
+  icon: message-circle
+  color: purple
 inputs:
-  milliseconds:  # id of input
-    description: 'number of milliseconds to wait'
+  relay:
+    description: Relay URL `wss://...`
     required: true
-    default: '1000'
-outputs:
-  time: # output will be available to future steps
-    description: 'The current time after waiting'
+  private-key:
+    description: Private key hex
+    required: true
+  content:
+    description: Content
+    required: true
 runs:
-  using: 'node16'
-  main: 'dist/index.js'
+  using: node16
+  main: dist/index.js
