@@ -5,7 +5,7 @@ inputs:
     description: Relay URL `wss://...`
     required: true
   private-key:
-    description: Private key `nsec1...` or hex
+    description: Private key hex
     required: true
   content:
     description: Content
