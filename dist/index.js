@@ -8564,13 +8564,10 @@ const { setTimeout } = __nccwpck_require__(9397);
 const WebSocket = __nccwpck_require__(8867);
 
 /**
- * @param {string} relay
  * @param {string} privateKey
  * @param {string} content
  */
-const nostr = async (relay, privateKey, content) => {
-  console.info(`Connect to ${relay}`);
-
+module.exports.createMessage = async (privateKey, content) => {
   const kind = 1;
   const tags = [];
   const publicKey = secp.utils.bytesToHex(secp.schnorr.getPublicKey(privateKey));
@@ -8603,6 +8600,16 @@ const nostr = async (relay, privateKey, content) => {
   ]);
   console.info(message);
 
+  return message;
+};
+
+/**
+ * @param {string} relay
+ * @param {object} message
+ */
+module.exports.postMessage = async (relay, message) => {
+  console.info(`Connect to ${relay}`);
+
   let done = false;
 
   const ws = new WebSocket(relay);
@@ -8632,8 +8639,6 @@ const nostr = async (relay, privateKey, content) => {
     await setTimeout(100);
   }
 };
-
-module.exports = nostr;
 
 
 /***/ }),
@@ -8824,15 +8829,22 @@ var __webpack_exports__ = {};
 // This entry need to be wrapped in an IIFE because it need to be isolated against other modules in the chunk.
 (() => {
 const core = __nccwpck_require__(2186);
-const nostr = __nccwpck_require__(458);
+const { createMessage, postMessage } = __nccwpck_require__(458);
 
 async function run() {
   try {
-    const relay = core.getInput('relay');
+    const relaysInput = core.getInput('relays');
+    core.info(relaysInput);
+    const relays = relaysInput.split("\n").map(x => x.trim()).filter(x => x.startsWith('wss://'));
+    core.info(relays.join("\n"))
     const privateKey = core.getInput('private-key');
     const content = core.getInput('content');
     core.setSecret(privateKey);
-    await nostr(relay, privateKey, content);
+    const message = await createMessage(privatekey, content);
+    for (const relay of relays) {
+      core.info(relay);
+      await postMessage(relay, message);
+    }
   } catch (error) {
     core.setFailed(error.message);
   }
