@@ -3,13 +3,10 @@ const { setTimeout } = require('node:timers/promises');
 const WebSocket = require('ws');
 
 /**
- * @param {string} relay
  * @param {string} privateKey
  * @param {string} content
  */
-const nostr = async (relay, privateKey, content) => {
-  console.info(`Connect to ${relay}`);
-
+module.exports.createMessage = async (privateKey, content) => {
   const kind = 1;
   const tags = [];
   const publicKey = secp.utils.bytesToHex(secp.schnorr.getPublicKey(privateKey));
@@ -42,6 +39,16 @@ const nostr = async (relay, privateKey, content) => {
   ]);
   console.info(message);
 
+  return message;
+};
+
+/**
+ * @param {string} relay
+ * @param {object} message
+ */
+module.exports.postMessage = async (relay, message) => {
+  console.info(`Connect to ${relay}`);
+
   let done = false;
 
   const ws = new WebSocket(relay);
@@ -71,5 +78,3 @@ const nostr = async (relay, privateKey, content) => {
     await setTimeout(100);
   }
 };
-
-module.exports = nostr;

@@ -1,5 +1,5 @@
 const core = require('@actions/core');
-const nostr = require('./nostr');
+const { createMessage, postMessage } = require('./nostr');
 
 async function run() {
   try {
@@ -7,7 +7,8 @@ async function run() {
     const privateKey = core.getInput('private-key');
     const content = core.getInput('content');
     core.setSecret(privateKey);
-    await nostr(relay, privateKey, content);
+    const message = await createMessage(privatekey, content);
+    await postMessage(relay, message);
   } catch (error) {
     core.setFailed(error.message);
   }
