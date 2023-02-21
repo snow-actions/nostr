@@ -9,6 +9,7 @@ async function run() {
     core.setSecret(privateKey);
     const message = await createMessage(privatekey, content);
     for (const relay of relays) {
+      core.info(relay);
       await postMessage(relay, message);
     }
   } catch (error) {
