@@ -4,8 +4,8 @@ branding:
   icon: message-circle
   color: purple
 inputs:
-  relay:
-    description: Relay URL `wss://...`
+  relays:
+    description: Relay URLs `wss://...` (separated by `\n`)
     required: true
   private-key:
     description: Private key hex

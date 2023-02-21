@@ -8,7 +8,9 @@ Send EVENT to Nostr.
 steps:
   - uses: snow-actions/nostr@v1.0.0
     with:
-      relay: ${{ vars.NOSTR_RELAY }}
+      relays: |
+        ${{ vars.NOSTR_RELAY_1 }}
+        ${{ vars.NOSTR_RELAY_2 }}
       private-key: ${{ secrets.NOSTR_PRIVATE_KEY }}
       content: |
         Text message
@@ -20,7 +22,7 @@ See [action.yml](action.yml)
 
 | Name | Description | Default | Required |
 | - | - | - | - |
-| `relay` | Relay URL `wss://...` | - | yes |
+| `relays` | Relay URLs `wss://...` (separated by `\n`) | - | yes |
 | `private-key` | Private key hex | - | yes |
 | `content` | Content | - | yes |
 
