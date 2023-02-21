@@ -3,12 +3,14 @@ const { createMessage, postMessage } = require('./nostr');
 
 async function run() {
   try {
-    const relay = core.getInput('relay');
+    const relays = core.getInput('relays').split("\n").map(x => x.trim()).filter(x => x.startsWith('wss://'));
     const privateKey = core.getInput('private-key');
     const content = core.getInput('content');
     core.setSecret(privateKey);
     const message = await createMessage(privatekey, content);
-    await postMessage(relay, message);
+    for (const relay of relays) {
+      await postMessage(relay, message);
+    }
   } catch (error) {
     core.setFailed(error.message);
   }

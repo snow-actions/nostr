@@ -18,9 +18,11 @@ test('test createMessage', async () => {
 });
 
 test('test', async () => {
-  const relay = process.env.NOSTR_RELAY;
+  const relays = process.env.NOSTR_RELAYS.split("\n").map(x => x.trim()).filter(x => x.startsWith('wss://'));
   const privatekey = process.env.NOSTR_PRIVATE_KEY;
   const content = 'test';
   const message = await createMessage(privatekey, content);
-  await postMessage(relay, message);
+  for (const relay of relays) {
+    await postMessage(relay, message);
+  }
 });
