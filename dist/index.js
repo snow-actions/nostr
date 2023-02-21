@@ -8838,7 +8838,7 @@ async function run() {
     const privateKey = core.getInput('private-key');
     const content = core.getInput('content');
     core.setSecret(privateKey);
-    const message = await createMessage(privatekey, content);
+    const message = await createMessage(privateKey, content);
     for (const relay of relays) {
       await postMessage(relay, message);
     }
