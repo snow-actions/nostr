@@ -24,7 +24,8 @@ jobs:
     - uses: actions/checkout@v3
     - uses: ./
       with:
-        relays: ${{ vars.NOSTR_RELAYS }}
+        relays: |
+          ${{ vars.NOSTR_RELAYS }}
         private-key: ${{ secrets.NOSTR_PRIVATE_KEY }}
         content: |
           test
