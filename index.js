@@ -3,7 +3,9 @@ const { createMessage, postMessage } = require('./nostr');
 
 async function run() {
   try {
-    const relays = core.getInput('relays').split("\n").map(x => x.trim()).filter(x => x.startsWith('wss://'));
+    const relaysInput = core.getInput('relays');
+    core.info(relaysInput);
+    const relays = relaysInput.split("\n").map(x => x.trim()).filter(x => x.startsWith('wss://'));
     core.info(relays.join("\n"))
     const privateKey = core.getInput('private-key');
     const content = core.getInput('content');
