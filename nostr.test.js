@@ -1,4 +1,5 @@
 const nostr = require('./nostr');
+require('dotenv').config();
 
 test('test', async () => {
   const relay = process.env.NOSTR_RELAY;
