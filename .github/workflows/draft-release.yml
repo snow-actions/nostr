@@ -18,4 +18,4 @@ jobs:
       - name: Create release draft
         run: |
           version=${RELEASE_BRANCH#release/}
-          gh release create ${version} --draft --title ${version} --generate-notes --discussion-category Announcements
+          gh release create ${version} --title ${version} --generate-notes --discussion-category Announcements
