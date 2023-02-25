@@ -1,8 +1,13 @@
-name: Draft release
+name: Release
 
 on:
   pull_request:
     types: [ closed ]
+  workflow_dispatch:
+    inputs:
+      version:
+        description: Version
+        required: true
 
 jobs:
   release:
@@ -12,7 +17,7 @@ jobs:
     env:
       GH_TOKEN: ${{ github.token }}
       GH_REPO: ${{ github.repository }}
-      RELEASE_BRANCH: ${{ github.event.pull_request.head.ref }}
+      RELEASE_BRANCH: ${{ github.event.pull_request.head.ref || inputs.version }}
 
     steps:
       - name: Create release draft
