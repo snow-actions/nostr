@@ -14,8 +14,8 @@ jobs:
       - run: npm ci
       - run: npm test
         env:
-          NOSTR_RELAYS: ${{ vars.NOSTR_RELAYS }}
-          NOSTR_PRIVATE_KEY: ${{ secrets.NOSTR_PRIVATE_KEY }}
+          NOSTR_RELAYS: ${{ vars.NOSTR_RELAYS_TEST }}
+          NOSTR_PRIVATE_KEY: ${{ secrets.NOSTR_PRIVATE_KEY_TEST }}
 
   e2e-test:
     runs-on: ubuntu-latest
@@ -25,8 +25,8 @@ jobs:
     - uses: ./
       with:
         relays: |
-          ${{ vars.NOSTR_RELAYS }}
-        private-key: ${{ secrets.NOSTR_PRIVATE_KEY }}
+          ${{ vars.NOSTR_RELAYS_TEST }}
+        private-key: ${{ secrets.NOSTR_PRIVATE_KEY_TEST }}
         content: |
           test
           https://github.com/snow-actions/nostr
