@@ -17,7 +17,7 @@ jobs:
     env:
       GH_TOKEN: ${{ github.token }}
       GH_REPO: ${{ github.repository }}
-      RELEASE_BRANCH: ${{ github.event.pull_request.head.ref }}
+      RELEASE_BRANCH: ${{ github.event.pull_request.head.ref || inputs.version }}
 
     steps:
       - name: Create release draft
