@@ -49,32 +49,31 @@ module.exports.createMessage = async (privateKey, content) => {
 module.exports.postMessage = async (relay, message) => {
   console.info(`Connect to ${relay}`);
 
-  let done = false;
+  return new Promise(async (resolve, reject) => {
+    // Timeout in 3 seconds
+    setTimeout(() => {
+        reject('Timed out');
+    }, 3000);
 
-  const ws = new WebSocket(relay);
-  ws.on('error', data => {
-    console.error('Error');
-    throw new Error(data);
+    const ws = new WebSocket(relay);
+    ws.on('error', data => {
+      console.error('Error');
+      reject(data);
+    });
+    ws.on('open', () => {
+      console.info('Opened');
+      ws.send(message);
+    });
+    ws.on('message', json => {
+      console.info('Message');
+      const data = JSON.parse(json);
+      console.info(data);
+      const [ messageType ] = data;
+      if (messageType !== 'OK') {
+        reject(json);
+      }
+      ws.close();
+      resolve();
+    });
   });
-  ws.on('open', () => {
-    console.info('Opened');
-    ws.send(message);
-  });
-  ws.on('message', json => {
-    console.info('Message');
-    const data = JSON.parse(json);
-    console.info(data);
-    const [ messageType ] = data;
-    if (messageType !== 'OK') {
-      done = true;
-      throw new Error(data);
-    }
-    ws.close();
-    done = true;
-  });
-
-  while (!done) {
-    console.info('waiting...');
-    await setTimeout(100);
-  }
 };
