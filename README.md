@@ -23,7 +23,7 @@ See [action.yml](action.yml)
 | Name | Description | Default | Required |
 | - | - | - | - |
 | `relays` | Relay URLs `wss://...` (separated by `\n`) | - | yes |
-| `private-key` | Private key hex | - | yes |
+| `private-key` | Private key (nsec or hex) | - | yes |
 | `content` | Content | - | yes |
 
 ## Supported
