@@ -1,8 +1,13 @@
-name: Draft release
+name: Release
 
 on:
   pull_request:
     types: [ closed ]
+  workflow_dispatch:
+    inputs:
+      version:
+        description: Version
+        required: true
 
 jobs:
   release:
