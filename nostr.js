@@ -1,4 +1,4 @@
-const secp = require('@noble/secp256k1');
+const { nip19, getPublicKey, getEventHash, signEvent } = require('nostr-tools');
 const { setTimeout } = require('node:timers/promises');
 const WebSocket = require('ws');
 
@@ -7,35 +7,27 @@ const WebSocket = require('ws');
  * @param {string} content
  */
 module.exports.createMessage = async (privateKey, content) => {
+  if (privateKey.startsWith('nsec')) {
+    privateKey = nip19.decode(privateKey).data;
+  }
+
   const kind = 1;
   const tags = [];
-  const publicKey = secp.utils.bytesToHex(secp.schnorr.getPublicKey(privateKey));
   const createdAt = Math.round(Date.now() / 1000);
-  const json = JSON.stringify([
-    0,
-    publicKey,
-    createdAt,
+  let event = {
+    created_at: createdAt,
     kind,
     tags,
     content,
-  ]);
-  console.debug('[json]', json);
-  const id = secp.utils.bytesToHex(await secp.utils.sha256(new TextEncoder().encode(json)));
-  console.debug('[id]', id);
-  const sig = secp.utils.bytesToHex(await secp.schnorr.sign(id, privateKey));
-  console.debug('[sig]', sig);
+    pubkey: getPublicKey(privateKey),
+  };
+  console.log(event);
+  event.id = getEventHash(event);
+  event.sig = signEvent(event, privateKey);
 
   const message = JSON.stringify([
     'EVENT',
-    {
-      id,
-      pubkey: publicKey,
-      created_at: createdAt,
-      kind,
-      tags,
-      content,
-      sig,
-    },
+    event,
   ]);
   console.info(message);
 
