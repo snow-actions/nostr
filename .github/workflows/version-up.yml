@@ -13,13 +13,25 @@ on:
           - minor
           - patch
 
+permissions:
+  contents: write
+  actions: write
+  pull-requests: write
+
 jobs:
   version-up:
     runs-on: ubuntu-latest
     timeout-minutes: 5
 
     steps:
+      - id: generate_token
+        uses: tibdex/github-app-token@v1.8.0
+        with:
+          app_id: ${{ secrets.APP_ID }}
+          private_key: ${{ secrets.APP_PRIVATE_KEY }}
       - uses: actions/checkout@v3
+        with:
+          token: ${{ steps.generate_token.outputs.token }}
       - name: Version up
         id: version
         run: |
@@ -32,11 +44,6 @@ jobs:
         env:
           SEMANTIC: ${{ github.event.inputs.semantic }}
       - uses: snow-actions/git-config-user@v1.0.0
-      - id: generate_token
-        uses: tibdex/github-app-token@v1.8.0
-        with:
-          app_id: ${{ secrets.APP_ID }}
-          private_key: ${{ secrets.APP_PRIVATE_KEY }}
       - name: Commit & PR
         run: |
           set -x
