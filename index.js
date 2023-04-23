@@ -1,5 +1,5 @@
 const core = require('@actions/core');
-const { createMessage, postMessage } = require('./nostr');
+const { createEvent, publishEvent } = require('./nostr');
 
 async function run() {
   try {
@@ -8,10 +8,8 @@ async function run() {
     const privateKey = core.getInput('private-key');
     const content = core.getInput('content');
     core.setSecret(privateKey);
-    const message = await createMessage(privateKey, content);
-    for (const relay of relays) {
-      await postMessage(relay, message);
-    }
+    const event = createEvent(privateKey, content);
+    await publishEvent(relays, event);
   } catch (error) {
     core.setFailed(error.message);
   }

@@ -1,12 +1,10 @@
-const { createMessage, postMessage } = require('./nostr');
+const { createEvent, publishEvent } = require('./nostr');
 require('dotenv').config();
 
 test('test createMessage', async () => {
   const privateKey = process.env.NOSTR_PRIVATE_KEY;
   const content = 'test';
-  const message = await createMessage(privateKey, content);
-  const [ type, event ] = JSON.parse(message);
-  expect(type).toBe('EVENT');
+  const event = createEvent(privateKey, content);
   expect(event).toHaveProperty('id');
   expect(event).toHaveProperty('pubkey');
   expect(event).toHaveProperty('created_at');
@@ -21,8 +19,6 @@ test('test', async () => {
   const relays = process.env.NOSTR_RELAYS.split("\n").map(x => x.trim()).filter(x => x.startsWith('wss://'));
   const privateKey = process.env.NOSTR_PRIVATE_KEY;
   const content = 'test';
-  const message = await createMessage(privateKey, content);
-  for (const relay of relays) {
-    await postMessage(relay, message);
-  }
+  const event = createEvent(privateKey, content);
+  await publishEvent(relays, event);
 });
