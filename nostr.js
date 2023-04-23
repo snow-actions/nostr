@@ -38,10 +38,10 @@ module.exports.createMessage = async (privateKey, content) => {
  * @param {string} relay
  * @param {object} message
  */
-module.exports.postMessage = async (relay, message) => {
+module.exports.postMessage = (relay, message) => {
   console.info(`Connect to ${relay}`);
 
-  return new Promise(async (resolve, reject) => {
+  return new Promise((resolve, reject) => {
     // Timeout in 3 seconds
     setTimeout(() => {
         reject('Timed out');

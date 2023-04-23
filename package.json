@@ -26,13 +26,13 @@
   "homepage": "https://github.com/snow-actions/nostr#readme",
   "dependencies": {
     "@actions/core": "^1.10.0",
-    "nostr-tools": "^1.6.0",
-    "ws": "^8.12.1"
+    "nostr-tools": "^1.10.1",
+    "ws": "^8.13.0"
   },
   "devDependencies": {
     "@vercel/ncc": "^0.36.1",
     "dotenv": "^16.0.3",
-    "eslint": "^8.34.0",
-    "jest": "^29.4.3"
+    "eslint": "^8.39.0",
+    "jest": "^29.5.0"
   }
 }
