@@ -18042,14 +18042,14 @@ const { setTimeout } = __nccwpck_require__(9397);
 
 /**
  * @param {string} privateKey
+ * @param {number} kind
  * @param {string} content
  */
-module.exports.createEvent = (privateKey, content) => {
+module.exports.createEvent = (privateKey, kind, content) => {
   if (privateKey.startsWith('nsec')) {
     privateKey = nip19.decode(privateKey).data;
   }
 
-  const kind = 1;
   const tags = [];
   const createdAt = Math.round(Date.now() / 1000);
   let event = {
@@ -18294,8 +18294,11 @@ async function run() {
     const relays = relaysInput.split("\n").map(x => x.trim()).filter(x => x.startsWith('wss://'));
     const privateKey = core.getInput('private-key');
     const content = core.getInput('content');
+    const kindString = core.getInput('kind', { trimWhitespace: true });
+    console.log('[kind]', kindString);
+    const kind = Number(kindString);
     core.setSecret(privateKey);
-    const event = createEvent(privateKey, content);
+    const event = createEvent(privateKey, kind, content);
     await publishEvent(relays, event);
     core.setOutput('event', JSON.stringify(event));
   } catch (error) {
