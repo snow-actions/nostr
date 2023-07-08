@@ -42,6 +42,7 @@ jobs:
         relays: ${{ vars.NOSTR_RELAYS_TEST }}
         private-key: ${{ secrets.NOSTR_PRIVATE_KEY_TEST }}
         content: wss://relay.nostr.wirednet.jp
+        kind: 2
       id: publish-2
     - run: test "$event" != ''
       env:
