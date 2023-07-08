@@ -36,22 +36,27 @@ module.exports.createEvent = (privateKey, content) => {
 module.exports.publishEvent = (relays, event) => {
   console.log('[publish]', relays, event);
 
-  return new Promise((resolve) => {
+  return new Promise((resolve, reject) => {
     const pool = new SimplePool();
     const publishedRelays = [];
+    const failedRelays = [];
     const close = () => {
       console.log('[close]');
       pool.close(relays);
-      resolve();
+      if (publishedRelays.length > 0) {
+        resolve();
+      } else {
+        reject();
+      }
     }
     const closeIfCompleted = () => {
-      console.log('[ok | failed]', relays.length, publishedRelays.length);
-      if (relays.length === publishedRelays.length) {
+      console.log('[ok | failed]', relays.length, publishedRelays.length, failedRelays.length);
+      if (relays.length === publishedRelays.length + failedRelays.length) {
         close()
       }
     };
     setTimeout(() => {
-      console.warn('[timeout]', relays, publishedRelays);
+      console.warn('[timeout]', relays, publishedRelays, failedRelays);
       close();
     }, 5000);
 
@@ -64,7 +69,7 @@ module.exports.publishEvent = (relays, event) => {
     });
     pub.on('failed', relay => {
       console.warn('[failed]', relay, `${Date.now() - start}ms`);
-      publishedRelays.push(relay);
+      failedRelays.push(relay);
       closeIfCompleted();
     });
   });

@@ -10,6 +10,7 @@ async function run() {
     core.setSecret(privateKey);
     const event = createEvent(privateKey, content);
     await publishEvent(relays, event);
+    core.setOutput('event', JSON.stringify(event));
   } catch (error) {
     core.setFailed(error.message);
   }
