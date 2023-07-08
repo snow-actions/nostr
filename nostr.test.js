@@ -18,6 +18,8 @@ test('createEvent', async () => {
 test('publishEvent', async () => {
   const relays = process.env.NOSTR_RELAYS.split("\n").map(x => x.trim()).filter(x => x.startsWith('wss://'));
   const privateKey = process.env.NOSTR_PRIVATE_KEY;
+  expect(privateKey).toBeDefined();
+  expect(privateKey).not.toBe('');
   const content = 'test';
   const event = createEvent(privateKey, content);
   await publishEvent(relays, event);
