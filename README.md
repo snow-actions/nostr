@@ -14,6 +14,10 @@ steps:
       private-key: ${{ secrets.NOSTR_PRIVATE_KEY }}
       content: |
         Text message
+    id: publish
+  - run: echo "${event}"
+    env:
+      event: ${{ steps.publish.outputs.event }}
 ```
 
 ## Inputs
@@ -25,6 +29,14 @@ See [action.yml](action.yml)
 | `relays` | Relay URLs `wss://...` (separated by `\n`) | - | yes |
 | `private-key` | Private key (nsec or hex) | - | yes |
 | `content` | Content | - | yes |
+
+## Outputs
+
+See [action.yml](action.yml)
+
+| Name | Description |
+| - | - |
+| `event` | Published event |
 
 ## Supported
 
@@ -42,9 +54,7 @@ See [action.yml](action.yml)
 ## Dependencies
 
 - Node.js 16
-- [@actions/core](https://www.npmjs.com/package/@actions/core)
-- [@noble/secp256k1](https://www.npmjs.com/package/@noble/secp256k1)
-- [ws](https://www.npmjs.com/package/ws)
+- See [package.json](package.json)
 
 ## Contributing
 

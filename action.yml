@@ -13,6 +13,9 @@ inputs:
   content:
     description: Content
     required: true
+outputs:
+  event:
+    description: Published event
 runs:
   using: node16
   main: dist/index.js

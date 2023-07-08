@@ -30,3 +30,7 @@ jobs:
         content: |
           test
           https://github.com/snow-actions/nostr
+      id: publish
+    - run: test "$event" != ''
+      env:
+        event: ${{ steps.publish.outputs.event }}
