@@ -13,6 +13,10 @@ inputs:
   content:
     description: Content
     required: true
+  kind:
+    description: Kind
+    required: false
+    default: '1'
 outputs:
   event:
     description: Published event

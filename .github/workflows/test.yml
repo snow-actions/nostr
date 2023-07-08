@@ -22,10 +22,11 @@ jobs:
     timeout-minutes: 5
     steps:
     - uses: actions/checkout@v3
+
+    # kind 1 (default)
     - uses: ./
       with:
-        relays: |
-          ${{ vars.NOSTR_RELAYS_TEST }}
+        relays: ${{ vars.NOSTR_RELAYS_TEST }}
         private-key: ${{ secrets.NOSTR_PRIVATE_KEY_TEST }}
         content: |
           test
@@ -34,3 +35,14 @@ jobs:
     - run: test "$event" != ''
       env:
         event: ${{ steps.publish.outputs.event }}
+
+    # kind 2
+    - uses: ./
+      with:
+        relays: ${{ vars.NOSTR_RELAYS_TEST }}
+        private-key: ${{ secrets.NOSTR_PRIVATE_KEY_TEST }}
+        content: wss://relay.nostr.wirednet.jp
+      id: publish-2
+    - run: test "$event" != ''
+      env:
+        event: ${{ steps.publish-2.outputs.event }}
