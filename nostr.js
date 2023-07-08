@@ -41,7 +41,7 @@ module.exports.publishEvent = (relays, event) => {
     const publishedRelays = [];
     const close = () => {
       console.log('[close]');
-      pool.close();
+      pool.close(relays);
       resolve();
     }
     const closeIfCompleted = () => {
