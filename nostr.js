@@ -51,6 +51,7 @@ module.exports.publishEvent = (relays, event) => {
       }
     };
     setTimeout(() => {
+      console.warn('[timeout]', relays, publishedRelays);
       close();
     }, 5000);
 
