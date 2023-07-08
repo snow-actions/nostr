@@ -4,7 +4,8 @@ require('dotenv').config();
 test('createEvent', async () => {
   const privateKey = process.env.NOSTR_PRIVATE_KEY;
   const content = 'test';
-  const event = createEvent(privateKey, content);
+  const kind = 1;
+  const event = createEvent(privateKey, kind, content);
   expect(event).toHaveProperty('id');
   expect(event).toHaveProperty('pubkey');
   expect(event).toHaveProperty('created_at');
@@ -18,9 +19,10 @@ test('createEvent', async () => {
 test('publishEvent', async () => {
   const relays = process.env.NOSTR_RELAYS.split("\n").map(x => x.trim()).filter(x => x.startsWith('wss://'));
   const privateKey = process.env.NOSTR_PRIVATE_KEY;
+  const kind = 1;
   expect(privateKey).toBeDefined();
   expect(privateKey).not.toBe('');
   const content = 'test';
-  const event = createEvent(privateKey, content);
+  const event = createEvent(privateKey, kind, content);
   await publishEvent(relays, event);
 });
