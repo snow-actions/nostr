@@ -29,6 +29,7 @@ See [action.yml](action.yml)
 | `relays` | Relay URLs `wss://...` (separated by `\n`) | - | yes |
 | `private-key` | Private key (nsec or hex) | - | yes |
 | `content` | Content | - | yes |
+| `kind` | Kind | 1 | no |
 
 ## Outputs
 
