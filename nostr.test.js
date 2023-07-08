@@ -1,7 +1,7 @@
 const { createEvent, publishEvent } = require('./nostr');
 require('dotenv').config();
 
-test('test createMessage', async () => {
+test('createEvent', async () => {
   const privateKey = process.env.NOSTR_PRIVATE_KEY;
   const content = 'test';
   const event = createEvent(privateKey, content);
@@ -15,7 +15,7 @@ test('test createMessage', async () => {
   expect(event.content).toBe(content);
 });
 
-test('test', async () => {
+test('publishEvent', async () => {
   const relays = process.env.NOSTR_RELAYS.split("\n").map(x => x.trim()).filter(x => x.startsWith('wss://'));
   const privateKey = process.env.NOSTR_PRIVATE_KEY;
   const content = 'test';
