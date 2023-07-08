@@ -44,6 +44,6 @@ jobs:
         content: wss://relay.nostr.wirednet.jp
         kind: 2
       id: publish-2
-    - run: test "$event" != ''
+    - run: test $(echo "$event" | jq '.kind') = 2
       env:
         event: ${{ steps.publish-2.outputs.event }}
