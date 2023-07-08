@@ -1,12 +1,12 @@
-const { nip19, getPublicKey, getEventHash, signEvent } = require('nostr-tools');
+require('websocket-polyfill');
+const { nip19, getPublicKey, getEventHash, signEvent, SimplePool } = require('nostr-tools');
 const { setTimeout } = require('node:timers/promises');
-const WebSocket = require('ws');
 
 /**
  * @param {string} privateKey
  * @param {string} content
  */
-module.exports.createMessage = async (privateKey, content) => {
+module.exports.createEvent = (privateKey, content) => {
   if (privateKey.startsWith('nsec')) {
     privateKey = nip19.decode(privateKey).data;
   }
@@ -21,51 +21,51 @@ module.exports.createMessage = async (privateKey, content) => {
     content,
     pubkey: getPublicKey(privateKey),
   };
-  console.log(event);
   event.id = getEventHash(event);
   event.sig = signEvent(event, privateKey);
 
-  const message = JSON.stringify([
-    'EVENT',
-    event,
-  ]);
-  console.info(message);
+  console.log('[event]', event);
 
-  return message;
+  return event;
 };
 
 /**
- * @param {string} relay
- * @param {object} message
+ * @param {string[]} relays
+ * @param {Event} event
  */
-module.exports.postMessage = (relay, message) => {
-  console.info(`Connect to ${relay}`);
+module.exports.publishEvent = (relays, event) => {
+  console.log('[publish]', relays, event);
 
-  return new Promise((resolve, reject) => {
-    // Timeout in 3 seconds
-    setTimeout(() => {
-        reject('Timed out');
-    }, 3000);
-
-    const ws = new WebSocket(relay);
-    ws.on('error', data => {
-      console.error('Error');
-      reject(data);
-    });
-    ws.on('open', () => {
-      console.info('Opened');
-      ws.send(message);
-    });
-    ws.on('message', json => {
-      console.info('Message');
-      const data = JSON.parse(json);
-      console.info(data);
-      const [ messageType ] = data;
-      if (messageType !== 'OK') {
-        reject(json);
-      }
-      ws.close();
+  return new Promise((resolve) => {
+    const pool = new SimplePool();
+    const publishedRelays = [];
+    const close = () => {
+      console.log('[close]');
+      pool.close(relays);
       resolve();
+    }
+    const closeIfCompleted = () => {
+      console.log('[ok | failed]', relays.length, publishedRelays.length);
+      if (relays.length === publishedRelays.length) {
+        close()
+      }
+    };
+    setTimeout(() => {
+      console.warn('[timeout]', relays, publishedRelays);
+      close();
+    }, 5000);
+
+    const start = Date.now();
+    const pub = pool.publish(relays, event);
+    pub.on('ok', relay => {
+      console.info('[ok]', relay, `${Date.now() - start}ms`);
+      publishedRelays.push(relay);
+      closeIfCompleted();
+    });
+    pub.on('failed', relay => {
+      console.warn('[failed]', relay, `${Date.now() - start}ms`);
+      publishedRelays.push(relay);
+      closeIfCompleted();
     });
   });
 };
