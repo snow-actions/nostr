@@ -6,13 +6,13 @@ const { setTimeout } = require('node:timers/promises');
  * @param {string} privateKey
  * @param {number} kind
  * @param {string} content
+ * @param {string[][]} tags
  */
-module.exports.createEvent = (privateKey, kind, content) => {
+module.exports.createEvent = (privateKey, kind, content, tags) => {
   if (privateKey.startsWith('nsec')) {
     privateKey = nip19.decode(privateKey).data;
   }
 
-  const tags = [];
   const createdAt = Math.round(Date.now() / 1000);
   let event = {
     created_at: createdAt,
