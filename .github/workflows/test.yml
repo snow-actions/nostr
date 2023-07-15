@@ -36,6 +36,20 @@ jobs:
       env:
         event: ${{ steps.publish.outputs.event }}
 
+    # reply
+    - uses: ./
+      with:
+        relays: ${{ vars.NOSTR_RELAYS_TEST }}
+        private-key: ${{ secrets.NOSTR_PRIVATE_KEY_TEST }}
+        content: test reply
+        tags: |
+          - ["e", "${{ fromJson(steps.publish.outputs.event).id }}", "", "root"]
+          - ["p", "${{ fromJson(steps.publish.outputs.event).pubkey }}"]
+      id: publish-reply
+    - run: test "$event" != ''
+      env:
+        event: ${{ steps.publish-reply.outputs.event }}
+
     # kind 2
     - uses: ./
       with:

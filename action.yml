@@ -17,6 +17,10 @@ inputs:
     description: Kind
     required: false
     default: '1'
+  tags:
+    description: Tags
+    required: false
+    default: '[]'
 outputs:
   event:
     description: Published event

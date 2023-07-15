@@ -8,9 +8,7 @@ Send EVENT to Nostr.
 steps:
   - uses: snow-actions/nostr@v1.5.0
     with:
-      relays: |
-        ${{ vars.NOSTR_RELAY_1 }}
-        ${{ vars.NOSTR_RELAY_2 }}
+      relays: ${{ vars.NOSTR_RELAYS }}
       private-key: ${{ secrets.NOSTR_PRIVATE_KEY }}
       content: |
         Text message
@@ -19,6 +17,8 @@ steps:
     env:
       event: ${{ steps.publish.outputs.event }}
 ```
+
+Other examples are [`test.yml`](.github/workflows/test.yml).
 
 ## Inputs
 
@@ -30,6 +30,7 @@ See [action.yml](action.yml)
 | `private-key` | Private key (nsec or hex) | - | yes |
 | `content` | Content | - | yes |
 | `kind` | Kind | 1 | no |
+| `tags` | Tags (YAML or JSON) | `[]` | no |
 
 ## Outputs
 
