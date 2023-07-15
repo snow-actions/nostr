@@ -18,6 +18,8 @@ steps:
       event: ${{ steps.publish.outputs.event }}
 ```
 
+Other examples are [`test.yml`](.github/workflows/test.yml).
+
 ## Inputs
 
 See [action.yml](action.yml)
