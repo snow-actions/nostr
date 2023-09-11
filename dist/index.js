@@ -22145,8 +22145,7 @@ function _dispatchEvent(event) {
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 __nccwpck_require__(3);
-const { nip19, getPublicKey, getEventHash, signEvent, SimplePool } = __nccwpck_require__(259);
-const { setTimeout } = __nccwpck_require__(9397);
+const { nip19, getPublicKey, getEventHash, signEvent } = __nccwpck_require__(259);
 
 /**
  * @param {string} privateKey
@@ -22182,42 +22181,46 @@ module.exports.createEvent = (privateKey, kind, content, tags) => {
 module.exports.publishEvent = (relays, event) => {
   console.log('[publish]', relays, event);
 
+  let timeoutId;
   return new Promise((resolve, reject) => {
-    const pool = new SimplePool();
-    const publishedRelays = [];
-    const failedRelays = [];
+    const wss = relays.map(relay => new WebSocket(relay));
+    const messages = new Map();
     const close = () => {
-      console.log('[close]');
-      pool.close(relays);
-      if (publishedRelays.length > 0) {
-        resolve();
-      } else {
-        reject();
+      if (timeoutId !== undefined) {
+        clearTimeout(timeoutId);
       }
-    }
-    const closeIfCompleted = () => {
-      console.log('[ok | failed]', relays.length, publishedRelays.length, failedRelays.length);
-      if (relays.length === publishedRelays.length + failedRelays.length) {
-        close()
+      for (const ws of wss) {
+        ws.close();
       }
+      for (const [url, json] of messages) {
+        const [type, , result] = JSON.parse(json);
+        if (type === 'OK' && result) {
+          resolve();
+        } else {
+          console.warn('[fail]', url, json);
+        }
+      }
+      reject();
     };
-    setTimeout(() => {
-      console.warn('[timeout]', relays, publishedRelays, failedRelays);
+    timeoutId = setTimeout(() => {
+      console.log('[timeout]');
       close();
-    }, 5000);
-
-    const start = Date.now();
-    const pub = pool.publish(relays, event);
-    pub.on('ok', relay => {
-      console.info('[ok]', relay, `${Date.now() - start}ms`);
-      publishedRelays.push(relay);
-      closeIfCompleted();
-    });
-    pub.on('failed', relay => {
-      console.warn('[failed]', relay, `${Date.now() - start}ms`);
-      failedRelays.push(relay);
-      closeIfCompleted();
-    });
+    }, 3000);
+    for (const ws of wss) {
+      console.time(ws.url);
+      ws.onopen = () => {
+        console.log('[open]', ws.url);
+        ws.send(JSON.stringify(['EVENT', event]));
+      };
+      ws.onmessage = ({data}) => {
+        console.log('[message]', ws.url, data);
+        console.timeEnd(ws.url);
+        messages.set(ws.url, data);
+        if (messages.size === relays.length) {
+          close();
+        }
+      };
+    }
   });
 };
 
@@ -22285,14 +22288,6 @@ module.exports = require("https");
 
 "use strict";
 module.exports = require("net");
-
-/***/ }),
-
-/***/ 9397:
-/***/ ((module) => {
-
-"use strict";
-module.exports = require("node:timers/promises");
 
 /***/ }),
 
