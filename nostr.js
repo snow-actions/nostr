@@ -35,10 +35,14 @@ module.exports.createEvent = (privateKey, kind, content, tags) => {
 module.exports.publishEvent = (relays, event) => {
   console.log('[publish]', relays, event);
 
+  let timeoutId;
   return new Promise((resolve, reject) => {
     const wss = relays.map(relay => new WebSocket(relay));
     const messages = new Map();
     const close = () => {
+      if (timeoutId !== undefined) {
+        clearTimeout(timeoutId);
+      }
       for (const ws of wss) {
         ws.close();
       }
@@ -52,7 +56,7 @@ module.exports.publishEvent = (relays, event) => {
       }
       reject();
     };
-    setTimeout(() => {
+    timeoutId = setTimeout(() => {
       console.log('[timeout]');
       close();
     }, 3000);
