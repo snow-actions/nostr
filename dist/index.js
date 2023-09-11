@@ -22190,6 +22190,9 @@ module.exports.publishEvent = (relays, event) => {
         clearTimeout(timeoutId);
       }
       for (const ws of wss) {
+        if (ws.readyState === WebSocket.CLOSED) {
+          continue;
+        }
         ws.close();
       }
       for (const [url, json] of messages) {
