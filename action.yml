@@ -12,7 +12,8 @@ inputs:
     required: true
   content:
     description: Content
-    required: true
+    required: false
+    default: ''
   kind:
     description: Kind
     required: false
