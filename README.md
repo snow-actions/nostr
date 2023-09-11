@@ -28,8 +28,8 @@ See [action.yml](action.yml)
 | - | - | - | - |
 | `relays` | Relay URLs `wss://...` (separated by `\n`) | - | yes |
 | `private-key` | Private key (nsec or hex) | - | yes |
-| `content` | Content | - | yes |
-| `kind` | Kind | 1 | no |
+| `content` | Content | `''` | no |
+| `kind` | Kind | `1` | no |
 | `tags` | Tags (YAML or JSON) | `[]` | no |
 
 ## Outputs
