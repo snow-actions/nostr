@@ -27,7 +27,7 @@
   "dependencies": {
     "@actions/core": "^1.10.0",
     "js-yaml": "^4.1.0",
-    "nostr-tools": "^1.10.1",
+    "nostr-tools": "^1.17.0",
     "websocket-polyfill": "^0.0.3",
     "ws": "^8.13.0"
   },
