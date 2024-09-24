@@ -32,7 +32,7 @@
     "ws": "^8.16.0"
   },
   "devDependencies": {
-    "@vercel/ncc": "^0.38.0",
+    "@vercel/ncc": "^0.38.2",
     "dotenv": "^16.3.1",
     "eslint": "^9.1.0",
     "jest": "^29.7.0"
