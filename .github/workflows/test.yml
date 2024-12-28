@@ -27,8 +27,8 @@ jobs:
           npm ci
           npm run package
 
-      # kind 1 (default)
-      - uses: ./
+      - name: Default is kind 1
+        uses: ./
         with:
           relays: ${{ vars.NOSTR_RELAYS_TEST }}
           private-key: ${{ secrets.NOSTR_PRIVATE_KEY_TEST }}
@@ -36,12 +36,15 @@ jobs:
             test
             https://github.com/snow-actions/nostr
         id: publish
+      - run: test $(echo "$event" | jq '.kind') = 1
+        env:
+          event: ${{ steps.publish.outputs.event }}
       - run: test "$event" != ''
         env:
           event: ${{ steps.publish.outputs.event }}
 
-      # reply
-      - uses: ./
+      - name: Reply with tags
+        uses: ./
         with:
           relays: ${{ vars.NOSTR_RELAYS_TEST }}
           private-key: ${{ secrets.NOSTR_PRIVATE_KEY_TEST }}
@@ -54,14 +57,14 @@ jobs:
         env:
           event: ${{ steps.publish-reply.outputs.event }}
 
-      # kind 2
-      - uses: ./
+      - name: Specify kind
+        uses: ./
         with:
           relays: ${{ vars.NOSTR_RELAYS_TEST }}
           private-key: ${{ secrets.NOSTR_PRIVATE_KEY_TEST }}
           content: wss://relay.nostr.wirednet.jp
           kind: 2
-        id: publish-2
+        id: publish-kind
       - run: test $(echo "$event" | jq '.kind') = 2
         env:
-          event: ${{ steps.publish-2.outputs.event }}
+          event: ${{ steps.publish-kind.outputs.event }}
