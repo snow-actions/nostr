@@ -24,20 +24,20 @@ Other examples are [`test.yml`](.github/workflows/test.yml).
 
 See [action.yml](action.yml)
 
-| Name | Description | Default | Required |
-| - | - | - | - |
-| `relays` | Relay URLs `wss://...` (separated by `\n`) | - | yes |
-| `private-key` | Private key (nsec or hex) | - | yes |
-| `content` | Content | `''` | no |
-| `kind` | Kind | `1` | no |
-| `tags` | Tags (YAML or JSON) | `[]` | no |
+| Name          | Description                                | Default | Required |
+| ------------- | ------------------------------------------ | ------- | -------- |
+| `relays`      | Relay URLs `wss://...` (separated by `\n`) | -       | yes      |
+| `private-key` | Private key (nsec or hex)                  | -       | yes      |
+| `content`     | Content                                    | `''`    | no       |
+| `kind`        | Kind                                       | `1`     | no       |
+| `tags`        | Tags (YAML or JSON)                        | `[]`    | no       |
 
 ## Outputs
 
 See [action.yml](action.yml)
 
-| Name | Description |
-| - | - |
+| Name    | Description     |
+| ------- | --------------- |
 | `event` | Published event |
 
 ## Supported
@@ -55,7 +55,7 @@ See [action.yml](action.yml)
 
 ## Dependencies
 
-- Node.js 16
+- Node.js v20
 - See [package.json](package.json)
 
 ## Contributing
