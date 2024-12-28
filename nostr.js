@@ -33,7 +33,17 @@ module.exports.publishEvent = (relays, event) => {
 
   let timeoutId;
   return new Promise((resolve, reject) => {
-    const wss = relays.map(relay => new WebSocket(relay));
+    const wss = relays.map(relay => {
+      try {
+        const ws = new WebSocket(relay);
+        return ws;
+      } catch (error) {
+        console.warn('[connection error]', relay, error);
+      }
+    }).filter(ws => ws !== undefined);
+    if (wss.length === 0) {
+      reject();
+    }
     const messages = new Map();
     const close = () => {
       if (timeoutId !== undefined) {
@@ -61,6 +71,9 @@ module.exports.publishEvent = (relays, event) => {
     }, 3000);
     for (const ws of wss) {
       console.time(ws.url);
+      ws.onerror = (error) => {
+        console.warn('[error]', ws.url, error);
+      };
       ws.onopen = () => {
         console.log('[open]', ws.url);
         ws.send(JSON.stringify(['EVENT', event]));
