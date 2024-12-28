@@ -1,5 +1,8 @@
-require('websocket-polyfill');
-const { nip19, getPublicKey, getEventHash, signEvent } = require('nostr-tools');
+const ws = require('ws');
+const { nip19, getPublicKey, finalizeEvent } = require('nostr-tools');
+const { useWebSocketImplementation } = require('nostr-tools/pool');
+
+useWebSocketImplementation(ws);
 
 /**
  * @param {string} privateKey
@@ -8,9 +11,7 @@ const { nip19, getPublicKey, getEventHash, signEvent } = require('nostr-tools');
  * @param {string[][]} tags
  */
 module.exports.createEvent = (privateKey, kind, content, tags) => {
-  if (privateKey.startsWith('nsec')) {
-    privateKey = nip19.decode(privateKey).data;
-  }
+  const seckey = privateKey.startsWith('nsec') ? nip19.decode(privateKey).data : Uint8Array.from(Buffer.from(privateKey));
 
   const createdAt = Math.round(Date.now() / 1000);
   let event = {
@@ -18,14 +19,9 @@ module.exports.createEvent = (privateKey, kind, content, tags) => {
     kind,
     tags,
     content,
-    pubkey: getPublicKey(privateKey),
+    pubkey: getPublicKey(seckey),
   };
-  event.id = getEventHash(event);
-  event.sig = signEvent(event, privateKey);
-
-  console.log('[event]', event);
-
-  return event;
+  return finalizeEvent(event, seckey);
 };
 
 /**
