@@ -24,14 +24,14 @@ jobs:
     timeout-minutes: 5
 
     steps:
-      - id: generate_token
-        uses: tibdex/github-app-token@v2.1.0
+      - uses: actions/create-github-app-token@v1
+        id: app-token
         with:
-          app_id: ${{ secrets.APP_ID }}
-          private_key: ${{ secrets.APP_PRIVATE_KEY }}
+          app-id: ${{ secrets.APP_ID }}
+          private-key: ${{ secrets.APP_PRIVATE_KEY }}
       - uses: actions/checkout@v4
         with:
-          token: ${{ steps.generate_token.outputs.token }}
+          token: ${{ steps.app-token.outputs.token }}
       - name: Version up
         id: version
         run: |
@@ -55,4 +55,4 @@ jobs:
           gh pr create --base ${GITHUB_REF_NAME} --head ${branch} --assignee ${GITHUB_ACTOR} --title ${VERSION} --body ''
         env:
           VERSION: ${{ steps.version.outputs.version }}
-          GH_TOKEN: ${{ steps.generate_token.outputs.token }}
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
