@@ -21,43 +21,43 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
-    - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-    # kind 1 (default)
-    - uses: ./
-      with:
-        relays: ${{ vars.NOSTR_RELAYS_TEST }}
-        private-key: ${{ secrets.NOSTR_PRIVATE_KEY_TEST }}
-        content: |
-          test
-          https://github.com/snow-actions/nostr
-      id: publish
-    - run: test "$event" != ''
-      env:
-        event: ${{ steps.publish.outputs.event }}
+      # kind 1 (default)
+      - uses: ./
+        with:
+          relays: ${{ vars.NOSTR_RELAYS_TEST }}
+          private-key: ${{ secrets.NOSTR_PRIVATE_KEY_TEST }}
+          content: |
+            test
+            https://github.com/snow-actions/nostr
+        id: publish
+      - run: test "$event" != ''
+        env:
+          event: ${{ steps.publish.outputs.event }}
 
-    # reply
-    - uses: ./
-      with:
-        relays: ${{ vars.NOSTR_RELAYS_TEST }}
-        private-key: ${{ secrets.NOSTR_PRIVATE_KEY_TEST }}
-        content: test reply
-        tags: |
-          - ["e", "${{ fromJson(steps.publish.outputs.event).id }}", "", "root"]
-          - ["p", "${{ fromJson(steps.publish.outputs.event).pubkey }}"]
-      id: publish-reply
-    - run: test "$event" != ''
-      env:
-        event: ${{ steps.publish-reply.outputs.event }}
+      # reply
+      - uses: ./
+        with:
+          relays: ${{ vars.NOSTR_RELAYS_TEST }}
+          private-key: ${{ secrets.NOSTR_PRIVATE_KEY_TEST }}
+          content: test reply
+          tags: |
+            - ["e", "${{ fromJson(steps.publish.outputs.event).id }}", "", "root"]
+            - ["p", "${{ fromJson(steps.publish.outputs.event).pubkey }}"]
+        id: publish-reply
+      - run: test "$event" != ''
+        env:
+          event: ${{ steps.publish-reply.outputs.event }}
 
-    # kind 2
-    - uses: ./
-      with:
-        relays: ${{ vars.NOSTR_RELAYS_TEST }}
-        private-key: ${{ secrets.NOSTR_PRIVATE_KEY_TEST }}
-        content: wss://relay.nostr.wirednet.jp
-        kind: 2
-      id: publish-2
-    - run: test $(echo "$event" | jq '.kind') = 2
-      env:
-        event: ${{ steps.publish-2.outputs.event }}
+      # kind 2
+      - uses: ./
+        with:
+          relays: ${{ vars.NOSTR_RELAYS_TEST }}
+          private-key: ${{ secrets.NOSTR_PRIVATE_KEY_TEST }}
+          content: wss://relay.nostr.wirednet.jp
+          kind: 2
+        id: publish-2
+      - run: test $(echo "$event" | jq '.kind') = 2
+        env:
+          event: ${{ steps.publish-2.outputs.event }}
