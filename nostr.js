@@ -1,8 +1,8 @@
-const ws = require('ws');
+const WebSocket = require('ws');
 const { nip19, getPublicKey, finalizeEvent } = require('nostr-tools');
 const { useWebSocketImplementation } = require('nostr-tools/pool');
 
-useWebSocketImplementation(ws);
+useWebSocketImplementation(WebSocket);
 
 /**
  * @param {string} privateKey
