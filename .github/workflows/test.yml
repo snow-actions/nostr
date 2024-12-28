@@ -22,6 +22,10 @@ jobs:
     timeout-minutes: 5
     steps:
       - uses: actions/checkout@v4
+      - name: Package
+        run: |
+          npm ci
+          npm run package
 
       # kind 1 (default)
       - uses: ./
