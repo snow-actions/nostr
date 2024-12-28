@@ -15,8 +15,6 @@ on:
 
 permissions:
   contents: write
-  actions: write
-  pull-requests: write
 
 jobs:
   version-up:
@@ -24,14 +22,11 @@ jobs:
     timeout-minutes: 5
 
     steps:
-      - id: generate_token
-        uses: tibdex/github-app-token@v2.1.0
-        with:
-          app_id: ${{ secrets.APP_ID }}
-          private_key: ${{ secrets.APP_PRIVATE_KEY }}
       - uses: actions/checkout@v4
-        with:
-          token: ${{ steps.generate_token.outputs.token }}
+      - name: Package
+        run: |
+          npm ci
+          npm run package
       - name: Version up
         id: version
         run: |
@@ -43,6 +38,11 @@ jobs:
           git diff
         env:
           SEMANTIC: ${{ github.event.inputs.semantic }}
+      - uses: actions/create-github-app-token@v1
+        id: app-token
+        with:
+          app-id: ${{ secrets.APP_ID }}
+          private-key: ${{ secrets.APP_PRIVATE_KEY }}
       - uses: snow-actions/git-config-user@v1.0.0
       - name: Commit & PR
         run: |
@@ -55,4 +55,4 @@ jobs:
           gh pr create --base ${GITHUB_REF_NAME} --head ${branch} --assignee ${GITHUB_ACTOR} --title ${VERSION} --body ''
         env:
           VERSION: ${{ steps.version.outputs.version }}
-          GH_TOKEN: ${{ steps.generate_token.outputs.token }}
+          GH_TOKEN: ${{ steps.app-token.outputs.token }} # Trigger next CI
