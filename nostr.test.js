@@ -1,8 +1,24 @@
 const { createEvent, publishEvent } = require('./nostr');
 require('dotenv').config();
 
-test('createEvent', async () => {
+test('createEvent with nsec', async () => {
   const privateKey = process.env.NOSTR_PRIVATE_KEY;
+  const content = 'test';
+  const kind = 1;
+  const tags = [];
+  const event = createEvent(privateKey, kind, content, tags);
+  expect(event).toHaveProperty('id');
+  expect(event).toHaveProperty('pubkey');
+  expect(event).toHaveProperty('created_at');
+  expect(event).toHaveProperty('kind');
+  expect(event).toHaveProperty('tags');
+  expect(event).toHaveProperty('content');
+  expect(event).toHaveProperty('sig');
+  expect(event.content).toBe(content);
+});
+
+test('createEvent with seckey', async () => {
+  const privateKey = process.env.NOSTR_SECKEY;
   const content = 'test';
   const kind = 1;
   const tags = [];

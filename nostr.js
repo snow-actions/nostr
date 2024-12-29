@@ -1,6 +1,7 @@
 const WebSocket = require('ws');
 const { nip19, getPublicKey, finalizeEvent } = require('nostr-tools');
 const { useWebSocketImplementation } = require('nostr-tools/pool');
+const { hexToBytes } = require('@noble/hashes/utils');
 
 useWebSocketImplementation(WebSocket);
 
@@ -11,7 +12,7 @@ useWebSocketImplementation(WebSocket);
  * @param {string[][]} tags
  */
 module.exports.createEvent = (privateKey, kind, content, tags) => {
-  const seckey = privateKey.startsWith('nsec') ? nip19.decode(privateKey).data : Uint8Array.from(Buffer.from(privateKey));
+  const seckey = privateKey.startsWith('nsec') ? nip19.decode(privateKey).data : hexToBytes(privateKey);
 
   const createdAt = Math.round(Date.now() / 1000);
   let event = {
