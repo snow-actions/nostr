@@ -16,6 +16,8 @@ jobs:
           content: |
             Release ${{ github.repository }} ${{ github.event.release.name }}
             ${{ github.event.release.html_url }}
+          tags: |
+            - ["proxy", "${{ github.event.release.html_url }}", "web"]
   user-status:
     runs-on: ubuntu-latest
     timeout-minutes: 5
