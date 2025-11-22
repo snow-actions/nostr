@@ -3,6 +3,9 @@ require("dotenv").config();
 
 test("createEvent with nsec", async () => {
   const privateKey = process.env.NOSTR_PRIVATE_KEY;
+  if (privateKey === undefined || privateKey === "") {
+    throw new Error("NOSTR_PRIVATE_KEY is not defined");
+  }
   const content = "test";
   const kind = 1;
   const tags = [];
@@ -19,6 +22,9 @@ test("createEvent with nsec", async () => {
 
 test("createEvent with seckey", async () => {
   const privateKey = process.env.NOSTR_SECKEY;
+  if (privateKey === undefined || privateKey === "") {
+    throw new Error("NOSTR_SECKEY is not defined");
+  }
   const content = "test";
   const kind = 1;
   const tags = [];
