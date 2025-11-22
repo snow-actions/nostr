@@ -20,7 +20,7 @@ jobs:
       RELEASE_BRANCH: ${{ github.event.pull_request.head.ref || inputs.version }}
 
     steps:
-      - uses: actions/create-github-app-token@v1
+      - uses: actions/create-github-app-token@v2
         id: app-token
         with:
           app-id: ${{ secrets.APP_ID }}
