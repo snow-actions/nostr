@@ -14,9 +14,9 @@ jobs:
       - run: npm ci
       - run: npm test
         env:
-          NOSTR_RELAYS: ${{ vars.NOSTR_RELAYS_TEST }}
-          NOSTR_PRIVATE_KEY: ${{ secrets.NOSTR_PRIVATE_KEY_TEST }}
-          NOSTR_SECKEY: ${{ secrets.NOSTR_SECKEY_TEST }}
+          NOSTR_RELAYS: "${{ vars.NOSTR_RELAYS_TEST }}"
+          NOSTR_PRIVATE_KEY: "${{ secrets.NOSTR_PRIVATE_KEY_TEST }}"
+          NOSTR_SECKEY: "${{ secrets.NOSTR_SECKEY_TEST }}"
 
   e2e-test:
     runs-on: ubuntu-latest
