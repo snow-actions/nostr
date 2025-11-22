@@ -10,19 +10,19 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - run: npm ci
       - run: npm test
         env:
-          NOSTR_RELAYS: ${{ vars.NOSTR_RELAYS_TEST }}
-          NOSTR_PRIVATE_KEY: ${{ secrets.NOSTR_PRIVATE_KEY_TEST }}
-          NOSTR_SECKEY: ${{ secrets.NOSTR_SECKEY_TEST }}
+          NOSTR_RELAYS: "${{ vars.NOSTR_RELAYS_TEST }}"
+          NOSTR_PRIVATE_KEY: "${{ secrets.NOSTR_PRIVATE_KEY_TEST }}"
+          NOSTR_SECKEY: "${{ secrets.NOSTR_SECKEY_TEST }}"
 
   e2e-test:
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - name: Package
         run: |
           npm ci
