@@ -22,36 +22,68 @@ var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (
 }) : function(o, v) {
     o["default"] = v;
 });
-var __importStar = (this && this.__importStar) || function (mod) {
-    if (mod && mod.__esModule) return mod;
-    var result = {};
-    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
-    __setModuleDefault(result, mod);
-    return result;
-};
+var __importStar = (this && this.__importStar) || (function () {
+    var ownKeys = function(o) {
+        ownKeys = Object.getOwnPropertyNames || function (o) {
+            var ar = [];
+            for (var k in o) if (Object.prototype.hasOwnProperty.call(o, k)) ar[ar.length] = k;
+            return ar;
+        };
+        return ownKeys(o);
+    };
+    return function (mod) {
+        if (mod && mod.__esModule) return mod;
+        var result = {};
+        if (mod != null) for (var k = ownKeys(mod), i = 0; i < k.length; i++) if (k[i] !== "default") __createBinding(result, mod, k[i]);
+        __setModuleDefault(result, mod);
+        return result;
+    };
+})();
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.issue = exports.issueCommand = void 0;
+exports.issueCommand = issueCommand;
+exports.issue = issue;
 const os = __importStar(__nccwpck_require__(857));
 const utils_1 = __nccwpck_require__(302);
 /**
- * Commands
+ * Issues a command to the GitHub Actions runner
+ *
+ * @param command - The command name to issue
+ * @param properties - Additional properties for the command (key-value pairs)
+ * @param message - The message to include with the command
+ * @remarks
+ * This function outputs a specially formatted string to stdout that the Actions
+ * runner interprets as a command. These commands can control workflow behavior,
+ * set outputs, create annotations, mask values, and more.
  *
  * Command Format:
  *   ::name key=value,key=value::message
  *
- * Examples:
- *   ::warning::This is the message
- *   ::set-env name=MY_VAR::some value
+ * @example
+ * ```typescript
+ * // Issue a warning annotation
+ * issueCommand('warning', {}, 'This is a warning message');
+ * // Output: ::warning::This is a warning message
+ *
+ * // Set an environment variable
+ * issueCommand('set-env', { name: 'MY_VAR' }, 'some value');
+ * // Output: ::set-env name=MY_VAR::some value
+ *
+ * // Add a secret mask
+ * issueCommand('add-mask', {}, 'secretValue123');
+ * // Output: ::add-mask::secretValue123
+ * ```
+ *
+ * @internal
+ * This is an internal utility function that powers the public API functions
+ * such as setSecret, warning, error, and exportVariable.
  */
 function issueCommand(command, properties, message) {
     const cmd = new Command(command, properties, message);
     process.stdout.write(cmd.toString() + os.EOL);
 }
-exports.issueCommand = issueCommand;
 function issue(name, message = '') {
     issueCommand(name, {}, message);
 }
-exports.issue = issue;
 const CMD_STRING = '::';
 class Command {
     constructor(command, properties, message) {
@@ -125,13 +157,23 @@ var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (
 }) : function(o, v) {
     o["default"] = v;
 });
-var __importStar = (this && this.__importStar) || function (mod) {
-    if (mod && mod.__esModule) return mod;
-    var result = {};
-    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
-    __setModuleDefault(result, mod);
-    return result;
-};
+var __importStar = (this && this.__importStar) || (function () {
+    var ownKeys = function(o) {
+        ownKeys = Object.getOwnPropertyNames || function (o) {
+            var ar = [];
+            for (var k in o) if (Object.prototype.hasOwnProperty.call(o, k)) ar[ar.length] = k;
+            return ar;
+        };
+        return ownKeys(o);
+    };
+    return function (mod) {
+        if (mod && mod.__esModule) return mod;
+        var result = {};
+        if (mod != null) for (var k = ownKeys(mod), i = 0; i < k.length; i++) if (k[i] !== "default") __createBinding(result, mod, k[i]);
+        __setModuleDefault(result, mod);
+        return result;
+    };
+})();
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -142,7 +184,28 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.platform = exports.toPlatformPath = exports.toWin32Path = exports.toPosixPath = exports.markdownSummary = exports.summary = exports.getIDToken = exports.getState = exports.saveState = exports.group = exports.endGroup = exports.startGroup = exports.info = exports.notice = exports.warning = exports.error = exports.debug = exports.isDebug = exports.setFailed = exports.setCommandEcho = exports.setOutput = exports.getBooleanInput = exports.getMultilineInput = exports.getInput = exports.addPath = exports.setSecret = exports.exportVariable = exports.ExitCode = void 0;
+exports.platform = exports.toPlatformPath = exports.toWin32Path = exports.toPosixPath = exports.markdownSummary = exports.summary = exports.ExitCode = void 0;
+exports.exportVariable = exportVariable;
+exports.setSecret = setSecret;
+exports.addPath = addPath;
+exports.getInput = getInput;
+exports.getMultilineInput = getMultilineInput;
+exports.getBooleanInput = getBooleanInput;
+exports.setOutput = setOutput;
+exports.setCommandEcho = setCommandEcho;
+exports.setFailed = setFailed;
+exports.isDebug = isDebug;
+exports.debug = debug;
+exports.error = error;
+exports.warning = warning;
+exports.notice = notice;
+exports.info = info;
+exports.startGroup = startGroup;
+exports.endGroup = endGroup;
+exports.group = group;
+exports.saveState = saveState;
+exports.getState = getState;
+exports.getIDToken = getIDToken;
 const command_1 = __nccwpck_require__(4914);
 const file_command_1 = __nccwpck_require__(4753);
 const utils_1 = __nccwpck_require__(302);
@@ -181,15 +244,38 @@ function exportVariable(name, val) {
     }
     (0, command_1.issueCommand)('set-env', { name }, convertedVal);
 }
-exports.exportVariable = exportVariable;
 /**
  * Registers a secret which will get masked from logs
- * @param secret value of the secret
+ *
+ * @param secret - Value of the secret to be masked
+ * @remarks
+ * This function instructs the Actions runner to mask the specified value in any
+ * logs produced during the workflow run. Once registered, the secret value will
+ * be replaced with asterisks (***) whenever it appears in console output, logs,
+ * or error messages.
+ *
+ * This is useful for protecting sensitive information such as:
+ * - API keys
+ * - Access tokens
+ * - Authentication credentials
+ * - URL parameters containing signatures (SAS tokens)
+ *
+ * Note that masking only affects future logs; any previous appearances of the
+ * secret in logs before calling this function will remain unmasked.
+ *
+ * @example
+ * ```typescript
+ * // Register an API token as a secret
+ * const apiToken = "abc123xyz456";
+ * setSecret(apiToken);
+ *
+ * // Now any logs containing this value will show *** instead
+ * console.log(`Using token: ${apiToken}`); // Outputs: "Using token: ***"
+ * ```
  */
 function setSecret(secret) {
     (0, command_1.issueCommand)('add-mask', {}, secret);
 }
-exports.setSecret = setSecret;
 /**
  * Prepends inputPath to the PATH (for this action and future actions)
  * @param inputPath
@@ -204,7 +290,6 @@ function addPath(inputPath) {
     }
     process.env['PATH'] = `${inputPath}${path.delimiter}${process.env['PATH']}`;
 }
-exports.addPath = addPath;
 /**
  * Gets the value of an input.
  * Unless trimWhitespace is set to false in InputOptions, the value is also trimmed.
@@ -224,7 +309,6 @@ function getInput(name, options) {
     }
     return val.trim();
 }
-exports.getInput = getInput;
 /**
  * Gets the values of an multiline input.  Each value is also trimmed.
  *
@@ -242,7 +326,6 @@ function getMultilineInput(name, options) {
     }
     return inputs.map(input => input.trim());
 }
-exports.getMultilineInput = getMultilineInput;
 /**
  * Gets the input value of the boolean type in the YAML 1.2 "core schema" specification.
  * Support boolean input list: `true | True | TRUE | false | False | FALSE` .
@@ -264,7 +347,6 @@ function getBooleanInput(name, options) {
     throw new TypeError(`Input does not meet YAML 1.2 "Core Schema" specification: ${name}\n` +
         `Support boolean input list: \`true | True | TRUE | false | False | FALSE\``);
 }
-exports.getBooleanInput = getBooleanInput;
 /**
  * Sets the value of an output.
  *
@@ -280,7 +362,6 @@ function setOutput(name, value) {
     process.stdout.write(os.EOL);
     (0, command_1.issueCommand)('set-output', { name }, (0, utils_1.toCommandValue)(value));
 }
-exports.setOutput = setOutput;
 /**
  * Enables or disables the echoing of commands into stdout for the rest of the step.
  * Echoing is disabled by default if ACTIONS_STEP_DEBUG is not set.
@@ -289,7 +370,6 @@ exports.setOutput = setOutput;
 function setCommandEcho(enabled) {
     (0, command_1.issue)('echo', enabled ? 'on' : 'off');
 }
-exports.setCommandEcho = setCommandEcho;
 //-----------------------------------------------------------------------
 // Results
 //-----------------------------------------------------------------------
@@ -302,7 +382,6 @@ function setFailed(message) {
     process.exitCode = ExitCode.Failure;
     error(message);
 }
-exports.setFailed = setFailed;
 //-----------------------------------------------------------------------
 // Logging Commands
 //-----------------------------------------------------------------------
@@ -312,7 +391,6 @@ exports.setFailed = setFailed;
 function isDebug() {
     return process.env['RUNNER_DEBUG'] === '1';
 }
-exports.isDebug = isDebug;
 /**
  * Writes debug message to user log
  * @param message debug message
@@ -320,7 +398,6 @@ exports.isDebug = isDebug;
 function debug(message) {
     (0, command_1.issueCommand)('debug', {}, message);
 }
-exports.debug = debug;
 /**
  * Adds an error issue
  * @param message error issue message. Errors will be converted to string via toString()
@@ -329,7 +406,6 @@ exports.debug = debug;
 function error(message, properties = {}) {
     (0, command_1.issueCommand)('error', (0, utils_1.toCommandProperties)(properties), message instanceof Error ? message.toString() : message);
 }
-exports.error = error;
 /**
  * Adds a warning issue
  * @param message warning issue message. Errors will be converted to string via toString()
@@ -338,7 +414,6 @@ exports.error = error;
 function warning(message, properties = {}) {
     (0, command_1.issueCommand)('warning', (0, utils_1.toCommandProperties)(properties), message instanceof Error ? message.toString() : message);
 }
-exports.warning = warning;
 /**
  * Adds a notice issue
  * @param message notice issue message. Errors will be converted to string via toString()
@@ -347,7 +422,6 @@ exports.warning = warning;
 function notice(message, properties = {}) {
     (0, command_1.issueCommand)('notice', (0, utils_1.toCommandProperties)(properties), message instanceof Error ? message.toString() : message);
 }
-exports.notice = notice;
 /**
  * Writes info to log with console.log.
  * @param message info message
@@ -355,7 +429,6 @@ exports.notice = notice;
 function info(message) {
     process.stdout.write(message + os.EOL);
 }
-exports.info = info;
 /**
  * Begin an output group.
  *
@@ -366,14 +439,12 @@ exports.info = info;
 function startGroup(name) {
     (0, command_1.issue)('group', name);
 }
-exports.startGroup = startGroup;
 /**
  * End an output group.
  */
 function endGroup() {
     (0, command_1.issue)('endgroup');
 }
-exports.endGroup = endGroup;
 /**
  * Wrap an asynchronous function call in a group.
  *
@@ -395,7 +466,6 @@ function group(name, fn) {
         return result;
     });
 }
-exports.group = group;
 //-----------------------------------------------------------------------
 // Wrapper action state
 //-----------------------------------------------------------------------
@@ -413,7 +483,6 @@ function saveState(name, value) {
     }
     (0, command_1.issueCommand)('save-state', { name }, (0, utils_1.toCommandValue)(value));
 }
-exports.saveState = saveState;
 /**
  * Gets the value of an state set by this action's main execution.
  *
@@ -423,13 +492,11 @@ exports.saveState = saveState;
 function getState(name) {
     return process.env[`STATE_${name}`] || '';
 }
-exports.getState = getState;
 function getIDToken(aud) {
     return __awaiter(this, void 0, void 0, function* () {
         return yield oidc_utils_1.OidcClient.getIDToken(aud);
     });
 }
-exports.getIDToken = getIDToken;
 /**
  * Summary exports
  */
@@ -477,15 +544,26 @@ var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (
 }) : function(o, v) {
     o["default"] = v;
 });
-var __importStar = (this && this.__importStar) || function (mod) {
-    if (mod && mod.__esModule) return mod;
-    var result = {};
-    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
-    __setModuleDefault(result, mod);
-    return result;
-};
+var __importStar = (this && this.__importStar) || (function () {
+    var ownKeys = function(o) {
+        ownKeys = Object.getOwnPropertyNames || function (o) {
+            var ar = [];
+            for (var k in o) if (Object.prototype.hasOwnProperty.call(o, k)) ar[ar.length] = k;
+            return ar;
+        };
+        return ownKeys(o);
+    };
+    return function (mod) {
+        if (mod && mod.__esModule) return mod;
+        var result = {};
+        if (mod != null) for (var k = ownKeys(mod), i = 0; i < k.length; i++) if (k[i] !== "default") __createBinding(result, mod, k[i]);
+        __setModuleDefault(result, mod);
+        return result;
+    };
+})();
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.prepareKeyValueMessage = exports.issueFileCommand = void 0;
+exports.issueFileCommand = issueFileCommand;
+exports.prepareKeyValueMessage = prepareKeyValueMessage;
 // We use any as a valid input type
 /* eslint-disable @typescript-eslint/no-explicit-any */
 const crypto = __importStar(__nccwpck_require__(6982));
@@ -504,7 +582,6 @@ function issueFileCommand(command, message) {
         encoding: 'utf8'
     });
 }
-exports.issueFileCommand = issueFileCommand;
 function prepareKeyValueMessage(key, value) {
     const delimiter = `ghadelimiter_${crypto.randomUUID()}`;
     const convertedValue = (0, utils_1.toCommandValue)(value);
@@ -519,7 +596,6 @@ function prepareKeyValueMessage(key, value) {
     }
     return `${key}<<${delimiter}${os.EOL}${convertedValue}${os.EOL}${delimiter}`;
 }
-exports.prepareKeyValueMessage = prepareKeyValueMessage;
 //# sourceMappingURL=file-command.js.map
 
 /***/ }),
@@ -566,8 +642,8 @@ class OidcClient {
         return runtimeUrl;
     }
     static getCall(id_token_url) {
-        var _a;
         return __awaiter(this, void 0, void 0, function* () {
+            var _a;
             const httpclient = OidcClient.createHttpClient();
             const res = yield httpclient
                 .getJson(id_token_url)
@@ -629,15 +705,27 @@ var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (
 }) : function(o, v) {
     o["default"] = v;
 });
-var __importStar = (this && this.__importStar) || function (mod) {
-    if (mod && mod.__esModule) return mod;
-    var result = {};
-    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
-    __setModuleDefault(result, mod);
-    return result;
-};
+var __importStar = (this && this.__importStar) || (function () {
+    var ownKeys = function(o) {
+        ownKeys = Object.getOwnPropertyNames || function (o) {
+            var ar = [];
+            for (var k in o) if (Object.prototype.hasOwnProperty.call(o, k)) ar[ar.length] = k;
+            return ar;
+        };
+        return ownKeys(o);
+    };
+    return function (mod) {
+        if (mod && mod.__esModule) return mod;
+        var result = {};
+        if (mod != null) for (var k = ownKeys(mod), i = 0; i < k.length; i++) if (k[i] !== "default") __createBinding(result, mod, k[i]);
+        __setModuleDefault(result, mod);
+        return result;
+    };
+})();
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.toPlatformPath = exports.toWin32Path = exports.toPosixPath = void 0;
+exports.toPosixPath = toPosixPath;
+exports.toWin32Path = toWin32Path;
+exports.toPlatformPath = toPlatformPath;
 const path = __importStar(__nccwpck_require__(6928));
 /**
  * toPosixPath converts the given path to the posix form. On Windows, \\ will be
@@ -649,7 +737,6 @@ const path = __importStar(__nccwpck_require__(6928));
 function toPosixPath(pth) {
     return pth.replace(/[\\]/g, '/');
 }
-exports.toPosixPath = toPosixPath;
 /**
  * toWin32Path converts the given path to the win32 form. On Linux, / will be
  * replaced with \\.
@@ -660,7 +747,6 @@ exports.toPosixPath = toPosixPath;
 function toWin32Path(pth) {
     return pth.replace(/[/]/g, '\\');
 }
-exports.toWin32Path = toWin32Path;
 /**
  * toPlatformPath converts the given path to a platform-specific path. It does
  * this by replacing instances of / and \ with the platform-specific path
@@ -672,7 +758,6 @@ exports.toWin32Path = toWin32Path;
 function toPlatformPath(pth) {
     return pth.replace(/[/\\]/g, path.sep);
 }
-exports.toPlatformPath = toPlatformPath;
 //# sourceMappingURL=path-utils.js.map
 
 /***/ }),
@@ -698,13 +783,23 @@ var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (
 }) : function(o, v) {
     o["default"] = v;
 });
-var __importStar = (this && this.__importStar) || function (mod) {
-    if (mod && mod.__esModule) return mod;
-    var result = {};
-    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
-    __setModuleDefault(result, mod);
-    return result;
-};
+var __importStar = (this && this.__importStar) || (function () {
+    var ownKeys = function(o) {
+        ownKeys = Object.getOwnPropertyNames || function (o) {
+            var ar = [];
+            for (var k in o) if (Object.prototype.hasOwnProperty.call(o, k)) ar[ar.length] = k;
+            return ar;
+        };
+        return ownKeys(o);
+    };
+    return function (mod) {
+        if (mod && mod.__esModule) return mod;
+        var result = {};
+        if (mod != null) for (var k = ownKeys(mod), i = 0; i < k.length; i++) if (k[i] !== "default") __createBinding(result, mod, k[i]);
+        __setModuleDefault(result, mod);
+        return result;
+    };
+})();
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -718,7 +813,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.getDetails = exports.isLinux = exports.isMacOS = exports.isWindows = exports.arch = exports.platform = void 0;
+exports.isLinux = exports.isMacOS = exports.isWindows = exports.arch = exports.platform = void 0;
+exports.getDetails = getDetails;
 const os_1 = __importDefault(__nccwpck_require__(857));
 const exec = __importStar(__nccwpck_require__(5236));
 const getWindowsInfo = () => __awaiter(void 0, void 0, void 0, function* () {
@@ -773,7 +869,6 @@ function getDetails() {
             isLinux: exports.isLinux });
     });
 }
-exports.getDetails = getDetails;
 //# sourceMappingURL=platform.js.map
 
 /***/ }),
@@ -1076,7 +1171,8 @@ exports.summary = _summary;
 // We use any as a valid input type
 /* eslint-disable @typescript-eslint/no-explicit-any */
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.toCommandProperties = exports.toCommandValue = void 0;
+exports.toCommandValue = toCommandValue;
+exports.toCommandProperties = toCommandProperties;
 /**
  * Sanitizes an input into a string so it can be passed into issueCommand safely
  * @param input input to sanitize into a string
@@ -1090,7 +1186,6 @@ function toCommandValue(input) {
     }
     return JSON.stringify(input);
 }
-exports.toCommandValue = toCommandValue;
 /**
  *
  * @param annotationProperties
@@ -1110,7 +1205,6 @@ function toCommandProperties(annotationProperties) {
         endColumn: annotationProperties.endColumn
     };
 }
-exports.toCommandProperties = toCommandProperties;
 //# sourceMappingURL=utils.js.map
 
 /***/ }),
@@ -1122,7 +1216,11 @@ exports.toCommandProperties = toCommandProperties;
 
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
-    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
 }) : (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
     o[k2] = m[k];
@@ -1132,13 +1230,23 @@ var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (
 }) : function(o, v) {
     o["default"] = v;
 });
-var __importStar = (this && this.__importStar) || function (mod) {
-    if (mod && mod.__esModule) return mod;
-    var result = {};
-    if (mod != null) for (var k in mod) if (k !== "default" && Object.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
-    __setModuleDefault(result, mod);
-    return result;
-};
+var __importStar = (this && this.__importStar) || (function () {
+    var ownKeys = function(o) {
+        ownKeys = Object.getOwnPropertyNames || function (o) {
+            var ar = [];
+            for (var k in o) if (Object.prototype.hasOwnProperty.call(o, k)) ar[ar.length] = k;
+            return ar;
+        };
+        return ownKeys(o);
+    };
+    return function (mod) {
+        if (mod && mod.__esModule) return mod;
+        var result = {};
+        if (mod != null) for (var k = ownKeys(mod), i = 0; i < k.length; i++) if (k[i] !== "default") __createBinding(result, mod, k[i]);
+        __setModuleDefault(result, mod);
+        return result;
+    };
+})();
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -1149,7 +1257,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.getExecOutput = exports.exec = void 0;
+exports.exec = exec;
+exports.getExecOutput = getExecOutput;
 const string_decoder_1 = __nccwpck_require__(3193);
 const tr = __importStar(__nccwpck_require__(6665));
 /**
@@ -1175,7 +1284,6 @@ function exec(commandLine, args, options) {
         return runner.exec();
     });
 }
-exports.exec = exec;
 /**
  * Exec a command and get the output.
  * Output will be streamed to the live console.
@@ -1187,8 +1295,8 @@ exports.exec = exec;
  * @returns   Promise<ExecOutput>   exit code, stdout, and stderr
  */
 function getExecOutput(commandLine, args, options) {
-    var _a, _b;
     return __awaiter(this, void 0, void 0, function* () {
+        var _a, _b;
         let stdout = '';
         let stderr = '';
         //Using string decoder covers the case where a mult-byte character is split
@@ -1220,7 +1328,6 @@ function getExecOutput(commandLine, args, options) {
         };
     });
 }
-exports.getExecOutput = getExecOutput;
 //# sourceMappingURL=exec.js.map
 
 /***/ }),
@@ -1232,7 +1339,11 @@ exports.getExecOutput = getExecOutput;
 
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
-    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
 }) : (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
     o[k2] = m[k];
@@ -1242,13 +1353,23 @@ var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (
 }) : function(o, v) {
     o["default"] = v;
 });
-var __importStar = (this && this.__importStar) || function (mod) {
-    if (mod && mod.__esModule) return mod;
-    var result = {};
-    if (mod != null) for (var k in mod) if (k !== "default" && Object.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
-    __setModuleDefault(result, mod);
-    return result;
-};
+var __importStar = (this && this.__importStar) || (function () {
+    var ownKeys = function(o) {
+        ownKeys = Object.getOwnPropertyNames || function (o) {
+            var ar = [];
+            for (var k in o) if (Object.prototype.hasOwnProperty.call(o, k)) ar[ar.length] = k;
+            return ar;
+        };
+        return ownKeys(o);
+    };
+    return function (mod) {
+        if (mod && mod.__esModule) return mod;
+        var result = {};
+        if (mod != null) for (var k = ownKeys(mod), i = 0; i < k.length; i++) if (k[i] !== "default") __createBinding(result, mod, k[i]);
+        __setModuleDefault(result, mod);
+        return result;
+    };
+})();
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -1259,7 +1380,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.argStringToArray = exports.ToolRunner = void 0;
+exports.ToolRunner = void 0;
+exports.argStringToArray = argStringToArray;
 const os = __importStar(__nccwpck_require__(857));
 const events = __importStar(__nccwpck_require__(4434));
 const child = __importStar(__nccwpck_require__(5317));
@@ -1491,10 +1613,7 @@ class ToolRunner extends events.EventEmitter {
             }
         }
         reverse += '"';
-        return reverse
-            .split('')
-            .reverse()
-            .join('');
+        return reverse.split('').reverse().join('');
     }
     _uvQuoteCmdArg(arg) {
         // Tool runner wraps child_process.spawn() and needs to apply the same quoting as
@@ -1570,10 +1689,7 @@ class ToolRunner extends events.EventEmitter {
             }
         }
         reverse += '"';
-        return reverse
-            .split('')
-            .reverse()
-            .join('');
+        return reverse.split('').reverse().join('');
     }
     _cloneExecOptions(options) {
         options = options || {};
@@ -1777,7 +1893,6 @@ function argStringToArray(argString) {
     }
     return args;
 }
-exports.argStringToArray = argStringToArray;
 class ExecState extends events.EventEmitter {
     constructor(options, toolPath) {
         super();
@@ -1806,7 +1921,7 @@ class ExecState extends events.EventEmitter {
             this._setResult();
         }
         else if (this.processExited) {
-            this.timeout = timers_1.setTimeout(ExecState.HandleTimeout, this.delay, this);
+            this.timeout = (0, timers_1.setTimeout)(ExecState.HandleTimeout, this.delay, this);
         }
     }
     _debug(message) {
@@ -1839,8 +1954,7 @@ class ExecState extends events.EventEmitter {
             return;
         }
         if (!state.processClosed && state.processExited) {
-            const message = `The STDIO streams did not close within ${state.delay /
-                1000} seconds of the exit event from process '${state.toolPath}'. This may indicate a child process inherited the STDIO streams and has not yet exited.`;
+            const message = `The STDIO streams did not close within ${state.delay / 1000} seconds of the exit event from process '${state.toolPath}'. This may indicate a child process inherited the STDIO streams and has not yet exited.`;
             state._debug(message);
         }
         state._setResult();
@@ -1960,13 +2074,23 @@ var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (
 }) : function(o, v) {
     o["default"] = v;
 });
-var __importStar = (this && this.__importStar) || function (mod) {
-    if (mod && mod.__esModule) return mod;
-    var result = {};
-    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
-    __setModuleDefault(result, mod);
-    return result;
-};
+var __importStar = (this && this.__importStar) || (function () {
+    var ownKeys = function(o) {
+        ownKeys = Object.getOwnPropertyNames || function (o) {
+            var ar = [];
+            for (var k in o) if (Object.prototype.hasOwnProperty.call(o, k)) ar[ar.length] = k;
+            return ar;
+        };
+        return ownKeys(o);
+    };
+    return function (mod) {
+        if (mod && mod.__esModule) return mod;
+        var result = {};
+        if (mod != null) for (var k = ownKeys(mod), i = 0; i < k.length; i++) if (k[i] !== "default") __createBinding(result, mod, k[i]);
+        __setModuleDefault(result, mod);
+        return result;
+    };
+})();
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -1977,7 +2101,9 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.HttpClient = exports.isHttps = exports.HttpClientResponse = exports.HttpClientError = exports.getProxyUrl = exports.MediaTypes = exports.Headers = exports.HttpCodes = void 0;
+exports.HttpClient = exports.HttpClientResponse = exports.HttpClientError = exports.MediaTypes = exports.Headers = exports.HttpCodes = void 0;
+exports.getProxyUrl = getProxyUrl;
+exports.isHttps = isHttps;
 const http = __importStar(__nccwpck_require__(8611));
 const https = __importStar(__nccwpck_require__(5692));
 const pm = __importStar(__nccwpck_require__(4988));
@@ -2030,7 +2156,6 @@ function getProxyUrl(serverUrl) {
     const proxyUrl = pm.getProxyUrl(new URL(serverUrl));
     return proxyUrl ? proxyUrl.href : '';
 }
-exports.getProxyUrl = getProxyUrl;
 const HttpRedirectCodes = [
     HttpCodes.MovedPermanently,
     HttpCodes.ResourceMoved,
@@ -2091,7 +2216,6 @@ function isHttps(requestUrl) {
     const parsedUrl = new URL(requestUrl);
     return parsedUrl.protocol === 'https:';
 }
-exports.isHttps = isHttps;
 class HttpClient {
     constructor(userAgent, handlers, requestOptions) {
         this._ignoreSslError = false;
@@ -2174,36 +2298,39 @@ class HttpClient {
      * Gets a typed object from an endpoint
      * Be aware that not found returns a null.  Other errors (4xx, 5xx) reject the promise
      */
-    getJson(requestUrl, additionalHeaders = {}) {
-        return __awaiter(this, void 0, void 0, function* () {
+    getJson(requestUrl_1) {
+        return __awaiter(this, arguments, void 0, function* (requestUrl, additionalHeaders = {}) {
             additionalHeaders[Headers.Accept] = this._getExistingOrDefaultHeader(additionalHeaders, Headers.Accept, MediaTypes.ApplicationJson);
             const res = yield this.get(requestUrl, additionalHeaders);
             return this._processResponse(res, this.requestOptions);
         });
     }
-    postJson(requestUrl, obj, additionalHeaders = {}) {
-        return __awaiter(this, void 0, void 0, function* () {
+    postJson(requestUrl_1, obj_1) {
+        return __awaiter(this, arguments, void 0, function* (requestUrl, obj, additionalHeaders = {}) {
             const data = JSON.stringify(obj, null, 2);
             additionalHeaders[Headers.Accept] = this._getExistingOrDefaultHeader(additionalHeaders, Headers.Accept, MediaTypes.ApplicationJson);
-            additionalHeaders[Headers.ContentType] = this._getExistingOrDefaultHeader(additionalHeaders, Headers.ContentType, MediaTypes.ApplicationJson);
+            additionalHeaders[Headers.ContentType] =
+                this._getExistingOrDefaultContentTypeHeader(additionalHeaders, MediaTypes.ApplicationJson);
             const res = yield this.post(requestUrl, data, additionalHeaders);
             return this._processResponse(res, this.requestOptions);
         });
     }
-    putJson(requestUrl, obj, additionalHeaders = {}) {
-        return __awaiter(this, void 0, void 0, function* () {
+    putJson(requestUrl_1, obj_1) {
+        return __awaiter(this, arguments, void 0, function* (requestUrl, obj, additionalHeaders = {}) {
             const data = JSON.stringify(obj, null, 2);
             additionalHeaders[Headers.Accept] = this._getExistingOrDefaultHeader(additionalHeaders, Headers.Accept, MediaTypes.ApplicationJson);
-            additionalHeaders[Headers.ContentType] = this._getExistingOrDefaultHeader(additionalHeaders, Headers.ContentType, MediaTypes.ApplicationJson);
+            additionalHeaders[Headers.ContentType] =
+                this._getExistingOrDefaultContentTypeHeader(additionalHeaders, MediaTypes.ApplicationJson);
             const res = yield this.put(requestUrl, data, additionalHeaders);
             return this._processResponse(res, this.requestOptions);
         });
     }
-    patchJson(requestUrl, obj, additionalHeaders = {}) {
-        return __awaiter(this, void 0, void 0, function* () {
+    patchJson(requestUrl_1, obj_1) {
+        return __awaiter(this, arguments, void 0, function* (requestUrl, obj, additionalHeaders = {}) {
             const data = JSON.stringify(obj, null, 2);
             additionalHeaders[Headers.Accept] = this._getExistingOrDefaultHeader(additionalHeaders, Headers.Accept, MediaTypes.ApplicationJson);
-            additionalHeaders[Headers.ContentType] = this._getExistingOrDefaultHeader(additionalHeaders, Headers.ContentType, MediaTypes.ApplicationJson);
+            additionalHeaders[Headers.ContentType] =
+                this._getExistingOrDefaultContentTypeHeader(additionalHeaders, MediaTypes.ApplicationJson);
             const res = yield this.patch(requestUrl, data, additionalHeaders);
             return this._processResponse(res, this.requestOptions);
         });
@@ -2432,12 +2559,73 @@ class HttpClient {
         }
         return lowercaseKeys(headers || {});
     }
+    /**
+     * Gets an existing header value or returns a default.
+     * Handles converting number header values to strings since HTTP headers must be strings.
+     * Note: This returns string | string[] since some headers can have multiple values.
+     * For headers that must always be a single string (like Content-Type), use the
+     * specialized _getExistingOrDefaultContentTypeHeader method instead.
+     */
     _getExistingOrDefaultHeader(additionalHeaders, header, _default) {
         let clientHeader;
         if (this.requestOptions && this.requestOptions.headers) {
-            clientHeader = lowercaseKeys(this.requestOptions.headers)[header];
+            const headerValue = lowercaseKeys(this.requestOptions.headers)[header];
+            if (headerValue) {
+                clientHeader =
+                    typeof headerValue === 'number' ? headerValue.toString() : headerValue;
+            }
         }
-        return additionalHeaders[header] || clientHeader || _default;
+        const additionalValue = additionalHeaders[header];
+        if (additionalValue !== undefined) {
+            return typeof additionalValue === 'number'
+                ? additionalValue.toString()
+                : additionalValue;
+        }
+        if (clientHeader !== undefined) {
+            return clientHeader;
+        }
+        return _default;
+    }
+    /**
+     * Specialized version of _getExistingOrDefaultHeader for Content-Type header.
+     * Always returns a single string (not an array) since Content-Type should be a single value.
+     * Converts arrays to comma-separated strings and numbers to strings to ensure type safety.
+     * This was split from _getExistingOrDefaultHeader to provide stricter typing for callers
+     * that assign the result to places expecting a string (e.g., additionalHeaders[Headers.ContentType]).
+     */
+    _getExistingOrDefaultContentTypeHeader(additionalHeaders, _default) {
+        let clientHeader;
+        if (this.requestOptions && this.requestOptions.headers) {
+            const headerValue = lowercaseKeys(this.requestOptions.headers)[Headers.ContentType];
+            if (headerValue) {
+                if (typeof headerValue === 'number') {
+                    clientHeader = String(headerValue);
+                }
+                else if (Array.isArray(headerValue)) {
+                    clientHeader = headerValue.join(', ');
+                }
+                else {
+                    clientHeader = headerValue;
+                }
+            }
+        }
+        const additionalValue = additionalHeaders[Headers.ContentType];
+        // Return the first non-undefined value, converting numbers or arrays to strings if necessary
+        if (additionalValue !== undefined) {
+            if (typeof additionalValue === 'number') {
+                return String(additionalValue);
+            }
+            else if (Array.isArray(additionalValue)) {
+                return additionalValue.join(', ');
+            }
+            else {
+                return additionalValue;
+            }
+        }
+        if (clientHeader !== undefined) {
+            return clientHeader;
+        }
+        return _default;
     }
     _getAgent(parsedUrl) {
         let agent;
@@ -2603,7 +2791,8 @@ const lowercaseKeys = (obj) => Object.keys(obj).reduce((c, k) => ((c[k.toLowerCa
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.checkBypass = exports.getProxyUrl = void 0;
+exports.getProxyUrl = getProxyUrl;
+exports.checkBypass = checkBypass;
 function getProxyUrl(reqUrl) {
     const usingSsl = reqUrl.protocol === 'https:';
     if (checkBypass(reqUrl)) {
@@ -2630,7 +2819,6 @@ function getProxyUrl(reqUrl) {
         return undefined;
     }
 }
-exports.getProxyUrl = getProxyUrl;
 function checkBypass(reqUrl) {
     if (!reqUrl.hostname) {
         return false;
@@ -2674,7 +2862,6 @@ function checkBypass(reqUrl) {
     }
     return false;
 }
-exports.checkBypass = checkBypass;
 function isLoopbackAddress(host) {
     const hostLower = host.toLowerCase();
     return (hostLower === 'localhost' ||
@@ -2706,7 +2893,11 @@ class DecodedURL extends URL {
 
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
-    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
 }) : (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
     o[k2] = m[k];
@@ -2716,13 +2907,23 @@ var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (
 }) : function(o, v) {
     o["default"] = v;
 });
-var __importStar = (this && this.__importStar) || function (mod) {
-    if (mod && mod.__esModule) return mod;
-    var result = {};
-    if (mod != null) for (var k in mod) if (k !== "default" && Object.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
-    __setModuleDefault(result, mod);
-    return result;
-};
+var __importStar = (this && this.__importStar) || (function () {
+    var ownKeys = function(o) {
+        ownKeys = Object.getOwnPropertyNames || function (o) {
+            var ar = [];
+            for (var k in o) if (Object.prototype.hasOwnProperty.call(o, k)) ar[ar.length] = k;
+            return ar;
+        };
+        return ownKeys(o);
+    };
+    return function (mod) {
+        if (mod && mod.__esModule) return mod;
+        var result = {};
+        if (mod != null) for (var k = ownKeys(mod), i = 0; i < k.length; i++) if (k[i] !== "default") __createBinding(result, mod, k[i]);
+        __setModuleDefault(result, mod);
+        return result;
+    };
+})();
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -2734,21 +2935,49 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 var _a;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.getCmdPath = exports.tryGetExecutablePath = exports.isRooted = exports.isDirectory = exports.exists = exports.READONLY = exports.UV_FS_O_EXLOCK = exports.IS_WINDOWS = exports.unlink = exports.symlink = exports.stat = exports.rmdir = exports.rm = exports.rename = exports.readlink = exports.readdir = exports.open = exports.mkdir = exports.lstat = exports.copyFile = exports.chmod = void 0;
+exports.READONLY = exports.UV_FS_O_EXLOCK = exports.IS_WINDOWS = exports.unlink = exports.symlink = exports.stat = exports.rmdir = exports.rm = exports.rename = exports.readdir = exports.open = exports.mkdir = exports.lstat = exports.copyFile = exports.chmod = void 0;
+exports.readlink = readlink;
+exports.exists = exists;
+exports.isDirectory = isDirectory;
+exports.isRooted = isRooted;
+exports.tryGetExecutablePath = tryGetExecutablePath;
+exports.getCmdPath = getCmdPath;
 const fs = __importStar(__nccwpck_require__(9896));
 const path = __importStar(__nccwpck_require__(6928));
 _a = fs.promises
 // export const {open} = 'fs'
-, exports.chmod = _a.chmod, exports.copyFile = _a.copyFile, exports.lstat = _a.lstat, exports.mkdir = _a.mkdir, exports.open = _a.open, exports.readdir = _a.readdir, exports.readlink = _a.readlink, exports.rename = _a.rename, exports.rm = _a.rm, exports.rmdir = _a.rmdir, exports.stat = _a.stat, exports.symlink = _a.symlink, exports.unlink = _a.unlink;
+, exports.chmod = _a.chmod, exports.copyFile = _a.copyFile, exports.lstat = _a.lstat, exports.mkdir = _a.mkdir, exports.open = _a.open, exports.readdir = _a.readdir, exports.rename = _a.rename, exports.rm = _a.rm, exports.rmdir = _a.rmdir, exports.stat = _a.stat, exports.symlink = _a.symlink, exports.unlink = _a.unlink;
 // export const {open} = 'fs'
 exports.IS_WINDOWS = process.platform === 'win32';
+/**
+ * Custom implementation of readlink to ensure Windows junctions
+ * maintain trailing backslash for backward compatibility with Node.js < 24
+ *
+ * In Node.js 20, Windows junctions (directory symlinks) always returned paths
+ * with trailing backslashes. Node.js 24 removed this behavior, which breaks
+ * code that relied on this format for path operations.
+ *
+ * This implementation restores the Node 20 behavior by adding a trailing
+ * backslash to all junction results on Windows.
+ */
+function readlink(fsPath) {
+    return __awaiter(this, void 0, void 0, function* () {
+        const result = yield fs.promises.readlink(fsPath);
+        // On Windows, restore Node 20 behavior: add trailing backslash to all results
+        // since junctions on Windows are always directory links
+        if (exports.IS_WINDOWS && !result.endsWith('\\')) {
+            return `${result}\\`;
+        }
+        return result;
+    });
+}
 // See https://github.com/nodejs/node/blob/d0153aee367422d0858105abec186da4dff0a0c5/deps/uv/include/uv/win.h#L691
 exports.UV_FS_O_EXLOCK = 0x10000000;
 exports.READONLY = fs.constants.O_RDONLY;
 function exists(fsPath) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
-            yield exports.stat(fsPath);
+            yield (0, exports.stat)(fsPath);
         }
         catch (err) {
             if (err.code === 'ENOENT') {
@@ -2759,14 +2988,12 @@ function exists(fsPath) {
         return true;
     });
 }
-exports.exists = exists;
-function isDirectory(fsPath, useStat = false) {
-    return __awaiter(this, void 0, void 0, function* () {
-        const stats = useStat ? yield exports.stat(fsPath) : yield exports.lstat(fsPath);
+function isDirectory(fsPath_1) {
+    return __awaiter(this, arguments, void 0, function* (fsPath, useStat = false) {
+        const stats = useStat ? yield (0, exports.stat)(fsPath) : yield (0, exports.lstat)(fsPath);
         return stats.isDirectory();
     });
 }
-exports.isDirectory = isDirectory;
 /**
  * On OSX/Linux, true if path starts with '/'. On Windows, true for paths like:
  * \, \hello, \\hello\share, C:, and C:\hello (and corresponding alternate separator cases).
@@ -2782,7 +3009,6 @@ function isRooted(p) {
     }
     return p.startsWith('/');
 }
-exports.isRooted = isRooted;
 /**
  * Best effort attempt to determine whether a file exists and is executable.
  * @param filePath    file path to check
@@ -2794,7 +3020,7 @@ function tryGetExecutablePath(filePath, extensions) {
         let stats = undefined;
         try {
             // test file exists
-            stats = yield exports.stat(filePath);
+            stats = yield (0, exports.stat)(filePath);
         }
         catch (err) {
             if (err.code !== 'ENOENT') {
@@ -2822,7 +3048,7 @@ function tryGetExecutablePath(filePath, extensions) {
             filePath = originalFilePath + extension;
             stats = undefined;
             try {
-                stats = yield exports.stat(filePath);
+                stats = yield (0, exports.stat)(filePath);
             }
             catch (err) {
                 if (err.code !== 'ENOENT') {
@@ -2836,7 +3062,7 @@ function tryGetExecutablePath(filePath, extensions) {
                     try {
                         const directory = path.dirname(filePath);
                         const upperName = path.basename(filePath).toUpperCase();
-                        for (const actualName of yield exports.readdir(directory)) {
+                        for (const actualName of yield (0, exports.readdir)(directory)) {
                             if (upperName === actualName.toUpperCase()) {
                                 filePath = path.join(directory, actualName);
                                 break;
@@ -2859,7 +3085,6 @@ function tryGetExecutablePath(filePath, extensions) {
         return '';
     });
 }
-exports.tryGetExecutablePath = tryGetExecutablePath;
 function normalizeSeparators(p) {
     p = p || '';
     if (exports.IS_WINDOWS) {
@@ -2876,15 +3101,18 @@ function normalizeSeparators(p) {
 //   256 128 64 32 16 8 4 2 1
 function isUnixExecutable(stats) {
     return ((stats.mode & 1) > 0 ||
-        ((stats.mode & 8) > 0 && stats.gid === process.getgid()) ||
-        ((stats.mode & 64) > 0 && stats.uid === process.getuid()));
+        ((stats.mode & 8) > 0 &&
+            process.getgid !== undefined &&
+            stats.gid === process.getgid()) ||
+        ((stats.mode & 64) > 0 &&
+            process.getuid !== undefined &&
+            stats.uid === process.getuid()));
 }
 // Get the path of cmd.exe in windows
 function getCmdPath() {
     var _a;
     return (_a = process.env['COMSPEC']) !== null && _a !== void 0 ? _a : `cmd.exe`;
 }
-exports.getCmdPath = getCmdPath;
 //# sourceMappingURL=io-util.js.map
 
 /***/ }),
@@ -2896,7 +3124,11 @@ exports.getCmdPath = getCmdPath;
 
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
-    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
 }) : (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
     o[k2] = m[k];
@@ -2906,13 +3138,23 @@ var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (
 }) : function(o, v) {
     o["default"] = v;
 });
-var __importStar = (this && this.__importStar) || function (mod) {
-    if (mod && mod.__esModule) return mod;
-    var result = {};
-    if (mod != null) for (var k in mod) if (k !== "default" && Object.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
-    __setModuleDefault(result, mod);
-    return result;
-};
+var __importStar = (this && this.__importStar) || (function () {
+    var ownKeys = function(o) {
+        ownKeys = Object.getOwnPropertyNames || function (o) {
+            var ar = [];
+            for (var k in o) if (Object.prototype.hasOwnProperty.call(o, k)) ar[ar.length] = k;
+            return ar;
+        };
+        return ownKeys(o);
+    };
+    return function (mod) {
+        if (mod && mod.__esModule) return mod;
+        var result = {};
+        if (mod != null) for (var k = ownKeys(mod), i = 0; i < k.length; i++) if (k[i] !== "default") __createBinding(result, mod, k[i]);
+        __setModuleDefault(result, mod);
+        return result;
+    };
+})();
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -2923,7 +3165,12 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.findInPath = exports.which = exports.mkdirP = exports.rmRF = exports.mv = exports.cp = void 0;
+exports.cp = cp;
+exports.mv = mv;
+exports.rmRF = rmRF;
+exports.mkdirP = mkdirP;
+exports.which = which;
+exports.findInPath = findInPath;
 const assert_1 = __nccwpck_require__(2613);
 const path = __importStar(__nccwpck_require__(6928));
 const ioUtil = __importStar(__nccwpck_require__(5207));
@@ -2935,8 +3182,8 @@ const ioUtil = __importStar(__nccwpck_require__(5207));
  * @param     dest      destination path
  * @param     options   optional. See CopyOptions.
  */
-function cp(source, dest, options = {}) {
-    return __awaiter(this, void 0, void 0, function* () {
+function cp(source_1, dest_1) {
+    return __awaiter(this, arguments, void 0, function* (source, dest, options = {}) {
         const { force, recursive, copySourceDirectory } = readCopyOptions(options);
         const destStat = (yield ioUtil.exists(dest)) ? yield ioUtil.stat(dest) : null;
         // Dest is an existing file, but not forcing
@@ -2968,7 +3215,6 @@ function cp(source, dest, options = {}) {
         }
     });
 }
-exports.cp = cp;
 /**
  * Moves a path.
  *
@@ -2976,8 +3222,8 @@ exports.cp = cp;
  * @param     dest      destination path
  * @param     options   optional. See MoveOptions.
  */
-function mv(source, dest, options = {}) {
-    return __awaiter(this, void 0, void 0, function* () {
+function mv(source_1, dest_1) {
+    return __awaiter(this, arguments, void 0, function* (source, dest, options = {}) {
         if (yield ioUtil.exists(dest)) {
             let destExists = true;
             if (yield ioUtil.isDirectory(dest)) {
@@ -2998,7 +3244,6 @@ function mv(source, dest, options = {}) {
         yield ioUtil.rename(source, dest);
     });
 }
-exports.mv = mv;
 /**
  * Remove a path recursively with force
  *
@@ -3027,7 +3272,6 @@ function rmRF(inputPath) {
         }
     });
 }
-exports.rmRF = rmRF;
 /**
  * Make a directory.  Creates the full path with folders in between
  * Will throw if it fails
@@ -3037,11 +3281,10 @@ exports.rmRF = rmRF;
  */
 function mkdirP(fsPath) {
     return __awaiter(this, void 0, void 0, function* () {
-        assert_1.ok(fsPath, 'a path argument must be provided');
+        (0, assert_1.ok)(fsPath, 'a path argument must be provided');
         yield ioUtil.mkdir(fsPath, { recursive: true });
     });
 }
-exports.mkdirP = mkdirP;
 /**
  * Returns path of a tool had the tool actually been invoked.  Resolves via paths.
  * If you check and the tool does not exist, it will throw.
@@ -3075,7 +3318,6 @@ function which(tool, check) {
         return '';
     });
 }
-exports.which = which;
 /**
  * Returns a list of all occurrences of the given tool on the system path.
  *
@@ -3132,7 +3374,6 @@ function findInPath(tool) {
         return matches;
     });
 }
-exports.findInPath = findInPath;
 function readCopyOptions(options) {
     const force = options.force == null ? true : options.force;
     const recursive = Boolean(options.recursive);
@@ -43327,6 +43568,10 @@ function normalizeURL(url) {
     if (url.indexOf("://") === -1)
       url = "wss://" + url;
     let p = new URL(url);
+    if (p.protocol === "http:")
+      p.protocol = "ws:";
+    else if (p.protocol === "https:")
+      p.protocol = "wss:";
     p.pathname = p.pathname.replace(/\/+/g, "/");
     if (p.pathname.endsWith("/"))
       p.pathname = p.pathname.slice(0, -1);
@@ -43487,6 +43732,7 @@ __export(kinds_exports, {
   BadgeAward: () => BadgeAward,
   BadgeDefinition: () => BadgeDefinition,
   BlockedRelaysList: () => BlockedRelaysList,
+  BlossomServerList: () => BlossomServerList,
   BookmarkList: () => BookmarkList,
   Bookmarksets: () => Bookmarksets,
   Calendar: () => Calendar,
@@ -43496,8 +43742,10 @@ __export(kinds_exports, {
   ChannelMessage: () => ChannelMessage,
   ChannelMetadata: () => ChannelMetadata,
   ChannelMuteUser: () => ChannelMuteUser,
+  ChatMessage: () => ChatMessage,
   ClassifiedListing: () => ClassifiedListing,
   ClientAuth: () => ClientAuth,
+  Comment: () => Comment,
   CommunitiesList: () => CommunitiesList,
   CommunityDefinition: () => CommunityDefinition,
   CommunityPostApproval: () => CommunityPostApproval,
@@ -43512,12 +43760,16 @@ __export(kinds_exports, {
   Emojisets: () => Emojisets,
   EncryptedDirectMessage: () => EncryptedDirectMessage,
   EventDeletion: () => EventDeletion,
+  FavoriteRelays: () => FavoriteRelays,
+  FileMessage: () => FileMessage,
   FileMetadata: () => FileMetadata,
   FileServerPreference: () => FileServerPreference,
   Followsets: () => Followsets,
+  ForumThread: () => ForumThread,
   GenericRepost: () => GenericRepost,
   Genericlists: () => Genericlists,
   GiftWrap: () => GiftWrap,
+  GroupMetadata: () => GroupMetadata,
   HTTPAuth: () => HTTPAuth,
   Handlerinformation: () => Handlerinformation,
   Handlerrecommendation: () => Handlerrecommendation,
@@ -43537,9 +43789,13 @@ __export(kinds_exports, {
   NWCWalletInfo: () => NWCWalletInfo,
   NWCWalletRequest: () => NWCWalletRequest,
   NWCWalletResponse: () => NWCWalletResponse,
+  NormalVideo: () => NormalVideo,
   NostrConnect: () => NostrConnect,
   OpenTimestamps: () => OpenTimestamps,
+  Photo: () => Photo,
   Pinlist: () => Pinlist,
+  Poll: () => Poll,
+  PollResponse: () => PollResponse,
   PrivateDirectMessage: () => PrivateDirectMessage,
   ProblemTracker: () => ProblemTracker,
   ProfileBadges: () => ProfileBadges,
@@ -43547,6 +43803,7 @@ __export(kinds_exports, {
   Reaction: () => Reaction,
   RecommendRelay: () => RecommendRelay,
   RelayList: () => RelayList,
+  RelayReview: () => RelayReview,
   Relaysets: () => Relaysets,
   Report: () => Report,
   Reporting: () => Reporting,
@@ -43554,9 +43811,12 @@ __export(kinds_exports, {
   Seal: () => Seal,
   SearchRelaysList: () => SearchRelaysList,
   ShortTextNote: () => ShortTextNote,
+  ShortVideo: () => ShortVideo,
   Time: () => Time,
   UserEmojiList: () => UserEmojiList,
   UserStatuses: () => UserStatuses,
+  Voice: () => Voice,
+  VoiceComment: () => VoiceComment,
   Zap: () => Zap,
   ZapGoal: () => ZapGoal,
   ZapRequest: () => ZapRequest,
@@ -43568,10 +43828,10 @@ __export(kinds_exports, {
   isReplaceableKind: () => isReplaceableKind
 });
 function isRegularKind(kind) {
-  return 1e3 <= kind && kind < 1e4 || [1, 2, 4, 5, 6, 7, 8, 16, 40, 41, 42, 43, 44].includes(kind);
+  return kind < 1e4 && kind !== 0 && kind !== 3;
 }
 function isReplaceableKind(kind) {
-  return [0, 3].includes(kind) || 1e4 <= kind && kind < 2e4;
+  return kind === 0 || kind === 3 || 1e4 <= kind && kind < 2e4;
 }
 function isEphemeralKind(kind) {
   return 2e4 <= kind && kind < 3e4;
@@ -43603,9 +43863,15 @@ var EventDeletion = 5;
 var Repost = 6;
 var Reaction = 7;
 var BadgeAward = 8;
+var ChatMessage = 9;
+var ForumThread = 11;
 var Seal = 13;
 var PrivateDirectMessage = 14;
+var FileMessage = 15;
 var GenericRepost = 16;
+var Photo = 20;
+var NormalVideo = 21;
+var ShortVideo = 22;
 var ChannelCreation = 40;
 var ChannelMetadata = 41;
 var ChannelMessage = 42;
@@ -43613,8 +43879,12 @@ var ChannelHideMessage = 43;
 var ChannelMuteUser = 44;
 var OpenTimestamps = 1040;
 var GiftWrap = 1059;
+var Poll = 1068;
 var FileMetadata = 1063;
+var Comment = 1111;
 var LiveChatMessage = 1311;
+var Voice = 1222;
+var VoiceComment = 1244;
 var ProblemTracker = 1971;
 var Report = 1984;
 var Reporting = 1984;
@@ -43627,6 +43897,7 @@ var ZapGoal = 9041;
 var ZapRequest = 9734;
 var Zap = 9735;
 var Highlights = 9802;
+var PollResponse = 1018;
 var Mutelist = 1e4;
 var Pinlist = 10001;
 var RelayList = 10002;
@@ -43635,10 +43906,12 @@ var CommunitiesList = 10004;
 var PublicChatsList = 10005;
 var BlockedRelaysList = 10006;
 var SearchRelaysList = 10007;
+var FavoriteRelays = 10012;
 var InterestsList = 10015;
 var UserEmojiList = 10030;
 var DirectMessageRelaysList = 10050;
 var FileServerPreference = 10096;
+var BlossomServerList = 10063;
 var NWCWalletInfo = 13194;
 var LightningPubRPC = 21e3;
 var ClientAuth = 22242;
@@ -43668,9 +43941,11 @@ var Date2 = 31922;
 var Time = 31923;
 var Calendar = 31924;
 var CalendarEventRSVP = 31925;
+var RelayReview = 31987;
 var Handlerrecommendation = 31989;
 var Handlerinformation = 31990;
 var CommunityDefinition = 34550;
+var GroupMetadata = 39e3;
 
 // filter.ts
 function matchFilter(filter, event) {
@@ -43856,10 +44131,11 @@ var AbstractRelay = class {
   _connected = false;
   onclose = null;
   onnotice = (msg) => console.debug(`NOTICE from ${this.url}: ${msg}`);
+  onauth;
   baseEoseTimeout = 4400;
   connectionTimeout = 4400;
   publishTimeout = 4400;
-  pingFrequency = 2e4;
+  pingFrequency = 29e3;
   pingTimeout = 2e4;
   resubscribeBackoff = [1e4, 1e4, 1e4, 2e4, 2e4, 3e4, 6e4];
   openSubs = /* @__PURE__ */ new Map();
@@ -43867,7 +44143,7 @@ var AbstractRelay = class {
   enableReconnect;
   connectionTimeoutHandle;
   reconnectTimeoutHandle;
-  pingTimeoutHandle;
+  pingIntervalHandle;
   reconnectAttempts = 0;
   closedIntentionally = false;
   connectionPromise;
@@ -43921,9 +44197,9 @@ var AbstractRelay = class {
     }, backoff);
   }
   handleHardClose(reason) {
-    if (this.pingTimeoutHandle) {
-      clearTimeout(this.pingTimeoutHandle);
-      this.pingTimeoutHandle = void 0;
+    if (this.pingIntervalHandle) {
+      clearInterval(this.pingIntervalHandle);
+      this.pingIntervalHandle = void 0;
     }
     this._connected = false;
     this.connectionPromise = void 0;
@@ -43962,16 +44238,21 @@ var AbstractRelay = class {
         }
         clearTimeout(this.connectionTimeoutHandle);
         this._connected = true;
+        const isReconnection = this.reconnectAttempts > 0;
         this.reconnectAttempts = 0;
         for (const sub of this.openSubs.values()) {
           sub.eosed = false;
-          if (typeof this.enableReconnect === "function") {
-            sub.filters = this.enableReconnect(sub.filters);
+          if (isReconnection) {
+            for (let f = 0; f < sub.filters.length; f++) {
+              if (sub.lastEmitted) {
+                sub.filters[f].since = sub.lastEmitted + 1;
+              }
+            }
           }
           sub.fire();
         }
         if (this.enablePing) {
-          this.pingpong();
+          this.pingIntervalHandle = setInterval(() => this.pingpong(), this.pingFrequency);
         }
         resolve();
       };
@@ -43996,15 +44277,28 @@ var AbstractRelay = class {
       this.ws.ping();
     });
   }
-  async waitForDummyReq() {
-    return new Promise((resolve, _) => {
-      const sub = this.subscribe([{ ids: ["a".repeat(64)] }], {
-        oneose: () => {
-          sub.close();
-          resolve(true);
-        },
-        eoseTimeout: this.pingTimeout + 1e3
-      });
+  waitForDummyReq() {
+    return new Promise((resolve, reject) => {
+      if (!this.connectionPromise)
+        return reject(new Error(`no connection to ${this.url}, can't ping`));
+      try {
+        const sub = this.subscribe(
+          [{ ids: ["aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"], limit: 0 }],
+          {
+            label: "forced-ping",
+            oneose: () => {
+              resolve(true);
+              sub.close();
+            },
+            onclose() {
+              resolve(true);
+            },
+            eoseTimeout: this.pingTimeout + 1e3
+          }
+        );
+      } catch (err) {
+        reject(err);
+      }
     });
   }
   async pingpong() {
@@ -44013,9 +44307,7 @@ var AbstractRelay = class {
         this.ws && this.ws.ping && this.ws.once ? this.waitForPingPong() : this.waitForDummyReq(),
         new Promise((res) => setTimeout(() => res(false), this.pingTimeout))
       ]);
-      if (result) {
-        this.pingTimeoutHandle = setTimeout(() => this.pingpong(), this.pingFrequency);
-      } else {
+      if (!result) {
         if (this.ws?.readyState === this._WebSocket.OPEN) {
           this.ws?.close();
         }
@@ -44059,6 +44351,8 @@ var AbstractRelay = class {
           if (this.verifyEvent(event) && matchFilters(so.filters, event)) {
             so.onevent(event);
           }
+          if (!so.lastEmitted || so.lastEmitted < event.created_at)
+            so.lastEmitted = event.created_at;
           return;
         }
         case "COUNT": {
@@ -44108,6 +44402,9 @@ var AbstractRelay = class {
         }
         case "AUTH": {
           this.challenge = data[1];
+          if (this.onauth) {
+            this.auth(this.onauth);
+          }
           return;
         }
         default: {
@@ -44192,9 +44489,9 @@ var AbstractRelay = class {
       clearTimeout(this.reconnectTimeoutHandle);
       this.reconnectTimeoutHandle = void 0;
     }
-    if (this.pingTimeoutHandle) {
-      clearTimeout(this.pingTimeoutHandle);
-      this.pingTimeoutHandle = void 0;
+    if (this.pingIntervalHandle) {
+      clearInterval(this.pingIntervalHandle);
+      this.pingIntervalHandle = void 0;
     }
     this.closeAllSubscriptions("relay connection closed by us");
     this._connected = false;
@@ -44213,6 +44510,7 @@ var AbstractRelay = class {
 var Subscription = class {
   relay;
   id;
+  lastEmitted;
   closed = false;
   eosed = false;
   filters;
@@ -44295,13 +44593,15 @@ var AbstractSimplePool = class {
   verifyEvent;
   enablePing;
   enableReconnect;
+  automaticallyAuth;
   trustedRelayURLs = /* @__PURE__ */ new Set();
   _WebSocket;
   constructor(opts) {
     this.verifyEvent = opts.verifyEvent;
     this._WebSocket = opts.websocketImplementation;
     this.enablePing = opts.enablePing;
-    this.enableReconnect = opts.enableReconnect;
+    this.enableReconnect = opts.enableReconnect || false;
+    this.automaticallyAuth = opts.automaticallyAuth;
   }
   async ensureRelay(url, params) {
     url = normalizeURL(url);
@@ -44322,6 +44622,12 @@ var AbstractSimplePool = class {
         relay.connectionTimeout = params.connectionTimeout;
       this.relays.set(url, relay);
     }
+    if (this.automaticallyAuth) {
+      const authSignerFn = this.automaticallyAuth(url);
+      if (authSignerFn) {
+        relay.onauth = authSignerFn;
+      }
+    }
     await relay.connect();
     return relay;
   }
@@ -44332,7 +44638,6 @@ var AbstractSimplePool = class {
     });
   }
   subscribe(relays, filter, params) {
-    params.onauth = params.onauth || params.doauth;
     const request = [];
     for (let i2 = 0; i2 < relays.length; i2++) {
       const url = normalizeURL(relays[i2]);
@@ -44343,7 +44648,6 @@ var AbstractSimplePool = class {
     return this.subscribeMap(request, params);
   }
   subscribeMany(relays, filter, params) {
-    params.onauth = params.onauth || params.doauth;
     const request = [];
     const uniqUrls = [];
     for (let i2 = 0; i2 < relays.length; i2++) {
@@ -44356,7 +44660,6 @@ var AbstractSimplePool = class {
     return this.subscribeMap(request, params);
   }
   subscribeMap(requests, params) {
-    params.onauth = params.onauth || params.doauth;
     const grouped = /* @__PURE__ */ new Map();
     for (const req of requests) {
       const { url, filter } = req;
@@ -44457,7 +44760,6 @@ var AbstractSimplePool = class {
     };
   }
   subscribeEose(relays, filter, params) {
-    params.onauth = params.onauth || params.doauth;
     const subcloser = this.subscribe(relays, filter, {
       ...params,
       oneose() {
@@ -44467,7 +44769,6 @@ var AbstractSimplePool = class {
     return subcloser;
   }
   subscribeManyEose(relays, filter, params) {
-    params.onauth = params.onauth || params.doauth;
     const subcloser = this.subscribeMany(relays, filter, {
       ...params,
       oneose() {
@@ -45475,7 +45776,7 @@ __export(nip27_exports, {
   parse: () => parse3
 });
 var noCharacter = /\W/m;
-var noURLCharacter = /\W |\W$|$|,| /m;
+var noURLCharacter = /[^\w\/] |[^\w\/]$|$|,| /m;
 var MAX_HASHTAG_LENGTH = 42;
 function* parse3(content) {
   let emojis = [];
@@ -45521,8 +45822,10 @@ function* parse3(content) {
             case "npub":
               pointer = { pubkey: data };
               break;
-            case "nsec":
             case "note":
+              pointer = { id: data };
+              break;
+            case "nsec":
               index = end + 1;
               continue;
             default:
@@ -45551,19 +45854,19 @@ function* parse3(content) {
           if (prevIndex !== u - prefixLen) {
             yield { type: "text", text: content.slice(prevIndex, u - prefixLen) };
           }
-          if (/\.(png|jpe?g|gif|webp)$/i.test(url.pathname)) {
+          if (/\.(png|jpe?g|gif|webp|heic|svg)$/i.test(url.pathname)) {
             yield { type: "image", url: url.toString() };
             index = end;
             prevIndex = index;
             continue mainloop;
           }
-          if (/\.(mp4|avi|webm|mkv)$/i.test(url.pathname)) {
+          if (/\.(mp4|avi|webm|mkv|mov)$/i.test(url.pathname)) {
             yield { type: "video", url: url.toString() };
             index = end;
             prevIndex = index;
             continue mainloop;
           }
-          if (/\.(mp3|aac|ogg|opus)$/i.test(url.pathname)) {
+          if (/\.(mp3|aac|ogg|opus|wav|flac)$/i.test(url.pathname)) {
             yield { type: "audio", url: url.toString() };
             index = end;
             prevIndex = index;
@@ -46676,6 +46979,10 @@ function normalizeURL(url) {
     if (url.indexOf("://") === -1)
       url = "wss://" + url;
     let p = new URL(url);
+    if (p.protocol === "http:")
+      p.protocol = "ws:";
+    else if (p.protocol === "https:")
+      p.protocol = "wss:";
     p.pathname = p.pathname.replace(/\/+/g, "/");
     if (p.pathname.endsWith("/"))
       p.pathname = p.pathname.slice(0, -1);
@@ -46903,10 +47210,11 @@ var AbstractRelay = class {
   _connected = false;
   onclose = null;
   onnotice = (msg) => console.debug(`NOTICE from ${this.url}: ${msg}`);
+  onauth;
   baseEoseTimeout = 4400;
   connectionTimeout = 4400;
   publishTimeout = 4400;
-  pingFrequency = 2e4;
+  pingFrequency = 29e3;
   pingTimeout = 2e4;
   resubscribeBackoff = [1e4, 1e4, 1e4, 2e4, 2e4, 3e4, 6e4];
   openSubs = /* @__PURE__ */ new Map();
@@ -46914,7 +47222,7 @@ var AbstractRelay = class {
   enableReconnect;
   connectionTimeoutHandle;
   reconnectTimeoutHandle;
-  pingTimeoutHandle;
+  pingIntervalHandle;
   reconnectAttempts = 0;
   closedIntentionally = false;
   connectionPromise;
@@ -46968,9 +47276,9 @@ var AbstractRelay = class {
     }, backoff);
   }
   handleHardClose(reason) {
-    if (this.pingTimeoutHandle) {
-      clearTimeout(this.pingTimeoutHandle);
-      this.pingTimeoutHandle = void 0;
+    if (this.pingIntervalHandle) {
+      clearInterval(this.pingIntervalHandle);
+      this.pingIntervalHandle = void 0;
     }
     this._connected = false;
     this.connectionPromise = void 0;
@@ -47009,16 +47317,21 @@ var AbstractRelay = class {
         }
         clearTimeout(this.connectionTimeoutHandle);
         this._connected = true;
+        const isReconnection = this.reconnectAttempts > 0;
         this.reconnectAttempts = 0;
         for (const sub of this.openSubs.values()) {
           sub.eosed = false;
-          if (typeof this.enableReconnect === "function") {
-            sub.filters = this.enableReconnect(sub.filters);
+          if (isReconnection) {
+            for (let f = 0; f < sub.filters.length; f++) {
+              if (sub.lastEmitted) {
+                sub.filters[f].since = sub.lastEmitted + 1;
+              }
+            }
           }
           sub.fire();
         }
         if (this.enablePing) {
-          this.pingpong();
+          this.pingIntervalHandle = setInterval(() => this.pingpong(), this.pingFrequency);
         }
         resolve();
       };
@@ -47043,15 +47356,28 @@ var AbstractRelay = class {
       this.ws.ping();
     });
   }
-  async waitForDummyReq() {
-    return new Promise((resolve, _) => {
-      const sub = this.subscribe([{ ids: ["a".repeat(64)] }], {
-        oneose: () => {
-          sub.close();
-          resolve(true);
-        },
-        eoseTimeout: this.pingTimeout + 1e3
-      });
+  waitForDummyReq() {
+    return new Promise((resolve, reject) => {
+      if (!this.connectionPromise)
+        return reject(new Error(`no connection to ${this.url}, can't ping`));
+      try {
+        const sub = this.subscribe(
+          [{ ids: ["aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"], limit: 0 }],
+          {
+            label: "forced-ping",
+            oneose: () => {
+              resolve(true);
+              sub.close();
+            },
+            onclose() {
+              resolve(true);
+            },
+            eoseTimeout: this.pingTimeout + 1e3
+          }
+        );
+      } catch (err) {
+        reject(err);
+      }
     });
   }
   async pingpong() {
@@ -47060,9 +47386,7 @@ var AbstractRelay = class {
         this.ws && this.ws.ping && this.ws.once ? this.waitForPingPong() : this.waitForDummyReq(),
         new Promise((res) => setTimeout(() => res(false), this.pingTimeout))
       ]);
-      if (result) {
-        this.pingTimeoutHandle = setTimeout(() => this.pingpong(), this.pingFrequency);
-      } else {
+      if (!result) {
         if (this.ws?.readyState === this._WebSocket.OPEN) {
           this.ws?.close();
         }
@@ -47106,6 +47430,8 @@ var AbstractRelay = class {
           if (this.verifyEvent(event) && matchFilters(so.filters, event)) {
             so.onevent(event);
           }
+          if (!so.lastEmitted || so.lastEmitted < event.created_at)
+            so.lastEmitted = event.created_at;
           return;
         }
         case "COUNT": {
@@ -47155,6 +47481,9 @@ var AbstractRelay = class {
         }
         case "AUTH": {
           this.challenge = data[1];
+          if (this.onauth) {
+            this.auth(this.onauth);
+          }
           return;
         }
         default: {
@@ -47239,9 +47568,9 @@ var AbstractRelay = class {
       clearTimeout(this.reconnectTimeoutHandle);
       this.reconnectTimeoutHandle = void 0;
     }
-    if (this.pingTimeoutHandle) {
-      clearTimeout(this.pingTimeoutHandle);
-      this.pingTimeoutHandle = void 0;
+    if (this.pingIntervalHandle) {
+      clearInterval(this.pingIntervalHandle);
+      this.pingIntervalHandle = void 0;
     }
     this.closeAllSubscriptions("relay connection closed by us");
     this._connected = false;
@@ -47260,6 +47589,7 @@ var AbstractRelay = class {
 var Subscription = class {
   relay;
   id;
+  lastEmitted;
   closed = false;
   eosed = false;
   filters;
@@ -47325,13 +47655,15 @@ var AbstractSimplePool = class {
   verifyEvent;
   enablePing;
   enableReconnect;
+  automaticallyAuth;
   trustedRelayURLs = /* @__PURE__ */ new Set();
   _WebSocket;
   constructor(opts) {
     this.verifyEvent = opts.verifyEvent;
     this._WebSocket = opts.websocketImplementation;
     this.enablePing = opts.enablePing;
-    this.enableReconnect = opts.enableReconnect;
+    this.enableReconnect = opts.enableReconnect || false;
+    this.automaticallyAuth = opts.automaticallyAuth;
   }
   async ensureRelay(url, params) {
     url = normalizeURL(url);
@@ -47352,6 +47684,12 @@ var AbstractSimplePool = class {
         relay.connectionTimeout = params.connectionTimeout;
       this.relays.set(url, relay);
     }
+    if (this.automaticallyAuth) {
+      const authSignerFn = this.automaticallyAuth(url);
+      if (authSignerFn) {
+        relay.onauth = authSignerFn;
+      }
+    }
     await relay.connect();
     return relay;
   }
@@ -47362,7 +47700,6 @@ var AbstractSimplePool = class {
     });
   }
   subscribe(relays, filter, params) {
-    params.onauth = params.onauth || params.doauth;
     const request = [];
     for (let i2 = 0; i2 < relays.length; i2++) {
       const url = normalizeURL(relays[i2]);
@@ -47373,7 +47710,6 @@ var AbstractSimplePool = class {
     return this.subscribeMap(request, params);
   }
   subscribeMany(relays, filter, params) {
-    params.onauth = params.onauth || params.doauth;
     const request = [];
     const uniqUrls = [];
     for (let i2 = 0; i2 < relays.length; i2++) {
@@ -47386,7 +47722,6 @@ var AbstractSimplePool = class {
     return this.subscribeMap(request, params);
   }
   subscribeMap(requests, params) {
-    params.onauth = params.onauth || params.doauth;
     const grouped = /* @__PURE__ */ new Map();
     for (const req of requests) {
       const { url, filter } = req;
@@ -47487,7 +47822,6 @@ var AbstractSimplePool = class {
     };
   }
   subscribeEose(relays, filter, params) {
-    params.onauth = params.onauth || params.doauth;
     const subcloser = this.subscribe(relays, filter, {
       ...params,
       oneose() {
@@ -47497,7 +47831,6 @@ var AbstractSimplePool = class {
     return subcloser;
   }
   subscribeManyEose(relays, filter, params) {
-    params.onauth = params.onauth || params.doauth;
     const subcloser = this.subscribeMany(relays, filter, {
       ...params,
       oneose() {

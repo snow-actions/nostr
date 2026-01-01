@@ -6,7 +6,7 @@ Send EVENT to Nostr.
 
 ```yml
 steps:
-  - uses: snow-actions/nostr@v1.8.2
+  - uses: snow-actions/nostr@v1.8.3
     with:
       relays: ${{ vars.NOSTR_RELAYS }}
       private-key: ${{ secrets.NOSTR_PRIVATE_KEY }}
