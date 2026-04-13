@@ -25,7 +25,7 @@
   },
   "homepage": "https://github.com/snow-actions/nostr#readme",
   "dependencies": {
-    "@actions/core": "^2.0.1",
+    "@actions/core": "^3.0.0",
     "@noble/hashes": "^1.6.1",
     "js-yaml": "^4.1.1",
     "nostr-tools": "^2.19.4",
