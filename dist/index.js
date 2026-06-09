@@ -1,6 +1,35 @@
 require('./sourcemap-register.js');/******/ (() => { // webpackBootstrap
 /******/ 	var __webpack_modules__ = ({
 
+/***/ 4679:
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
+
+const yaml = __nccwpck_require__(4281);
+
+/**
+ * Parse the `relays` input into a list of `wss://` relay URLs.
+ * @param {string} input
+ * @returns {string[]}
+ */
+module.exports.parseRelays = (input) => {
+  return input
+    .split('\n')
+    .map((x) => x.trim())
+    .filter((x) => x.startsWith('wss://'));
+};
+
+/**
+ * Parse the `tags` input (YAML/JSON) into an array of tag arrays.
+ * @param {string} input
+ * @returns {string[][]}
+ */
+module.exports.parseTags = (input) => {
+  return yaml.load(input);
+};
+
+
+/***/ }),
+
 /***/ 4914:
 /***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
 
@@ -36476,15 +36505,24 @@ module.exports = {
 "use strict";
 
 
+const createWebSocketStream = __nccwpck_require__(6412);
+const extension = __nccwpck_require__(1335);
+const PerMessageDeflate = __nccwpck_require__(4376);
+const Receiver = __nccwpck_require__(893);
+const Sender = __nccwpck_require__(7389);
+const subprotocol = __nccwpck_require__(3332);
 const WebSocket = __nccwpck_require__(6681);
+const WebSocketServer = __nccwpck_require__(129);
 
-WebSocket.createWebSocketStream = __nccwpck_require__(6412);
-WebSocket.Server = __nccwpck_require__(129);
-WebSocket.Receiver = __nccwpck_require__(893);
-WebSocket.Sender = __nccwpck_require__(7389);
-
+WebSocket.createWebSocketStream = createWebSocketStream;
+WebSocket.extension = extension;
+WebSocket.PerMessageDeflate = PerMessageDeflate;
+WebSocket.Receiver = Receiver;
+WebSocket.Sender = Sender;
+WebSocket.Server = WebSocketServer;
+WebSocket.subprotocol = subprotocol;
 WebSocket.WebSocket = WebSocket;
-WebSocket.WebSocketServer = WebSocket.Server;
+WebSocket.WebSocketServer = WebSocketServer;
 
 module.exports = WebSocket;
 
@@ -36643,6 +36681,7 @@ if (hasBlob) BINARY_TYPES.push('blob');
 
 module.exports = {
   BINARY_TYPES,
+  CLOSE_TIMEOUT: 30000,
   EMPTY_BUFFER: Buffer.alloc(0),
   GUID: '258EAFA5-E914-47DA-95CA-C5AB0DC85B11',
   hasBlob,
@@ -37273,6 +37312,9 @@ class PerMessageDeflate {
    *     acknowledge disabling of client context takeover
    * @param {Number} [options.concurrencyLimit=10] The number of concurrent
    *     calls to zlib
+   * @param {Boolean} [options.isServer=false] Create the instance in either
+   *     server or client mode
+   * @param {Number} [options.maxPayload=0] The maximum allowed message length
    * @param {(Boolean|Number)} [options.serverMaxWindowBits] Request/confirm the
    *     use of a custom server window size
    * @param {Boolean} [options.serverNoContextTakeover=false] Request/accept
@@ -37283,16 +37325,13 @@ class PerMessageDeflate {
    *     deflate
    * @param {Object} [options.zlibInflateOptions] Options to pass to zlib on
    *     inflate
-   * @param {Boolean} [isServer=false] Create the instance in either server or
-   *     client mode
-   * @param {Number} [maxPayload=0] The maximum allowed message length
    */
-  constructor(options, isServer, maxPayload) {
-    this._maxPayload = maxPayload | 0;
+  constructor(options) {
     this._options = options || {};
     this._threshold =
       this._options.threshold !== undefined ? this._options.threshold : 1024;
-    this._isServer = !!isServer;
+    this._maxPayload = this._options.maxPayload | 0;
+    this._isServer = !!this._options.isServer;
     this._deflate = null;
     this._inflate = null;
 
@@ -39506,7 +39545,7 @@ const extension = __nccwpck_require__(1335);
 const PerMessageDeflate = __nccwpck_require__(4376);
 const subprotocol = __nccwpck_require__(3332);
 const WebSocket = __nccwpck_require__(6681);
-const { GUID, kWebSocket } = __nccwpck_require__(1791);
+const { CLOSE_TIMEOUT, GUID, kWebSocket } = __nccwpck_require__(1791);
 
 const keyRegex = /^[+/0-9A-Za-z]{22}==$/;
 
@@ -39533,6 +39572,9 @@ class WebSocketServer extends EventEmitter {
    *     pending connections
    * @param {Boolean} [options.clientTracking=true] Specifies whether or not to
    *     track clients
+   * @param {Number} [options.closeTimeout=30000] Duration in milliseconds to
+   *     wait for the closing handshake to finish after `websocket.close()` is
+   *     called
    * @param {Function} [options.handleProtocols] A hook to handle protocols
    * @param {String} [options.host] The hostname where to bind the server
    * @param {Number} [options.maxPayload=104857600] The maximum allowed message
@@ -39562,6 +39604,7 @@ class WebSocketServer extends EventEmitter {
       perMessageDeflate: false,
       handleProtocols: null,
       clientTracking: true,
+      closeTimeout: CLOSE_TIMEOUT,
       verifyClient: null,
       noServer: false,
       backlog: null, // use default (511 as implemented in net.js)
@@ -39784,11 +39827,11 @@ class WebSocketServer extends EventEmitter {
       this.options.perMessageDeflate &&
       secWebSocketExtensions !== undefined
     ) {
-      const perMessageDeflate = new PerMessageDeflate(
-        this.options.perMessageDeflate,
-        true,
-        this.options.maxPayload
-      );
+      const perMessageDeflate = new PerMessageDeflate({
+        ...this.options.perMessageDeflate,
+        isServer: true,
+        maxPayload: this.options.maxPayload
+      });
 
       try {
         const offers = extension.parse(secWebSocketExtensions);
@@ -40071,6 +40114,7 @@ const { isBlob } = __nccwpck_require__(8996);
 
 const {
   BINARY_TYPES,
+  CLOSE_TIMEOUT,
   EMPTY_BUFFER,
   GUID,
   kForOnEventAttribute,
@@ -40085,7 +40129,6 @@ const {
 const { format, parse } = __nccwpck_require__(1335);
 const { toBuffer } = __nccwpck_require__(5803);
 
-const closeTimeout = 30 * 1000;
 const kAborted = Symbol('kAborted');
 const protocolVersions = [8, 13];
 const readyStates = ['CONNECTING', 'OPEN', 'CLOSING', 'CLOSED'];
@@ -40141,6 +40184,7 @@ class WebSocket extends EventEmitter {
       initAsClient(this, address, protocols, options);
     } else {
       this._autoPong = options.autoPong;
+      this._closeTimeout = options.closeTimeout;
       this._isServer = true;
     }
   }
@@ -40682,6 +40726,8 @@ module.exports = WebSocket;
  *     times in the same tick
  * @param {Boolean} [options.autoPong=true] Specifies whether or not to
  *     automatically send a pong in response to a ping
+ * @param {Number} [options.closeTimeout=30000] Duration in milliseconds to wait
+ *     for the closing handshake to finish after `websocket.close()` is called
  * @param {Function} [options.finishRequest] A function which can be used to
  *     customize the headers of each http request before it is sent
  * @param {Boolean} [options.followRedirects=false] Whether or not to follow
@@ -40708,6 +40754,7 @@ function initAsClient(websocket, address, protocols, options) {
   const opts = {
     allowSynchronousEvents: true,
     autoPong: true,
+    closeTimeout: CLOSE_TIMEOUT,
     protocolVersion: protocolVersions[1],
     maxPayload: 100 * 1024 * 1024,
     skipUTF8Validation: false,
@@ -40726,6 +40773,7 @@ function initAsClient(websocket, address, protocols, options) {
   };
 
   websocket._autoPong = opts.autoPong;
+  websocket._closeTimeout = opts.closeTimeout;
 
   if (!protocolVersions.includes(opts.protocolVersion)) {
     throw new RangeError(
@@ -40741,7 +40789,7 @@ function initAsClient(websocket, address, protocols, options) {
   } else {
     try {
       parsedUrl = new URL(address);
-    } catch (e) {
+    } catch {
       throw new SyntaxError(`Invalid URL: ${address}`);
     }
   }
@@ -40803,11 +40851,11 @@ function initAsClient(websocket, address, protocols, options) {
   opts.timeout = opts.handshakeTimeout;
 
   if (opts.perMessageDeflate) {
-    perMessageDeflate = new PerMessageDeflate(
-      opts.perMessageDeflate !== true ? opts.perMessageDeflate : {},
-      false,
-      opts.maxPayload
-    );
+    perMessageDeflate = new PerMessageDeflate({
+      ...opts.perMessageDeflate,
+      isServer: false,
+      maxPayload: opts.maxPayload
+    });
     opts.headers['Sec-WebSocket-Extensions'] = format({
       [PerMessageDeflate.extensionName]: perMessageDeflate.offer()
     });
@@ -41343,7 +41391,7 @@ function senderOnError(err) {
 function setCloseTimer(websocket) {
   websocket._closeTimer = setTimeout(
     websocket._socket.destroy.bind(websocket._socket),
-    closeTimeout
+    websocket._closeTimeout
   );
 }
 
@@ -41361,23 +41409,23 @@ function socketOnClose() {
 
   websocket._readyState = WebSocket.CLOSING;
 
-  let chunk;
-
   //
   // The close frame might not have been received or the `'end'` event emitted,
   // for example, if the socket was destroyed due to an error. Ensure that the
   // `receiver` stream is closed after writing any remaining buffered data to
   // it. If the readable side of the socket is in flowing mode then there is no
-  // buffered data as everything has been already written and `readable.read()`
-  // will return `null`. If instead, the socket is paused, any possible buffered
-  // data will be read as a single chunk.
+  // buffered data as everything has been already written. If instead, the
+  // socket is paused, any possible buffered data will be read as a single
+  // chunk.
   //
   if (
     !this._readableState.endEmitted &&
     !websocket._closeFrameReceived &&
     !websocket._receiver._writableState.errorEmitted &&
-    (chunk = websocket._socket.read()) !== null
+    this._readableState.length !== 0
   ) {
+    const chunk = this.read(this._readableState.length);
+
     websocket._receiver.write(chunk);
   }
 
@@ -47953,17 +48001,16 @@ var SimplePool = class extends AbstractSimplePool {
 /************************************************************************/
 var __webpack_exports__ = {};
 const core = __nccwpck_require__(7484);
-const yaml = __nccwpck_require__(4281);
+const { parseRelays, parseTags } = __nccwpck_require__(4679);
 const { createEvent, publishEvent } = __nccwpck_require__(6710);
 
 async function run() {
   try {
-    const relaysInput = core.getInput('relays');
-    const relays = relaysInput.split("\n").map(x => x.trim()).filter(x => x.startsWith('wss://'));
+    const relays = parseRelays(core.getInput('relays'));
     const privateKey = core.getInput('private-key');
     const content = core.getInput('content');
     const kind = Number(core.getInput('kind', { trimWhitespace: true }));
-    const tags = yaml.load(core.getInput('tags'));
+    const tags = parseTags(core.getInput('tags'));
     core.setSecret(privateKey);
     const event = createEvent(privateKey, kind, content, tags);
     await publishEvent(relays, event);
