@@ -46,8 +46,8 @@ See [action.yml](action.yml)
 
 - `ubuntu-*`
 - `windows-*`
-- `macos-*`
-- `self-hosted`
+- `macos-*` (macOS 13.5 or later)
+- `self-hosted` (except ARM32)
 
 ### Events
 
@@ -55,7 +55,7 @@ See [action.yml](action.yml)
 
 ## Dependencies
 
-- Node.js v20
+- Node.js v24
 - See [package.json](package.json)
 
 ## Contributing
