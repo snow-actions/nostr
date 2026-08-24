@@ -34,27 +34,30 @@ jobs:
         run: |
           npm ci
           npm run package
-      - name: Version up
+      - name: Update version
         id: version
         run: |
-          set -x
-          version=$(npm --no-git-tag-version version $SEMANTIC)
-          echo "::set-output name=version::${version}"
+          version=$(npm --no-git-tag-version version "$SEMANTIC")
+          printf 'version=%s\n' "$version" >> "$GITHUB_OUTPUT"
           sed -i -e "s|${GITHUB_REPOSITORY}@v[.0-9]\+|${GITHUB_REPOSITORY}@${version}|g" README.md
           sed -i -e "s|${GITHUB_REPOSITORY}@v[.0-9]\+|${GITHUB_REPOSITORY}@${version}|g" .github/workflows/released.yml
           git diff
         env:
-          SEMANTIC: ${{ github.event.inputs.semantic }}
+          SEMANTIC: ${{ inputs.semantic }}
       - uses: snow-actions/git-config-user@v1.0.0
-      - name: Commit & PR
+      - name: Create release pull request
         run: |
-          set -x
           branch="release/${VERSION}"
-          git switch -c ${branch}
+          git switch -c "$branch"
           git add .
-          git commit -m "${VERSION}"
-          git push origin ${branch}
-          gh pr create --base ${GITHUB_REF_NAME} --head ${branch} --assignee ${GITHUB_ACTOR} --title ${VERSION} --body ''
+          git commit -m "$VERSION"
+          git push origin "$branch"
+          gh pr create \
+            --base "$GITHUB_REF_NAME" \
+            --head "$branch" \
+            --assignee "$GITHUB_ACTOR" \
+            --title "$VERSION" \
+            --body ''
         env:
           VERSION: ${{ steps.version.outputs.version }}
           GH_TOKEN: ${{ steps.app-token.outputs.token }} # Trigger next CI
