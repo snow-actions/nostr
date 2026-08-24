@@ -69,7 +69,7 @@ test("createEvent with nsec", () => {
   expect(verifyEvent(eventToVerify)).toBe(true);
 });
 
-test("createEvent with hex secret key", () => {
+test("createEvent with seckey", () => {
   const seckey = generateSecretKey();
   const hexSeckey = bytesToHex(seckey);
   const expectedPubkey = getPublicKey(seckey);
@@ -80,7 +80,7 @@ test("createEvent with hex secret key", () => {
   expect(verifyEvent(eventToVerify)).toBe(true);
 });
 
-test("createEvent rejects a malformed hex secret key", () => {
+test("createEvent rejects a malformed seckey", () => {
   expect(() => createEvent("not-hex", 1, "test", [])).toThrow();
 });
 
