@@ -125,8 +125,8 @@ test("publishEvent rejects when WebSocket construction fails", async () => {
   mockConnectionErrors.add("wss://relay-1");
 
   await expect(publishEvent(["wss://relay-1"], event)).rejects.toBeUndefined();
-  jest.runOnlyPendingTimers();
   expect(mockWebSockets).toHaveLength(0);
+  expect(jest.getTimerCount()).toBe(0);
 });
 
 test("publishEvent rejects when relays time out", async () => {
