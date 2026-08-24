@@ -1,7 +1,16 @@
+import { jest } from '@jest/globals';
+import {
+  generateSecretKey,
+  getPublicKey,
+  nip19,
+  verifyEvent,
+} from "nostr-tools";
+import { bytesToHex } from "@noble/hashes/utils";
+
 const mockWebSockets = [];
 const mockConnectionErrors = new Set();
 
-jest.mock("ws", () => {
+jest.unstable_mockModule("ws", () => {
   class WebSocket {
     constructor(url) {
       if (mockConnectionErrors.has(url)) {
@@ -17,17 +26,10 @@ jest.mock("ws", () => {
     }
   }
   WebSocket.CLOSED = 3;
-  return WebSocket;
+  return { default: WebSocket };
 });
 
-const { createEvent, publishEvent } = require("./nostr");
-const {
-  generateSecretKey,
-  getPublicKey,
-  nip19,
-  verifyEvent,
-} = require("nostr-tools");
-const { bytesToHex } = require("@noble/hashes/utils");
+const { createEvent, publishEvent } = await import("./nostr.js");
 
 const event = { id: "event-id" };
 

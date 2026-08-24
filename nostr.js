@@ -1,7 +1,7 @@
-const WebSocket = require('ws');
-const { nip19, getPublicKey, finalizeEvent } = require('nostr-tools');
-const { useWebSocketImplementation } = require('nostr-tools/pool');
-const { hexToBytes } = require('@noble/hashes/utils');
+import WebSocket from 'ws';
+import { nip19, getPublicKey, finalizeEvent } from 'nostr-tools';
+import { useWebSocketImplementation } from 'nostr-tools/pool';
+import { hexToBytes } from '@noble/hashes/utils';
 
 useWebSocketImplementation(WebSocket);
 
@@ -11,7 +11,7 @@ useWebSocketImplementation(WebSocket);
  * @param {string} content
  * @param {string[][]} tags
  */
-module.exports.createEvent = (privateKey, kind, content, tags) => {
+export const createEvent = (privateKey, kind, content, tags) => {
   const seckey = privateKey.startsWith('nsec') ? nip19.decode(privateKey).data : hexToBytes(privateKey);
 
   const createdAt = Math.round(Date.now() / 1000);
@@ -29,7 +29,7 @@ module.exports.createEvent = (privateKey, kind, content, tags) => {
  * @param {string[]} relays
  * @param {Event} event
  */
-module.exports.publishEvent = (relays, event) => {
+export const publishEvent = (relays, event) => {
   console.log('[publish]', relays, event);
 
   let timeoutId;
