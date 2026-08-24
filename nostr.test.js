@@ -21,7 +21,13 @@ jest.mock("ws", () => {
 });
 
 const { createEvent, publishEvent } = require("./nostr");
-require("dotenv").config();
+const {
+  generateSecretKey,
+  getPublicKey,
+  nip19,
+  verifyEvent,
+} = require("nostr-tools");
+const { bytesToHex } = require("@noble/hashes/utils");
 
 const event = { id: "event-id" };
 
@@ -44,42 +50,40 @@ afterEach(() => {
   jest.restoreAllMocks();
 });
 
-test("createEvent with nsec", async () => {
-  const privateKey = process.env.NOSTR_PRIVATE_KEY;
-  if (privateKey === undefined || privateKey === "") {
-    throw new Error("NOSTR_PRIVATE_KEY is not defined");
-  }
-  const content = "test";
-  const kind = 1;
-  const tags = [];
-  const event = createEvent(privateKey, kind, content, tags);
-  expect(event).toHaveProperty("id");
-  expect(event).toHaveProperty("pubkey");
-  expect(event).toHaveProperty("created_at");
-  expect(event).toHaveProperty("kind");
-  expect(event).toHaveProperty("tags");
-  expect(event).toHaveProperty("content");
-  expect(event).toHaveProperty("sig");
-  expect(event.content).toBe(content);
+test("createEvent with nsec", () => {
+  const secretKey = generateSecretKey();
+  const privateKey = nip19.nsecEncode(secretKey);
+  const expectedPublicKey = getPublicKey(secretKey);
+  const content = "test content";
+  const kind = 42;
+  const tags = [["t", "test"]];
+  const createdEvent = createEvent(privateKey, kind, content, tags);
+
+  expect(createdEvent).toHaveProperty("id");
+  expect(createdEvent).toHaveProperty("sig");
+  expect(createdEvent.pubkey).toBe(expectedPublicKey);
+  expect(createdEvent.kind).toBe(kind);
+  expect(createdEvent.content).toBe(content);
+  expect(createdEvent.tags).toEqual(tags);
+  expect(verifyEvent(createdEvent)).toBe(true);
 });
 
-test("createEvent with seckey", async () => {
-  const privateKey = process.env.NOSTR_SECKEY;
-  if (privateKey === undefined || privateKey === "") {
-    throw new Error("NOSTR_SECKEY is not defined");
-  }
-  const content = "test";
-  const kind = 1;
-  const tags = [];
-  const event = createEvent(privateKey, kind, content, tags);
-  expect(event).toHaveProperty("id");
-  expect(event).toHaveProperty("pubkey");
-  expect(event).toHaveProperty("created_at");
-  expect(event).toHaveProperty("kind");
-  expect(event).toHaveProperty("tags");
-  expect(event).toHaveProperty("content");
-  expect(event).toHaveProperty("sig");
-  expect(event.content).toBe(content);
+test("createEvent with hex secret key", () => {
+  const secretKey = generateSecretKey();
+  const privateKey = bytesToHex(secretKey);
+  const expectedPublicKey = getPublicKey(secretKey);
+  const createdEvent = createEvent(privateKey, 1, "test", []);
+
+  expect(createdEvent.pubkey).toBe(expectedPublicKey);
+  expect(verifyEvent(createdEvent)).toBe(true);
+});
+
+test("createEvent rejects a malformed hex secret key", () => {
+  expect(() => createEvent("not-hex", 1, "test", [])).toThrow();
+});
+
+test("createEvent rejects a malformed nsec", () => {
+  expect(() => createEvent("nsec-invalid", 1, "test", [])).toThrow();
 });
 
 test("publishEvent resolves when all relays accept the event", async () => {
