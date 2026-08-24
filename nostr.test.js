@@ -58,6 +58,7 @@ test("createEvent with nsec", () => {
   const kind = 42;
   const tags = [["t", "test"]];
   const createdEvent = createEvent(privateKey, kind, content, tags);
+  const eventToVerify = JSON.parse(JSON.stringify(createdEvent));
 
   expect(createdEvent).toHaveProperty("id");
   expect(createdEvent).toHaveProperty("sig");
@@ -65,7 +66,7 @@ test("createEvent with nsec", () => {
   expect(createdEvent.kind).toBe(kind);
   expect(createdEvent.content).toBe(content);
   expect(createdEvent.tags).toEqual(tags);
-  expect(verifyEvent(createdEvent)).toBe(true);
+  expect(verifyEvent(eventToVerify)).toBe(true);
 });
 
 test("createEvent with hex secret key", () => {
@@ -73,9 +74,10 @@ test("createEvent with hex secret key", () => {
   const privateKey = bytesToHex(secretKey);
   const expectedPublicKey = getPublicKey(secretKey);
   const createdEvent = createEvent(privateKey, 1, "test", []);
+  const eventToVerify = JSON.parse(JSON.stringify(createdEvent));
 
   expect(createdEvent.pubkey).toBe(expectedPublicKey);
-  expect(verifyEvent(createdEvent)).toBe(true);
+  expect(verifyEvent(eventToVerify)).toBe(true);
 });
 
 test("createEvent rejects a malformed hex secret key", () => {
