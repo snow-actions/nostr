@@ -28,7 +28,7 @@ jobs:
     timeout-minutes: 5
     env:
       # Test-only key. Never use this key with production or public relays.
-      TEST_SECKEY: 0000000000000000000000000000000000000000000000000000000000000001
+      TEST_SECKEY: '0000000000000000000000000000000000000000000000000000000000000001'
     services:
       relay:
         image: scsibug/nostr-rs-relay:0.10.0@sha256:48d54c2d2781577cf3ed2951112f0953dc2c5e7c9d2ea20c64e8c0fa37d16e4d
