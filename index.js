@@ -12,7 +12,8 @@ function isAllowedRelay(relay) {
   }
 
   const url = new URL(relay);
-  return url.protocol === 'ws:' && url.hostname === '127.0.0.1' && url.port !== '';
+  // Permit unencrypted connections only for the disposable relay used by local E2E tests.
+  return url.protocol === 'ws:' && url.hostname === '127.0.0.1';
 }
 
 async function run() {
