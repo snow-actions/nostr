@@ -44,6 +44,7 @@ module.exports.publishEvent = (relays, event) => {
     }).filter(ws => ws !== undefined);
     if (wss.length === 0) {
       reject();
+      return;
     }
     const messages = new Map();
     const close = () => {
