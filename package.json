@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "lint": "eslint .",
-    "package": "rollup --config rollup.config.mjs",
+    "package": "npx rimraf ./dist && npx rollup --config rollup.config.mjs",
     "test": "jest",
     "test:coverage": "jest --coverage --collectCoverageFrom=nostr.js --coverageReporters=text --coverageReporters=json-summary",
     "all": "npm run lint && npm run package && npm run test"
