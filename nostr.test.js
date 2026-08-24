@@ -51,18 +51,18 @@ afterEach(() => {
 });
 
 test("createEvent with nsec", () => {
-  const secretKey = generateSecretKey();
-  const privateKey = nip19.nsecEncode(secretKey);
-  const expectedPublicKey = getPublicKey(secretKey);
+  const seckey = generateSecretKey();
+  const nsec = nip19.nsecEncode(seckey);
+  const expectedPubkey = getPublicKey(seckey);
   const content = "test content";
   const kind = 42;
   const tags = [["t", "test"]];
-  const createdEvent = createEvent(privateKey, kind, content, tags);
+  const createdEvent = createEvent(nsec, kind, content, tags);
   const eventToVerify = JSON.parse(JSON.stringify(createdEvent));
 
   expect(createdEvent).toHaveProperty("id");
   expect(createdEvent).toHaveProperty("sig");
-  expect(createdEvent.pubkey).toBe(expectedPublicKey);
+  expect(createdEvent.pubkey).toBe(expectedPubkey);
   expect(createdEvent.kind).toBe(kind);
   expect(createdEvent.content).toBe(content);
   expect(createdEvent.tags).toEqual(tags);
@@ -70,13 +70,13 @@ test("createEvent with nsec", () => {
 });
 
 test("createEvent with hex secret key", () => {
-  const secretKey = generateSecretKey();
-  const privateKey = bytesToHex(secretKey);
-  const expectedPublicKey = getPublicKey(secretKey);
-  const createdEvent = createEvent(privateKey, 1, "test", []);
+  const seckey = generateSecretKey();
+  const hexSeckey = bytesToHex(seckey);
+  const expectedPubkey = getPublicKey(seckey);
+  const createdEvent = createEvent(hexSeckey, 1, "test", []);
   const eventToVerify = JSON.parse(JSON.stringify(createdEvent));
 
-  expect(createdEvent.pubkey).toBe(expectedPublicKey);
+  expect(createdEvent.pubkey).toBe(expectedPubkey);
   expect(verifyEvent(eventToVerify)).toBe(true);
 });
 
