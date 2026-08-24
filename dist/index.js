@@ -1,6 +1,51 @@
 require('./sourcemap-register.js');/******/ (() => { // webpackBootstrap
 /******/ 	var __webpack_modules__ = ({
 
+/***/ 6136:
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
+
+const core = __nccwpck_require__(7484);
+const yaml = __nccwpck_require__(4281);
+const { createEvent, publishEvent } = __nccwpck_require__(6710);
+
+function isAllowedRelay(relay) {
+  if (relay.startsWith('wss://')) {
+    return true;
+  }
+
+  if (!URL.canParse(relay)) {
+    return false;
+  }
+
+  const url = new URL(relay);
+  // Permit unencrypted connections only for the disposable relay used by local E2E tests.
+  return url.protocol === 'ws:' && url.hostname === '127.0.0.1';
+}
+
+async function run() {
+  try {
+    const relaysInput = core.getInput('relays');
+    const relays = relaysInput.split("\n").map(x => x.trim()).filter(isAllowedRelay);
+    const privateKey = core.getInput('private-key');
+    const content = core.getInput('content');
+    const kind = Number(core.getInput('kind', { trimWhitespace: true }));
+    const tags = yaml.load(core.getInput('tags'));
+    core.setSecret(privateKey);
+    const event = createEvent(privateKey, kind, content, tags);
+    await publishEvent(relays, event);
+    core.setOutput('event', JSON.stringify(event));
+  } catch (error) {
+    core.setFailed(error.message);
+  }
+}
+
+module.exports.isAllowedRelay = isAllowedRelay;
+
+run();
+
+
+/***/ }),
+
 /***/ 4914:
 /***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
 
@@ -47971,31 +48016,13 @@ var SimplePool = class extends AbstractSimplePool {
 /******/ 	if (typeof __nccwpck_require__ !== 'undefined') __nccwpck_require__.ab = __dirname + "/";
 /******/ 	
 /************************************************************************/
-var __webpack_exports__ = {};
-const core = __nccwpck_require__(7484);
-const yaml = __nccwpck_require__(4281);
-const { createEvent, publishEvent } = __nccwpck_require__(6710);
-
-async function run() {
-  try {
-    const relaysInput = core.getInput('relays');
-    const relays = relaysInput.split("\n").map(x => x.trim()).filter(x => x.startsWith('wss://'));
-    const privateKey = core.getInput('private-key');
-    const content = core.getInput('content');
-    const kind = Number(core.getInput('kind', { trimWhitespace: true }));
-    const tags = yaml.load(core.getInput('tags'));
-    core.setSecret(privateKey);
-    const event = createEvent(privateKey, kind, content, tags);
-    await publishEvent(relays, event);
-    core.setOutput('event', JSON.stringify(event));
-  } catch (error) {
-    core.setFailed(error.message);
-  }
-}
-
-run();
-
-module.exports = __webpack_exports__;
+/******/ 	
+/******/ 	// startup
+/******/ 	// Load entry module and return exports
+/******/ 	// This entry module used 'module' so it can't be inlined
+/******/ 	var __webpack_exports__ = __nccwpck_require__(6136);
+/******/ 	module.exports = __webpack_exports__;
+/******/ 	
 /******/ })()
 ;
 //# sourceMappingURL=index.js.map

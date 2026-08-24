@@ -26,6 +26,20 @@ jobs:
   e2e-test:
     runs-on: ubuntu-latest
     timeout-minutes: 5
+    env:
+      TEST_RELAY: ws://127.0.0.1:8080
+      # Test-only key. Never use this key with production or public relays.
+      TEST_SECKEY: '0000000000000000000000000000000000000000000000000000000000000001'
+    services:
+      relay:
+        image: scsibug/nostr-rs-relay:0.10.0@sha256:48d54c2d2781577cf3ed2951112f0953dc2c5e7c9d2ea20c64e8c0fa37d16e4d
+        ports:
+          - 8080:8080
+        options: >-
+          --health-cmd "bash -c 'echo > /dev/tcp/127.0.0.1/8080'"
+          --health-interval 1s
+          --health-timeout 2s
+          --health-retries 30
     steps:
       - uses: actions/checkout@v6
       - name: Package
@@ -42,8 +56,8 @@ jobs:
       - name: Default is kind 1
         uses: ./
         with:
-          relays: ${{ vars.NOSTR_RELAYS_TEST }}
-          private-key: ${{ secrets.NOSTR_PRIVATE_KEY_TEST }}
+          relays: ${{ env.TEST_RELAY }}
+          private-key: ${{ env.TEST_SECKEY }}
           content: |
             test
             https://github.com/snow-actions/nostr
@@ -58,8 +72,8 @@ jobs:
       - name: Reply with tags
         uses: ./
         with:
-          relays: ${{ vars.NOSTR_RELAYS_TEST }}
-          private-key: ${{ secrets.NOSTR_PRIVATE_KEY_TEST }}
+          relays: ${{ env.TEST_RELAY }}
+          private-key: ${{ env.TEST_SECKEY }}
           content: test reply
           tags: |
             - ["e", "${{ fromJson(steps.publish.outputs.event).id }}", "", "root"]
@@ -72,8 +86,8 @@ jobs:
       - name: Specify kind
         uses: ./
         with:
-          relays: ${{ vars.NOSTR_RELAYS_TEST }}
-          private-key: ${{ secrets.NOSTR_PRIVATE_KEY_TEST }}
+          relays: ${{ env.TEST_RELAY }}
+          private-key: ${{ env.TEST_SECKEY }}
           content: wss://relay.nostr.wirednet.jp
           kind: 2
         id: publish-kind
