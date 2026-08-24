@@ -1,13 +1,14 @@
 {
   "name": "nostr",
   "version": "1.9.0",
+  "type": "module",
   "description": "Send EVENT to Nostr",
   "main": "index.js",
   "scripts": {
     "lint": "eslint .",
     "package": "npx rimraf ./dist && npx rollup --config rollup.config.mjs",
-    "test": "jest",
-    "test:coverage": "jest --coverage --collectCoverageFrom=nostr.js --coverageReporters=text --coverageReporters=json-summary",
+    "test": "NODE_OPTIONS=--experimental-vm-modules jest",
+    "test:coverage": "NODE_OPTIONS=--experimental-vm-modules jest --coverage --collectCoverageFrom=nostr.js --coverageReporters=text --coverageReporters=json-summary",
     "all": "npm run lint && npm run package && npm run test"
   },
   "repository": {
@@ -33,6 +34,7 @@
     "ws": "^8.20.0"
   },
   "devDependencies": {
+    "@jest/globals": "^30.3.0",
     "@rollup/plugin-commonjs": "^29.0.0",
     "@rollup/plugin-node-resolve": "^16.0.3",
     "eslint": "^9.39.2",

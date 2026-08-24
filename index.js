@@ -1,8 +1,8 @@
-const core = require('@actions/core');
-const yaml = require('js-yaml');
-const { createEvent, publishEvent } = require('./nostr');
+import * as core from '@actions/core';
+import yaml from 'js-yaml';
+import { createEvent, publishEvent } from './nostr.js';
 
-function isAllowedRelay(relay) {
+export function isAllowedRelay(relay) {
   if (relay.startsWith('wss://')) {
     return true;
   }
@@ -32,7 +32,5 @@ async function run() {
     core.setFailed(error.message);
   }
 }
-
-module.exports.isAllowedRelay = isAllowedRelay;
 
 run();
