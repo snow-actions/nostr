@@ -46,8 +46,8 @@ See [action.yml](action.yml)
 
 - `ubuntu-*`
 - `windows-*`
-- `macos-*` (macOS 13.5 or later)
-- `self-hosted` (except ARM32)
+- `macos-*`
+- `self-hosted` (except ARM32 and macOS 13.4 or earlier)
 
 ### Events
 
