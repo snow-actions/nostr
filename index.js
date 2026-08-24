@@ -2,10 +2,23 @@ const core = require('@actions/core');
 const yaml = require('js-yaml');
 const { createEvent, publishEvent } = require('./nostr');
 
+function isAllowedRelay(relay) {
+  if (relay.startsWith('wss://')) {
+    return true;
+  }
+
+  if (!URL.canParse(relay)) {
+    return false;
+  }
+
+  const url = new URL(relay);
+  return url.protocol === 'ws:' && url.hostname === '127.0.0.1' && url.port !== '';
+}
+
 async function run() {
   try {
     const relaysInput = core.getInput('relays');
-    const relays = relaysInput.split("\n").map(x => x.trim()).filter(x => x.startsWith('wss://'));
+    const relays = relaysInput.split("\n").map(x => x.trim()).filter(isAllowedRelay);
     const privateKey = core.getInput('private-key');
     const content = core.getInput('content');
     const kind = Number(core.getInput('kind', { trimWhitespace: true }));
@@ -18,5 +31,7 @@ async function run() {
     core.setFailed(error.message);
   }
 }
+
+module.exports.isAllowedRelay = isAllowedRelay;
 
 run();
