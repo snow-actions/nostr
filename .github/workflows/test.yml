@@ -12,7 +12,16 @@ jobs:
     steps:
       - uses: actions/checkout@v6
       - run: npm ci
-      - run: npm test
+      - run: npm run test:coverage
+      - name: Add coverage summary
+        run: |
+          node -e '
+            const fs = require("fs");
+            const coverage = require("./coverage/coverage-summary.json").total;
+            const metrics = ["statements", "branches", "functions", "lines"];
+            const rows = metrics.map((metric) => `| ${metric[0].toUpperCase() + metric.slice(1)} | ${coverage[metric].pct.toFixed(1)}% |`);
+            fs.appendFileSync(process.env.GITHUB_STEP_SUMMARY, `## Unit test coverage\n\n| Metric | Coverage |\n| --- | ---: |\n${rows.join("\n")}\n`);
+          '
 
   e2e-test:
     runs-on: ubuntu-latest
@@ -23,6 +32,12 @@ jobs:
         run: |
           npm ci
           npm run package
+
+      - name: Add bundle size summary
+        run: |
+          bytes=$(wc -c < dist/index.js)
+          kib=$(awk -v bytes="$bytes" 'BEGIN { printf "%.1f", bytes / 1024 }')
+          printf '## Bundle size\n\n| File | Size |\n| --- | ---: |\n| `dist/index.js` | %d bytes (%s KiB) |\n' "$bytes" "$kib" >> "$GITHUB_STEP_SUMMARY"
 
       - name: Default is kind 1
         uses: ./
