@@ -47,7 +47,9 @@ See [action.yml](action.yml)
 - `ubuntu-*`
 - `windows-*`
 - `macos-*`
-- `self-hosted` (except ARM32 and macOS 13.4 or earlier)
+- `self-hosted`
+  - GitHub Actions Runner v2.327.0 or later
+  - ARM32 and macOS 13.4 or earlier are not supported
 
 ### Events
 
