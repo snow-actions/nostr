@@ -29,7 +29,6 @@ export const createEvent = (privateKey, kind, content, tags) => {
 export const publishEvent = (relays, event, WebSocketImplementation = globalThis.WebSocket) => {
   console.log('[publish]', relays, event);
 
-  let timeoutId;
   return new Promise((resolve, reject) => {
     const wss = relays.map(relay => {
       try {
@@ -40,36 +39,41 @@ export const publishEvent = (relays, event, WebSocketImplementation = globalThis
       }
     }).filter(ws => ws !== undefined);
     if (wss.length === 0) {
-      reject();
+      reject(new Error('Failed to create any WebSocket connections'));
       return;
     }
-    const messages = new Map();
+    const responses = new Map();
     const close = () => {
-      if (timeoutId !== undefined) {
-        clearTimeout(timeoutId);
-      }
+      clearTimeout(timeoutId);
       for (const ws of wss) {
         if (ws.readyState === WebSocketImplementation.CLOSED) {
           continue;
         }
         ws.close();
       }
-      for (const [url, json] of messages) {
-        const [type, , result] = JSON.parse(json);
-        if (type === 'OK' && result) {
-          resolve();
-        } else {
-          console.warn('[fail]', url, json);
-        }
-      }
-      reject();
     };
-    timeoutId = setTimeout(() => {
+    const finish = () => {
+      close();
+      if ([...responses.values()].some(({ accepted }) => accepted)) {
+        resolve();
+        return;
+      }
+      const rejectionMessages = [...responses.values()]
+        .map(({ message }) => message)
+        .filter(message => typeof message === 'string' && message.length > 0);
+      const details = rejectionMessages.length > 0 ? `: ${rejectionMessages.join('; ')}` : '';
+      reject(new Error(`All relays rejected the event${details}`));
+    };
+    const timeoutId = setTimeout(() => {
       console.log('[timeout]');
       close();
+      if ([...responses.values()].some(({ accepted }) => accepted)) {
+        resolve();
+        return;
+      }
+      reject(new Error('Timed out waiting for relay responses'));
     }, 3000);
     for (const ws of wss) {
-      console.time(ws.url);
       ws.onerror = (error) => {
         console.warn('[error]', ws.url, error);
       };
@@ -79,10 +83,24 @@ export const publishEvent = (relays, event, WebSocketImplementation = globalThis
       };
       ws.onmessage = ({data}) => {
         console.log('[message]', ws.url, data);
-        console.timeEnd(ws.url);
-        messages.set(ws.url, data);
-        if (messages.size === relays.length) {
-          close();
+        if (responses.has(ws)) {
+          return;
+        }
+        let response;
+        try {
+          response = JSON.parse(data);
+        } catch {
+          return;
+        }
+        if (!Array.isArray(response)
+          || response[0] !== 'OK'
+          || response[1] !== event.id
+          || typeof response[2] !== 'boolean') {
+          return;
+        }
+        responses.set(ws, { accepted: response[2], message: response[3] });
+        if (responses.size === wss.length) {
+          finish();
         }
       };
     }
