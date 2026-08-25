@@ -2,7 +2,7 @@ import WebSocket from 'ws';
 import { finalizeEvent, getPublicKey } from 'nostr-tools/pure';
 import * as nip19 from 'nostr-tools/nip19';
 import { useWebSocketImplementation } from 'nostr-tools/pool';
-import { hexToBytes } from '@noble/hashes/utils';
+import { hexToBytes } from '@noble/hashes/utils.js';
 
 useWebSocketImplementation(WebSocket);
 
