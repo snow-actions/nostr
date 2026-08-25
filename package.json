@@ -2,6 +2,10 @@
   "name": "nostr",
   "version": "1.9.0",
   "type": "module",
+  "engines": {
+    "node": ">=24",
+    "npm": ">=11.14.0"
+  },
   "description": "Send EVENT to Nostr",
   "main": "index.js",
   "scripts": {
