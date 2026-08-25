@@ -33756,6 +33756,10 @@ const publishEvent = (relays, event, WebSocketImplementation = globalThis.WebSoc
     const timeoutId = setTimeout(() => {
       console.log('[timeout]');
       close();
+      if ([...responses.values()].some(({ accepted }) => accepted)) {
+        resolve();
+        return;
+      }
       reject(new Error('Timed out waiting for relay responses'));
     }, 3000);
     for (const ws of wss) {

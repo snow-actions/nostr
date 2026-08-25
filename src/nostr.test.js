@@ -134,6 +134,19 @@ test('publishEvent rejects when relays time out', async (t) => {
   assert.strictEqual(webSockets[0].close.mock.callCount(), 1);
 });
 
+test('publishEvent resolves on timeout when a relay accepted the event', async (t) => {
+  mockConsole(t);
+  t.mock.timers.enable({ apis: ['setTimeout'] });
+  const { FakeWebSocket, webSockets } = createWebSocketFixture(t);
+  const result = publishEvent(['wss://relay-1', 'wss://relay-2'], event, FakeWebSocket);
+  respond(webSockets[0], true);
+  t.mock.timers.tick(3000);
+
+  await assert.doesNotReject(result);
+  assert.strictEqual(webSockets[0].close.mock.callCount(), 1);
+  assert.strictEqual(webSockets[1].close.mock.callCount(), 1);
+});
+
 test('publishEvent handles a WebSocket error and rejects on timeout', async (t) => {
   mockConsole(t);
   t.mock.timers.enable({ apis: ['setTimeout'] });
