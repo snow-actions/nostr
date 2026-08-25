@@ -15,16 +15,24 @@ jobs:
         with:
           node-version: '24'
       - run: npm ci
-      - run: npm run test:coverage
-      - name: Add coverage summary
+      - name: Test with coverage
+        shell: bash
         run: |
-          node -e '
-            const fs = require("fs");
-            const coverage = require("./coverage/coverage-summary.json").total;
-            const metrics = ["statements", "branches", "functions", "lines"];
-            const rows = metrics.map((metric) => `| ${metric[0].toUpperCase() + metric.slice(1)} | ${coverage[metric].pct.toFixed(1)}% |`);
-            fs.appendFileSync(process.env.GITHUB_STEP_SUMMARY, `## Unit test coverage\n\n| Metric | Coverage |\n| --- | ---: |\n${rows.join("\n")}\n`);
-          '
+          set -o pipefail
+          npm run test:coverage | tee "$RUNNER_TEMP/test-coverage.log"
+      - name: Add coverage summary
+        shell: bash
+        run: |
+          {
+            echo '## Unit test coverage'
+            echo
+            echo '```text'
+            sed -n \
+              '/start of coverage report/,/end of coverage report/p' \
+              "$RUNNER_TEMP/test-coverage.log" |
+              sed '1d;$d'
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"
 
   e2e-test:
     runs-on: ubuntu-latest
