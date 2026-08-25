@@ -10,7 +10,7 @@
   "main": "index.js",
   "scripts": {
     "lint": "eslint .",
-    "package": "npx rimraf ./dist && npx rollup --config rollup.config.mjs",
+    "package": "rimraf ./dist && rollup --config rollup.config.mjs",
     "test": "NODE_OPTIONS=--experimental-vm-modules jest",
     "test:coverage": "NODE_OPTIONS=--experimental-vm-modules jest --coverage --collectCoverageFrom=nostr.js --coverageReporters=text --coverageReporters=json-summary",
     "all": "npm run lint && npm run package && npm run test"
