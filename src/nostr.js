@@ -1,4 +1,3 @@
-import WebSocket from 'ws';
 import { finalizeEvent, getPublicKey } from 'nostr-tools/pure';
 import * as nip19 from 'nostr-tools/nip19';
 import { hexToBytes } from '@noble/hashes/utils.js';
@@ -27,7 +26,7 @@ export const createEvent = (privateKey, kind, content, tags) => {
  * @param {string[]} relays
  * @param {Event} event
  */
-export const publishEvent = (relays, event, WebSocketImplementation = WebSocket) => {
+export const publishEvent = (relays, event, WebSocketImplementation = globalThis.WebSocket) => {
   console.log('[publish]', relays, event);
 
   let timeoutId;
