@@ -8,7 +8,6 @@ export default [
   js.configs.recommended,
   {
     languageOptions: {
-      ecmaVersion: 'latest',
       globals: {
         ...globals.nodeBuiltin,
       },
