@@ -35168,7 +35168,7 @@ function requireSubprotocol () {
 requireSubprotocol();
 
 var websocketExports = requireWebsocket();
-var WebSocket$1 = /*@__PURE__*/getDefaultExportFromCjs(websocketExports);
+var WebSocket = /*@__PURE__*/getDefaultExportFromCjs(websocketExports);
 
 /* eslint no-unused-vars: ["error", { "varsIgnorePattern": "^Duplex$", "caughtErrors": "none" }] */
 
@@ -38217,8 +38217,8 @@ const sha256 = /* @__PURE__ */ createHasher(() => new _SHA256(),
 
 // pure.ts
 new TextDecoder("utf-8");
-var utf8Encoder$1 = new TextEncoder();
-function isHex32$1(input) {
+var utf8Encoder = new TextEncoder();
+function isHex32(input) {
   for (let i2 = 0; i2 < 64; i2++) {
     let cc = input.charCodeAt(i2);
     if (isNaN(cc) || cc < 48 || cc > 102 || cc > 57 && cc < 97) {
@@ -38229,10 +38229,10 @@ function isHex32$1(input) {
 }
 
 // core.ts
-var verifiedSymbol$1 = Symbol("verified");
-var isRecord$1 = (obj) => obj instanceof Object;
-function validateEvent$1(event) {
-  if (!isRecord$1(event))
+var verifiedSymbol = Symbol("verified");
+var isRecord = (obj) => obj instanceof Object;
+function validateEvent(event) {
+  if (!isRecord(event))
     return false;
   if (typeof event.kind !== "number")
     return false;
@@ -38242,7 +38242,7 @@ function validateEvent$1(event) {
     return false;
   if (typeof event.pubkey !== "string")
     return false;
-  if (!isHex32$1(event.pubkey))
+  if (!isHex32(event.pubkey))
     return false;
   if (!Array.isArray(event.tags))
     return false;
@@ -38257,7 +38257,7 @@ function validateEvent$1(event) {
   }
   return true;
 }
-var JS$1 = class JS {
+var JS = class {
   generateSecretKey() {
     return schnorr.utils.randomSecretKey();
   }
@@ -38267,43 +38267,43 @@ var JS$1 = class JS {
   finalizeEvent(t, secretKey) {
     const event = t;
     event.pubkey = bytesToHex(schnorr.getPublicKey(secretKey));
-    event.id = getEventHash$1(event);
-    event.sig = bytesToHex(schnorr.sign(hexToBytes$1(getEventHash$1(event)), secretKey));
-    event[verifiedSymbol$1] = true;
+    event.id = getEventHash(event);
+    event.sig = bytesToHex(schnorr.sign(hexToBytes$1(getEventHash(event)), secretKey));
+    event[verifiedSymbol] = true;
     return event;
   }
   verifyEvent(event) {
-    if (typeof event[verifiedSymbol$1] === "boolean")
-      return event[verifiedSymbol$1];
+    if (typeof event[verifiedSymbol] === "boolean")
+      return event[verifiedSymbol];
     try {
-      const hash = getEventHash$1(event);
+      const hash = getEventHash(event);
       if (hash !== event.id) {
-        event[verifiedSymbol$1] = false;
+        event[verifiedSymbol] = false;
         return false;
       }
       const valid = schnorr.verify(hexToBytes$1(event.sig), hexToBytes$1(hash), hexToBytes$1(event.pubkey));
-      event[verifiedSymbol$1] = valid;
+      event[verifiedSymbol] = valid;
       return valid;
     } catch (err) {
-      event[verifiedSymbol$1] = false;
+      event[verifiedSymbol] = false;
       return false;
     }
   }
 };
-function serializeEvent$1(evt) {
-  if (!validateEvent$1(evt))
+function serializeEvent(evt) {
+  if (!validateEvent(evt))
     throw new Error("can't serialize event with wrong or missing properties");
   return JSON.stringify([0, evt.pubkey, evt.created_at, evt.kind, evt.tags, evt.content]);
 }
-function getEventHash$1(event) {
-  let eventHash = sha256(utf8Encoder$1.encode(serializeEvent$1(event)));
+function getEventHash(event) {
+  let eventHash = sha256(utf8Encoder.encode(serializeEvent(event)));
   return bytesToHex(eventHash);
 }
-var i$1 = new JS$1();
-i$1.generateSecretKey;
-var getPublicKey = i$1.getPublicKey;
-var finalizeEvent = i$1.finalizeEvent;
-i$1.verifyEvent;
+var i = new JS();
+i.generateSecretKey;
+var getPublicKey = i.getPublicKey;
+var finalizeEvent = i.finalizeEvent;
+i.verifyEvent;
 
 /*! scure-base - MIT License (c) 2022 Paul Miller (paulmillr.com) */
 function isBytes(a) {
@@ -38683,107 +38683,6 @@ function parseTLV(data) {
   return result;
 }
 
-// pure.ts
-new TextDecoder("utf-8");
-var utf8Encoder = new TextEncoder();
-function isHex32(input) {
-  for (let i2 = 0; i2 < 64; i2++) {
-    let cc = input.charCodeAt(i2);
-    if (isNaN(cc) || cc < 48 || cc > 102 || cc > 57 && cc < 97) {
-      return false;
-    }
-  }
-  return true;
-}
-
-// core.ts
-var verifiedSymbol = Symbol("verified");
-var isRecord = (obj) => obj instanceof Object;
-function validateEvent(event) {
-  if (!isRecord(event))
-    return false;
-  if (typeof event.kind !== "number")
-    return false;
-  if (typeof event.content !== "string")
-    return false;
-  if (typeof event.created_at !== "number")
-    return false;
-  if (typeof event.pubkey !== "string")
-    return false;
-  if (!isHex32(event.pubkey))
-    return false;
-  if (!Array.isArray(event.tags))
-    return false;
-  for (let i2 = 0; i2 < event.tags.length; i2++) {
-    let tag = event.tags[i2];
-    if (!Array.isArray(tag))
-      return false;
-    for (let j = 0; j < tag.length; j++) {
-      if (typeof tag[j] !== "string")
-        return false;
-    }
-  }
-  return true;
-}
-var JS = class {
-  generateSecretKey() {
-    return schnorr.utils.randomSecretKey();
-  }
-  getPublicKey(secretKey) {
-    return bytesToHex(schnorr.getPublicKey(secretKey));
-  }
-  finalizeEvent(t, secretKey) {
-    const event = t;
-    event.pubkey = bytesToHex(schnorr.getPublicKey(secretKey));
-    event.id = getEventHash(event);
-    event.sig = bytesToHex(schnorr.sign(hexToBytes$1(getEventHash(event)), secretKey));
-    event[verifiedSymbol] = true;
-    return event;
-  }
-  verifyEvent(event) {
-    if (typeof event[verifiedSymbol] === "boolean")
-      return event[verifiedSymbol];
-    try {
-      const hash = getEventHash(event);
-      if (hash !== event.id) {
-        event[verifiedSymbol] = false;
-        return false;
-      }
-      const valid = schnorr.verify(hexToBytes$1(event.sig), hexToBytes$1(hash), hexToBytes$1(event.pubkey));
-      event[verifiedSymbol] = valid;
-      return valid;
-    } catch (err) {
-      event[verifiedSymbol] = false;
-      return false;
-    }
-  }
-};
-function serializeEvent(evt) {
-  if (!validateEvent(evt))
-    throw new Error("can't serialize event with wrong or missing properties");
-  return JSON.stringify([0, evt.pubkey, evt.created_at, evt.kind, evt.tags, evt.content]);
-}
-function getEventHash(event) {
-  let eventHash = sha256(utf8Encoder.encode(serializeEvent(event)));
-  return bytesToHex(eventHash);
-}
-var i = new JS();
-i.generateSecretKey;
-i.getPublicKey;
-i.finalizeEvent;
-i.verifyEvent;
-new TextEncoder();
-
-// pool.ts
-var _WebSocket;
-try {
-  _WebSocket = WebSocket;
-} catch {
-}
-function useWebSocketImplementation(websocketImplementation) {
-  _WebSocket = websocketImplementation;
-}
-
 /**
  * Checks if something is Uint8Array. Be careful: nodejs Buffer will return true.
  * @param a - value to test
@@ -38849,8 +38748,6 @@ function hexToBytes(hex) {
     return array;
 }
 
-useWebSocketImplementation(WebSocket$1);
-
 /**
  * @param {string} privateKey
  * @param {number} kind
@@ -38875,14 +38772,14 @@ const createEvent = (privateKey, kind, content, tags) => {
  * @param {string[]} relays
  * @param {Event} event
  */
-const publishEvent = (relays, event) => {
+const publishEvent = (relays, event, WebSocketImplementation = WebSocket) => {
   console.log('[publish]', relays, event);
 
   let timeoutId;
   return new Promise((resolve, reject) => {
     const wss = relays.map(relay => {
       try {
-        const ws = new WebSocket$1(relay);
+        const ws = new WebSocketImplementation(relay);
         return ws;
       } catch (error) {
         console.warn('[connection error]', relay, error);
@@ -38898,7 +38795,7 @@ const publishEvent = (relays, event) => {
         clearTimeout(timeoutId);
       }
       for (const ws of wss) {
-        if (ws.readyState === WebSocket$1.CLOSED) {
+        if (ws.readyState === WebSocketImplementation.CLOSED) {
           continue;
         }
         ws.close();
@@ -38970,6 +38867,4 @@ async function run() {
 }
 
 run();
-
-export { isAllowedRelay };
 //# sourceMappingURL=index.js.map

@@ -1,10 +1,7 @@
 import WebSocket from 'ws';
 import { finalizeEvent, getPublicKey } from 'nostr-tools/pure';
 import * as nip19 from 'nostr-tools/nip19';
-import { useWebSocketImplementation } from 'nostr-tools/pool';
 import { hexToBytes } from '@noble/hashes/utils.js';
-
-useWebSocketImplementation(WebSocket);
 
 /**
  * @param {string} privateKey
@@ -30,14 +27,14 @@ export const createEvent = (privateKey, kind, content, tags) => {
  * @param {string[]} relays
  * @param {Event} event
  */
-export const publishEvent = (relays, event) => {
+export const publishEvent = (relays, event, WebSocketImplementation = WebSocket) => {
   console.log('[publish]', relays, event);
 
   let timeoutId;
   return new Promise((resolve, reject) => {
     const wss = relays.map(relay => {
       try {
-        const ws = new WebSocket(relay);
+        const ws = new WebSocketImplementation(relay);
         return ws;
       } catch (error) {
         console.warn('[connection error]', relay, error);
@@ -53,7 +50,7 @@ export const publishEvent = (relays, event) => {
         clearTimeout(timeoutId);
       }
       for (const ws of wss) {
-        if (ws.readyState === WebSocket.CLOSED) {
+        if (ws.readyState === WebSocketImplementation.CLOSED) {
           continue;
         }
         ws.close();

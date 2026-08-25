@@ -1,24 +1,4 @@
-import { jest } from '@jest/globals';
-
-jest.unstable_mockModule('@actions/core', () => ({
-  getInput: jest.fn((name) => ({
-    relays: 'wss://relay.example.com',
-    'private-key': '1'.padStart(64, '0'),
-    content: 'test',
-    kind: '1',
-    tags: '[]',
-  })[name]),
-  setFailed: jest.fn(),
-  setOutput: jest.fn(),
-  setSecret: jest.fn(),
-}));
-
-jest.unstable_mockModule('./nostr.js', () => ({
-  createEvent: jest.fn(() => ({})),
-  publishEvent: jest.fn(() => Promise.resolve()),
-}));
-
-const { isAllowedRelay } = await import('./index.js');
+import { isAllowedRelay } from './relay.js';
 
 test('allows secure remote relays', () => {
   expect(isAllowedRelay('wss://relay.example.com')).toBe(true);

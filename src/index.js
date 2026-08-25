@@ -1,20 +1,7 @@
 import * as core from '@actions/core';
 import { load } from 'js-yaml';
 import { createEvent, publishEvent } from './nostr.js';
-
-export function isAllowedRelay(relay) {
-  if (relay.startsWith('wss://')) {
-    return true;
-  }
-
-  if (!URL.canParse(relay)) {
-    return false;
-  }
-
-  const url = new URL(relay);
-  // Permit unencrypted connections only for the disposable relay used by local E2E tests.
-  return url.protocol === 'ws:' && url.hostname === '127.0.0.1';
-}
+import { isAllowedRelay } from './relay.js';
 
 async function run() {
   try {
