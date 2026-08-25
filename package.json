@@ -11,8 +11,8 @@
   "scripts": {
     "lint": "eslint .",
     "package": "rimraf ./dist && rollup --config rollup.config.mjs",
-    "test": "NODE_OPTIONS=--experimental-vm-modules jest",
-    "test:coverage": "NODE_OPTIONS=--experimental-vm-modules jest --coverage --collectCoverageFrom=src/nostr.js --coverageReporters=text --coverageReporters=json-summary",
+    "test": "node --test --test-isolation=none",
+    "test:coverage": "node --test --test-isolation=none --experimental-test-coverage --test-coverage-include=\"src/**/*.js\" --test-coverage-exclude=\"src/index.js\" --test-coverage-exclude=\"src/*.test.js\" --test-reporter=spec",
     "all": "npm run lint && npm run package && npm run test"
   },
   "repository": {
@@ -38,11 +38,9 @@
     "ws": "^8.21.3"
   },
   "devDependencies": {
-    "@jest/globals": "^30.3.0",
     "@rollup/plugin-commonjs": "^29.0.0",
     "@rollup/plugin-node-resolve": "^16.0.3",
     "eslint": "^9.39.2",
-    "jest": "^30.3.0",
     "rimraf": "^6.1.3",
     "rollup": "^4.57.1"
   }
