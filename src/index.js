@@ -16,7 +16,7 @@ async function run() {
     await publishEvent(relays, event);
     core.setOutput('event', JSON.stringify(event));
   } catch (error) {
-    core.setFailed(error.message);
+    core.setFailed(error instanceof Error ? error.message : String(error));
   }
 }
 
