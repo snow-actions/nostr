@@ -95,8 +95,7 @@ export const publishEvent = (relays, event, WebSocketImplementation = globalThis
         if (!Array.isArray(response)
           || response[0] !== 'OK'
           || response[1] !== event.id
-          || typeof response[2] !== 'boolean'
-          || typeof response[3] !== 'string') {
+          || typeof response[2] !== 'boolean') {
           return;
         }
         responses.set(ws, { accepted: response[2], message: response[3] });

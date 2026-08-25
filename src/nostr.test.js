@@ -100,6 +100,26 @@ test('publishEvent resolves when at least one relay accepts the event', async (t
   await assert.doesNotReject(result);
 });
 
+test('publishEvent accepts an OK response without a message', async (t) => {
+  mockConsole(t);
+  const { FakeWebSocket, webSockets } = createWebSocketFixture(t);
+  const result = publishEvent(['wss://relay-1'], event, FakeWebSocket);
+  webSockets[0].onmessage({ data: JSON.stringify(['OK', event.id, true]) });
+
+  await assert.doesNotReject(result);
+});
+
+test('publishEvent rejects when all OK responses have non-string messages', async (t) => {
+  mockConsole(t);
+  const { FakeWebSocket, webSockets } = createWebSocketFixture(t);
+  const result = publishEvent(['wss://relay-1', 'wss://relay-2'], event, FakeWebSocket);
+  webSockets.forEach((ws) => {
+    ws.onmessage({ data: JSON.stringify(['OK', event.id, false, null]) });
+  });
+
+  await assert.rejects(result, { name: 'Error', message: 'All relays rejected the event' });
+});
+
 test('publishEvent rejects when all relays reject the event', async (t) => {
   mockConsole(t);
   const { FakeWebSocket, webSockets } = createWebSocketFixture(t);
