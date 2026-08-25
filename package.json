@@ -1,13 +1,13 @@
 {
   "name": "nostr",
   "version": "1.9.0",
+  "private": true,
   "type": "module",
   "engines": {
     "node": ">=24",
     "npm": ">=11.15.0"
   },
   "description": "Send EVENT to Nostr",
-  "main": "src/index.js",
   "scripts": {
     "lint": "eslint .",
     "package": "rimraf ./dist && rollup --config rollup.config.mjs",
@@ -19,12 +19,6 @@
     "type": "git",
     "url": "git+https://github.com/snow-actions/nostr.git"
   },
-  "keywords": [
-    "GitHub",
-    "Actions",
-    "JavaScript"
-  ],
-  "author": "",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/snow-actions/nostr/issues"
