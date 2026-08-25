@@ -1,4 +1,4 @@
-import { finalizeEvent, getPublicKey } from 'nostr-tools/pure';
+import { finalizeEvent } from 'nostr-tools/pure';
 import * as nip19 from 'nostr-tools/nip19';
 import { hexToBytes } from '@noble/hashes/utils.js';
 
@@ -17,7 +17,6 @@ export const createEvent = (privateKey, kind, content, tags) => {
     kind,
     tags,
     content,
-    pubkey: getPublicKey(seckey),
   };
   return finalizeEvent(event, seckey);
 };

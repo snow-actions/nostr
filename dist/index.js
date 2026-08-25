@@ -33244,7 +33244,7 @@ function getEventHash(event) {
 }
 var i = new JS();
 i.generateSecretKey;
-var getPublicKey = i.getPublicKey;
+i.getPublicKey;
 var finalizeEvent = i.finalizeEvent;
 i.verifyEvent;
 
@@ -33706,7 +33706,6 @@ const createEvent = (privateKey, kind, content, tags) => {
     kind,
     tags,
     content,
-    pubkey: getPublicKey(seckey),
   };
   return finalizeEvent(event, seckey);
 };
