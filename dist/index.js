@@ -1,6 +1,6 @@
 import * as os from 'os';
 import os__default from 'os';
-import * as crypto$2 from 'crypto';
+import * as crypto$1 from 'crypto';
 import crypto__default from 'crypto';
 import * as fs from 'fs';
 import { promises } from 'fs';
@@ -175,7 +175,7 @@ function issueFileCommand(command, message) {
     });
 }
 function prepareKeyValueMessage(key, value) {
-    const delimiter = `ghadelimiter_${crypto$2.randomUUID()}`;
+    const delimiter = `ghadelimiter_${crypto$1.randomUUID()}`;
     const convertedValue = toCommandValue(value);
     // These should realistically never happen, but just in case someone finds a
     // way to exploit uuid generation let's not allow keys or values that contain
@@ -16227,11 +16227,11 @@ function requireRetry () {
 	return retry;
 }
 
-var dump$2;
+var dump;
 var hasRequiredDump;
 
 function requireDump () {
-	if (hasRequiredDump) return dump$2;
+	if (hasRequiredDump) return dump;
 	hasRequiredDump = 1;
 
 	const util = requireUtil$7();
@@ -16354,8 +16354,8 @@ function requireDump () {
 	  }
 	}
 
-	dump$2 = createDumpInterceptor;
-	return dump$2;
+	dump = createDumpInterceptor;
+	return dump;
 }
 
 var dns;
@@ -23981,11 +23981,11 @@ function requireUtil$2 () {
 	return util$2;
 }
 
-var parse$1;
+var parse;
 var hasRequiredParse;
 
 function requireParse () {
-	if (hasRequiredParse) return parse$1;
+	if (hasRequiredParse) return parse;
 	hasRequiredParse = 1;
 
 	const { maxNameValuePairSize, maxAttributeValueSize } = requireConstants$2();
@@ -24292,11 +24292,11 @@ function requireParse () {
 	  return parseUnparsedAttributes(unparsedAttributes, cookieAttributeList)
 	}
 
-	parse$1 = {
+	parse = {
 	  parseSetCookie,
 	  parseUnparsedAttributes
 	};
-	return parse$1;
+	return parse;
 }
 
 var cookies;
@@ -28928,7 +28928,7 @@ function isBoolean(object) {
   return Object.prototype.toString.call(object) === '[object Boolean]';
 }
 
-var bool$2 = new type('tag:yaml.org,2002:bool', {
+var bool$1 = new type('tag:yaml.org,2002:bool', {
   kind: 'scalar',
   resolve: resolveYamlBoolean,
   construct: constructYamlBoolean,
@@ -29189,7 +29189,7 @@ var float = new type('tag:yaml.org,2002:float', {
 var json = failsafe.extend({
   implicit: [
     _null,
-    bool$2,
+    bool$1,
     int,
     float
   ]
@@ -31243,24 +31243,6 @@ function loadDocuments(input, options) {
 }
 
 
-function loadAll$1(input, iterator, options) {
-  if (iterator !== null && typeof iterator === 'object' && typeof options === 'undefined') {
-    options = iterator;
-    iterator = null;
-  }
-
-  var documents = loadDocuments(input, options);
-
-  if (typeof iterator !== 'function') {
-    return documents;
-  }
-
-  for (var index = 0, length = documents.length; index < length; index += 1) {
-    iterator(documents[index]);
-  }
-}
-
-
 function load$1(input, options) {
   var documents = loadDocuments(input, options);
 
@@ -31272,1041 +31254,12 @@ function load$1(input, options) {
   }
   throw new exception('expected a single document in the stream, but found more');
 }
-
-
-var loadAll_1 = loadAll$1;
 var load_1    = load$1;
 
 var loader = {
-	loadAll: loadAll_1,
 	load: load_1
 };
-
-/*eslint-disable no-use-before-define*/
-
-
-
-
-
-var _toString       = Object.prototype.toString;
-var _hasOwnProperty = Object.prototype.hasOwnProperty;
-
-var CHAR_BOM                  = 0xFEFF;
-var CHAR_TAB                  = 0x09; /* Tab */
-var CHAR_LINE_FEED            = 0x0A; /* LF */
-var CHAR_CARRIAGE_RETURN      = 0x0D; /* CR */
-var CHAR_SPACE                = 0x20; /* Space */
-var CHAR_EXCLAMATION          = 0x21; /* ! */
-var CHAR_DOUBLE_QUOTE         = 0x22; /* " */
-var CHAR_SHARP                = 0x23; /* # */
-var CHAR_PERCENT              = 0x25; /* % */
-var CHAR_AMPERSAND            = 0x26; /* & */
-var CHAR_SINGLE_QUOTE         = 0x27; /* ' */
-var CHAR_ASTERISK             = 0x2A; /* * */
-var CHAR_COMMA                = 0x2C; /* , */
-var CHAR_MINUS                = 0x2D; /* - */
-var CHAR_COLON                = 0x3A; /* : */
-var CHAR_EQUALS               = 0x3D; /* = */
-var CHAR_GREATER_THAN         = 0x3E; /* > */
-var CHAR_QUESTION             = 0x3F; /* ? */
-var CHAR_COMMERCIAL_AT        = 0x40; /* @ */
-var CHAR_LEFT_SQUARE_BRACKET  = 0x5B; /* [ */
-var CHAR_RIGHT_SQUARE_BRACKET = 0x5D; /* ] */
-var CHAR_GRAVE_ACCENT         = 0x60; /* ` */
-var CHAR_LEFT_CURLY_BRACKET   = 0x7B; /* { */
-var CHAR_VERTICAL_LINE        = 0x7C; /* | */
-var CHAR_RIGHT_CURLY_BRACKET  = 0x7D; /* } */
-
-var ESCAPE_SEQUENCES = {};
-
-ESCAPE_SEQUENCES[0x00]   = '\\0';
-ESCAPE_SEQUENCES[0x07]   = '\\a';
-ESCAPE_SEQUENCES[0x08]   = '\\b';
-ESCAPE_SEQUENCES[0x09]   = '\\t';
-ESCAPE_SEQUENCES[0x0A]   = '\\n';
-ESCAPE_SEQUENCES[0x0B]   = '\\v';
-ESCAPE_SEQUENCES[0x0C]   = '\\f';
-ESCAPE_SEQUENCES[0x0D]   = '\\r';
-ESCAPE_SEQUENCES[0x1B]   = '\\e';
-ESCAPE_SEQUENCES[0x22]   = '\\"';
-ESCAPE_SEQUENCES[0x5C]   = '\\\\';
-ESCAPE_SEQUENCES[0x85]   = '\\N';
-ESCAPE_SEQUENCES[0xA0]   = '\\_';
-ESCAPE_SEQUENCES[0x2028] = '\\L';
-ESCAPE_SEQUENCES[0x2029] = '\\P';
-
-var DEPRECATED_BOOLEANS_SYNTAX = [
-  'y', 'Y', 'yes', 'Yes', 'YES', 'on', 'On', 'ON',
-  'n', 'N', 'no', 'No', 'NO', 'off', 'Off', 'OFF'
-];
-
-var DEPRECATED_BASE60_SYNTAX = /^[-+]?[0-9_]+(?::[0-9_]+)+(?:\.[0-9_]*)?$/;
-
-function compileStyleMap(schema, map) {
-  var result, keys, index, length, tag, style, type;
-
-  if (map === null) return {};
-
-  result = {};
-  keys = Object.keys(map);
-
-  for (index = 0, length = keys.length; index < length; index += 1) {
-    tag = keys[index];
-    style = String(map[tag]);
-
-    if (tag.slice(0, 2) === '!!') {
-      tag = 'tag:yaml.org,2002:' + tag.slice(2);
-    }
-    type = schema.compiledTypeMap['fallback'][tag];
-
-    if (type && _hasOwnProperty.call(type.styleAliases, style)) {
-      style = type.styleAliases[style];
-    }
-
-    result[tag] = style;
-  }
-
-  return result;
-}
-
-function encodeHex(character) {
-  var string, handle, length;
-
-  string = character.toString(16).toUpperCase();
-
-  if (character <= 0xFF) {
-    handle = 'x';
-    length = 2;
-  } else if (character <= 0xFFFF) {
-    handle = 'u';
-    length = 4;
-  } else if (character <= 0xFFFFFFFF) {
-    handle = 'U';
-    length = 8;
-  } else {
-    throw new exception('code point within a string may not be greater than 0xFFFFFFFF');
-  }
-
-  return '\\' + handle + common.repeat('0', length - string.length) + string;
-}
-
-
-var QUOTING_TYPE_SINGLE = 1,
-    QUOTING_TYPE_DOUBLE = 2;
-
-function State(options) {
-  this.schema        = options['schema'] || _default;
-  this.indent        = Math.max(1, (options['indent'] || 2));
-  this.noArrayIndent = options['noArrayIndent'] || false;
-  this.skipInvalid   = options['skipInvalid'] || false;
-  this.flowLevel     = (common.isNothing(options['flowLevel']) ? -1 : options['flowLevel']);
-  this.styleMap      = compileStyleMap(this.schema, options['styles'] || null);
-  this.sortKeys      = options['sortKeys'] || false;
-  this.lineWidth     = options['lineWidth'] || 80;
-  this.noRefs        = options['noRefs'] || false;
-  this.noCompatMode  = options['noCompatMode'] || false;
-  this.condenseFlow  = options['condenseFlow'] || false;
-  this.quotingType   = options['quotingType'] === '"' ? QUOTING_TYPE_DOUBLE : QUOTING_TYPE_SINGLE;
-  this.forceQuotes   = options['forceQuotes'] || false;
-  this.replacer      = typeof options['replacer'] === 'function' ? options['replacer'] : null;
-
-  this.implicitTypes = this.schema.compiledImplicit;
-  this.explicitTypes = this.schema.compiledExplicit;
-
-  this.tag = null;
-  this.result = '';
-
-  this.duplicates = [];
-  this.usedDuplicates = null;
-}
-
-// Indents every line in a string. Empty lines (\n only) are not indented.
-function indentString(string, spaces) {
-  var ind = common.repeat(' ', spaces),
-      position = 0,
-      next = -1,
-      result = '',
-      line,
-      length = string.length;
-
-  while (position < length) {
-    next = string.indexOf('\n', position);
-    if (next === -1) {
-      line = string.slice(position);
-      position = length;
-    } else {
-      line = string.slice(position, next + 1);
-      position = next + 1;
-    }
-
-    if (line.length && line !== '\n') result += ind;
-
-    result += line;
-  }
-
-  return result;
-}
-
-function generateNextLine(state, level) {
-  return '\n' + common.repeat(' ', state.indent * level);
-}
-
-function testImplicitResolving(state, str) {
-  var index, length, type;
-
-  for (index = 0, length = state.implicitTypes.length; index < length; index += 1) {
-    type = state.implicitTypes[index];
-
-    if (type.resolve(str)) {
-      return true;
-    }
-  }
-
-  return false;
-}
-
-// [33] s-white ::= s-space | s-tab
-function isWhitespace(c) {
-  return c === CHAR_SPACE || c === CHAR_TAB;
-}
-
-// Returns true if the character can be printed without escaping.
-// From YAML 1.2: "any allowed characters known to be non-printable
-// should also be escaped. [However,] This isn’t mandatory"
-// Derived from nb-char - \t - #x85 - #xA0 - #x2028 - #x2029.
-function isPrintable(c) {
-  return  (0x00020 <= c && c <= 0x00007E)
-      || ((0x000A1 <= c && c <= 0x00D7FF) && c !== 0x2028 && c !== 0x2029)
-      || ((0x0E000 <= c && c <= 0x00FFFD) && c !== CHAR_BOM)
-      ||  (0x10000 <= c && c <= 0x10FFFF);
-}
-
-// [34] ns-char ::= nb-char - s-white
-// [27] nb-char ::= c-printable - b-char - c-byte-order-mark
-// [26] b-char  ::= b-line-feed | b-carriage-return
-// Including s-white (for some reason, examples doesn't match specs in this aspect)
-// ns-char ::= c-printable - b-line-feed - b-carriage-return - c-byte-order-mark
-function isNsCharOrWhitespace(c) {
-  return isPrintable(c)
-    && c !== CHAR_BOM
-    // - b-char
-    && c !== CHAR_CARRIAGE_RETURN
-    && c !== CHAR_LINE_FEED;
-}
-
-// [127]  ns-plain-safe(c) ::= c = flow-out  ⇒ ns-plain-safe-out
-//                             c = flow-in   ⇒ ns-plain-safe-in
-//                             c = block-key ⇒ ns-plain-safe-out
-//                             c = flow-key  ⇒ ns-plain-safe-in
-// [128] ns-plain-safe-out ::= ns-char
-// [129]  ns-plain-safe-in ::= ns-char - c-flow-indicator
-// [130]  ns-plain-char(c) ::=  ( ns-plain-safe(c) - “:” - “#” )
-//                            | ( /* An ns-char preceding */ “#” )
-//                            | ( “:” /* Followed by an ns-plain-safe(c) */ )
-function isPlainSafe(c, prev, inblock) {
-  var cIsNsCharOrWhitespace = isNsCharOrWhitespace(c);
-  var cIsNsChar = cIsNsCharOrWhitespace && !isWhitespace(c);
-  return (
-    // ns-plain-safe
-    inblock ? // c = flow-in
-      cIsNsCharOrWhitespace
-      : cIsNsCharOrWhitespace
-        // - c-flow-indicator
-        && c !== CHAR_COMMA
-        && c !== CHAR_LEFT_SQUARE_BRACKET
-        && c !== CHAR_RIGHT_SQUARE_BRACKET
-        && c !== CHAR_LEFT_CURLY_BRACKET
-        && c !== CHAR_RIGHT_CURLY_BRACKET
-  )
-    // ns-plain-char
-    && c !== CHAR_SHARP // false on '#'
-    && !(prev === CHAR_COLON && !cIsNsChar) // false on ': '
-    || (isNsCharOrWhitespace(prev) && !isWhitespace(prev) && c === CHAR_SHARP) // change to true on '[^ ]#'
-    || (prev === CHAR_COLON && cIsNsChar); // change to true on ':[^ ]'
-}
-
-// Simplified test for values allowed as the first character in plain style.
-function isPlainSafeFirst(c) {
-  // Uses a subset of ns-char - c-indicator
-  // where ns-char = nb-char - s-white.
-  // No support of ( ( “?” | “:” | “-” ) /* Followed by an ns-plain-safe(c)) */ ) part
-  return isPrintable(c) && c !== CHAR_BOM
-    && !isWhitespace(c) // - s-white
-    // - (c-indicator ::=
-    // “-” | “?” | “:” | “,” | “[” | “]” | “{” | “}”
-    && c !== CHAR_MINUS
-    && c !== CHAR_QUESTION
-    && c !== CHAR_COLON
-    && c !== CHAR_COMMA
-    && c !== CHAR_LEFT_SQUARE_BRACKET
-    && c !== CHAR_RIGHT_SQUARE_BRACKET
-    && c !== CHAR_LEFT_CURLY_BRACKET
-    && c !== CHAR_RIGHT_CURLY_BRACKET
-    // | “#” | “&” | “*” | “!” | “|” | “=” | “>” | “'” | “"”
-    && c !== CHAR_SHARP
-    && c !== CHAR_AMPERSAND
-    && c !== CHAR_ASTERISK
-    && c !== CHAR_EXCLAMATION
-    && c !== CHAR_VERTICAL_LINE
-    && c !== CHAR_EQUALS
-    && c !== CHAR_GREATER_THAN
-    && c !== CHAR_SINGLE_QUOTE
-    && c !== CHAR_DOUBLE_QUOTE
-    // | “%” | “@” | “`”)
-    && c !== CHAR_PERCENT
-    && c !== CHAR_COMMERCIAL_AT
-    && c !== CHAR_GRAVE_ACCENT;
-}
-
-// Simplified test for values allowed as the last character in plain style.
-function isPlainSafeLast(c) {
-  // just not whitespace or colon, it will be checked to be plain character later
-  return !isWhitespace(c) && c !== CHAR_COLON;
-}
-
-// Same as 'string'.codePointAt(pos), but works in older browsers.
-function codePointAt(string, pos) {
-  var first = string.charCodeAt(pos), second;
-  if (first >= 0xD800 && first <= 0xDBFF && pos + 1 < string.length) {
-    second = string.charCodeAt(pos + 1);
-    if (second >= 0xDC00 && second <= 0xDFFF) {
-      // https://mathiasbynens.be/notes/javascript-encoding#surrogate-formulae
-      return (first - 0xD800) * 0x400 + second - 0xDC00 + 0x10000;
-    }
-  }
-  return first;
-}
-
-// Determines whether block indentation indicator is required.
-function needIndentIndicator(string) {
-  var leadingSpaceRe = /^\n* /;
-  return leadingSpaceRe.test(string);
-}
-
-var STYLE_PLAIN   = 1,
-    STYLE_SINGLE  = 2,
-    STYLE_LITERAL = 3,
-    STYLE_FOLDED  = 4,
-    STYLE_DOUBLE  = 5;
-
-// Determines which scalar styles are possible and returns the preferred style.
-// lineWidth = -1 => no limit.
-// Pre-conditions: str.length > 0.
-// Post-conditions:
-//    STYLE_PLAIN or STYLE_SINGLE => no \n are in the string.
-//    STYLE_LITERAL => no lines are suitable for folding (or lineWidth is -1).
-//    STYLE_FOLDED => a line > lineWidth and can be folded (and lineWidth != -1).
-function chooseScalarStyle(string, singleLineOnly, indentPerLevel, lineWidth,
-  testAmbiguousType, quotingType, forceQuotes, inblock) {
-
-  var i;
-  var char = 0;
-  var prevChar = null;
-  var hasLineBreak = false;
-  var hasFoldableLine = false; // only checked if shouldTrackWidth
-  var shouldTrackWidth = lineWidth !== -1;
-  var previousLineBreak = -1; // count the first line correctly
-  var plain = isPlainSafeFirst(codePointAt(string, 0))
-          && isPlainSafeLast(codePointAt(string, string.length - 1));
-
-  if (singleLineOnly || forceQuotes) {
-    // Case: no block styles.
-    // Check for disallowed characters to rule out plain and single.
-    for (i = 0; i < string.length; char >= 0x10000 ? i += 2 : i++) {
-      char = codePointAt(string, i);
-      if (!isPrintable(char)) {
-        return STYLE_DOUBLE;
-      }
-      plain = plain && isPlainSafe(char, prevChar, inblock);
-      prevChar = char;
-    }
-  } else {
-    // Case: block styles permitted.
-    for (i = 0; i < string.length; char >= 0x10000 ? i += 2 : i++) {
-      char = codePointAt(string, i);
-      if (char === CHAR_LINE_FEED) {
-        hasLineBreak = true;
-        // Check if any line can be folded.
-        if (shouldTrackWidth) {
-          hasFoldableLine = hasFoldableLine ||
-            // Foldable line = too long, and not more-indented.
-            (i - previousLineBreak - 1 > lineWidth &&
-             string[previousLineBreak + 1] !== ' ');
-          previousLineBreak = i;
-        }
-      } else if (!isPrintable(char)) {
-        return STYLE_DOUBLE;
-      }
-      plain = plain && isPlainSafe(char, prevChar, inblock);
-      prevChar = char;
-    }
-    // in case the end is missing a \n
-    hasFoldableLine = hasFoldableLine || (shouldTrackWidth &&
-      (i - previousLineBreak - 1 > lineWidth &&
-       string[previousLineBreak + 1] !== ' '));
-  }
-  // Although every style can represent \n without escaping, prefer block styles
-  // for multiline, since they're more readable and they don't add empty lines.
-  // Also prefer folding a super-long line.
-  if (!hasLineBreak && !hasFoldableLine) {
-    // Strings interpretable as another type have to be quoted;
-    // e.g. the string 'true' vs. the boolean true.
-    if (plain && !forceQuotes && !testAmbiguousType(string)) {
-      return STYLE_PLAIN;
-    }
-    return quotingType === QUOTING_TYPE_DOUBLE ? STYLE_DOUBLE : STYLE_SINGLE;
-  }
-  // Edge case: block indentation indicator can only have one digit.
-  if (indentPerLevel > 9 && needIndentIndicator(string)) {
-    return STYLE_DOUBLE;
-  }
-  // At this point we know block styles are valid.
-  // Prefer literal style unless we want to fold.
-  if (!forceQuotes) {
-    return hasFoldableLine ? STYLE_FOLDED : STYLE_LITERAL;
-  }
-  return quotingType === QUOTING_TYPE_DOUBLE ? STYLE_DOUBLE : STYLE_SINGLE;
-}
-
-// Note: line breaking/folding is implemented for only the folded style.
-// NB. We drop the last trailing newline (if any) of a returned block scalar
-//  since the dumper adds its own newline. This always works:
-//    • No ending newline => unaffected; already using strip "-" chomping.
-//    • Ending newline    => removed then restored.
-//  Importantly, this keeps the "+" chomp indicator from gaining an extra line.
-function writeScalar(state, string, level, iskey, inblock) {
-  state.dump = (function () {
-    if (string.length === 0) {
-      return state.quotingType === QUOTING_TYPE_DOUBLE ? '""' : "''";
-    }
-    if (!state.noCompatMode) {
-      if (DEPRECATED_BOOLEANS_SYNTAX.indexOf(string) !== -1 || DEPRECATED_BASE60_SYNTAX.test(string)) {
-        return state.quotingType === QUOTING_TYPE_DOUBLE ? ('"' + string + '"') : ("'" + string + "'");
-      }
-    }
-
-    var indent = state.indent * Math.max(1, level); // no 0-indent scalars
-    // As indentation gets deeper, let the width decrease monotonically
-    // to the lower bound min(state.lineWidth, 40).
-    // Note that this implies
-    //  state.lineWidth ≤ 40 + state.indent: width is fixed at the lower bound.
-    //  state.lineWidth > 40 + state.indent: width decreases until the lower bound.
-    // This behaves better than a constant minimum width which disallows narrower options,
-    // or an indent threshold which causes the width to suddenly increase.
-    var lineWidth = state.lineWidth === -1
-      ? -1 : Math.max(Math.min(state.lineWidth, 40), state.lineWidth - indent);
-
-    // Without knowing if keys are implicit/explicit, assume implicit for safety.
-    var singleLineOnly = iskey
-      // No block styles in flow mode.
-      || (state.flowLevel > -1 && level >= state.flowLevel);
-    function testAmbiguity(string) {
-      return testImplicitResolving(state, string);
-    }
-
-    switch (chooseScalarStyle(string, singleLineOnly, state.indent, lineWidth,
-      testAmbiguity, state.quotingType, state.forceQuotes && !iskey, inblock)) {
-
-      case STYLE_PLAIN:
-        return string;
-      case STYLE_SINGLE:
-        return "'" + string.replace(/'/g, "''") + "'";
-      case STYLE_LITERAL:
-        return '|' + blockHeader(string, state.indent)
-          + dropEndingNewline(indentString(string, indent));
-      case STYLE_FOLDED:
-        return '>' + blockHeader(string, state.indent)
-          + dropEndingNewline(indentString(foldString(string, lineWidth), indent));
-      case STYLE_DOUBLE:
-        return '"' + escapeString(string) + '"';
-      default:
-        throw new exception('impossible error: invalid scalar style');
-    }
-  }());
-}
-
-// Pre-conditions: string is valid for a block scalar, 1 <= indentPerLevel <= 9.
-function blockHeader(string, indentPerLevel) {
-  var indentIndicator = needIndentIndicator(string) ? String(indentPerLevel) : '';
-
-  // note the special case: the string '\n' counts as a "trailing" empty line.
-  var clip =          string[string.length - 1] === '\n';
-  var keep = clip && (string[string.length - 2] === '\n' || string === '\n');
-  var chomp = keep ? '+' : (clip ? '' : '-');
-
-  return indentIndicator + chomp + '\n';
-}
-
-// (See the note for writeScalar.)
-function dropEndingNewline(string) {
-  return string[string.length - 1] === '\n' ? string.slice(0, -1) : string;
-}
-
-// Note: a long line without a suitable break point will exceed the width limit.
-// Pre-conditions: every char in str isPrintable, str.length > 0, width > 0.
-function foldString(string, width) {
-  // In folded style, $k$ consecutive newlines output as $k+1$ newlines—
-  // unless they're before or after a more-indented line, or at the very
-  // beginning or end, in which case $k$ maps to $k$.
-  // Therefore, parse each chunk as newline(s) followed by a content line.
-  var lineRe = /(\n+)([^\n]*)/g;
-
-  // first line (possibly an empty line)
-  var result = (function () {
-    var nextLF = string.indexOf('\n');
-    nextLF = nextLF !== -1 ? nextLF : string.length;
-    lineRe.lastIndex = nextLF;
-    return foldLine(string.slice(0, nextLF), width);
-  }());
-  // If we haven't reached the first content line yet, don't add an extra \n.
-  var prevMoreIndented = string[0] === '\n' || string[0] === ' ';
-  var moreIndented;
-
-  // rest of the lines
-  var match;
-  while ((match = lineRe.exec(string))) {
-    var prefix = match[1], line = match[2];
-    moreIndented = (line[0] === ' ');
-    result += prefix
-      + (!prevMoreIndented && !moreIndented && line !== ''
-        ? '\n' : '')
-      + foldLine(line, width);
-    prevMoreIndented = moreIndented;
-  }
-
-  return result;
-}
-
-// Greedy line breaking.
-// Picks the longest line under the limit each time,
-// otherwise settles for the shortest line over the limit.
-// NB. More-indented lines *cannot* be folded, as that would add an extra \n.
-function foldLine(line, width) {
-  if (line === '' || line[0] === ' ') return line;
-
-  // Since a more-indented line adds a \n, breaks can't be followed by a space.
-  var breakRe = / [^ ]/g; // note: the match index will always be <= length-2.
-  var match;
-  // start is an inclusive index. end, curr, and next are exclusive.
-  var start = 0, end, curr = 0, next = 0;
-  var result = '';
-
-  // Invariants: 0 <= start <= length-1.
-  //   0 <= curr <= next <= max(0, length-2). curr - start <= width.
-  // Inside the loop:
-  //   A match implies length >= 2, so curr and next are <= length-2.
-  while ((match = breakRe.exec(line))) {
-    next = match.index;
-    // maintain invariant: curr - start <= width
-    if (next - start > width) {
-      end = (curr > start) ? curr : next; // derive end <= length-2
-      result += '\n' + line.slice(start, end);
-      // skip the space that was output as \n
-      start = end + 1;                    // derive start <= length-1
-    }
-    curr = next;
-  }
-
-  // By the invariants, start <= length-1, so there is something left over.
-  // It is either the whole string or a part starting from non-whitespace.
-  result += '\n';
-  // Insert a break if the remainder is too long and there is a break available.
-  if (line.length - start > width && curr > start) {
-    result += line.slice(start, curr) + '\n' + line.slice(curr + 1);
-  } else {
-    result += line.slice(start);
-  }
-
-  return result.slice(1); // drop extra \n joiner
-}
-
-// Escapes a double-quoted string.
-function escapeString(string) {
-  var result = '';
-  var char = 0;
-  var escapeSeq;
-
-  for (var i = 0; i < string.length; char >= 0x10000 ? i += 2 : i++) {
-    char = codePointAt(string, i);
-    escapeSeq = ESCAPE_SEQUENCES[char];
-
-    if (!escapeSeq && isPrintable(char)) {
-      result += string[i];
-      if (char >= 0x10000) result += string[i + 1];
-    } else {
-      result += escapeSeq || encodeHex(char);
-    }
-  }
-
-  return result;
-}
-
-function writeFlowSequence(state, level, object) {
-  var _result = '',
-      _tag    = state.tag,
-      index,
-      length,
-      value;
-
-  for (index = 0, length = object.length; index < length; index += 1) {
-    value = object[index];
-
-    if (state.replacer) {
-      value = state.replacer.call(object, String(index), value);
-    }
-
-    // Write only valid elements, put null instead of invalid elements.
-    if (writeNode(state, level, value, false, false) ||
-        (typeof value === 'undefined' &&
-         writeNode(state, level, null, false, false))) {
-
-      if (_result !== '') _result += ',' + (!state.condenseFlow ? ' ' : '');
-      _result += state.dump;
-    }
-  }
-
-  state.tag = _tag;
-  state.dump = '[' + _result + ']';
-}
-
-function writeBlockSequence(state, level, object, compact) {
-  var _result = '',
-      _tag    = state.tag,
-      index,
-      length,
-      value;
-
-  for (index = 0, length = object.length; index < length; index += 1) {
-    value = object[index];
-
-    if (state.replacer) {
-      value = state.replacer.call(object, String(index), value);
-    }
-
-    // Write only valid elements, put null instead of invalid elements.
-    if (writeNode(state, level + 1, value, true, true, false, true) ||
-        (typeof value === 'undefined' &&
-         writeNode(state, level + 1, null, true, true, false, true))) {
-
-      if (!compact || _result !== '') {
-        _result += generateNextLine(state, level);
-      }
-
-      if (state.dump && CHAR_LINE_FEED === state.dump.charCodeAt(0)) {
-        _result += '-';
-      } else {
-        _result += '- ';
-      }
-
-      _result += state.dump;
-    }
-  }
-
-  state.tag = _tag;
-  state.dump = _result || '[]'; // Empty sequence if no valid values.
-}
-
-function writeFlowMapping(state, level, object) {
-  var _result       = '',
-      _tag          = state.tag,
-      objectKeyList = Object.keys(object),
-      index,
-      length,
-      objectKey,
-      objectValue,
-      pairBuffer;
-
-  for (index = 0, length = objectKeyList.length; index < length; index += 1) {
-
-    pairBuffer = '';
-    if (_result !== '') pairBuffer += ', ';
-
-    if (state.condenseFlow) pairBuffer += '"';
-
-    objectKey = objectKeyList[index];
-    objectValue = object[objectKey];
-
-    if (state.replacer) {
-      objectValue = state.replacer.call(object, objectKey, objectValue);
-    }
-
-    if (!writeNode(state, level, objectKey, false, false)) {
-      continue; // Skip this pair because of invalid key;
-    }
-
-    if (state.dump.length > 1024) pairBuffer += '? ';
-
-    pairBuffer += state.dump + (state.condenseFlow ? '"' : '') + ':' + (state.condenseFlow ? '' : ' ');
-
-    if (!writeNode(state, level, objectValue, false, false)) {
-      continue; // Skip this pair because of invalid value.
-    }
-
-    pairBuffer += state.dump;
-
-    // Both key and value are valid.
-    _result += pairBuffer;
-  }
-
-  state.tag = _tag;
-  state.dump = '{' + _result + '}';
-}
-
-function writeBlockMapping(state, level, object, compact) {
-  var _result       = '',
-      _tag          = state.tag,
-      objectKeyList = Object.keys(object),
-      index,
-      length,
-      objectKey,
-      objectValue,
-      explicitPair,
-      pairBuffer;
-
-  // Allow sorting keys so that the output file is deterministic
-  if (state.sortKeys === true) {
-    // Default sorting
-    objectKeyList.sort();
-  } else if (typeof state.sortKeys === 'function') {
-    // Custom sort function
-    objectKeyList.sort(state.sortKeys);
-  } else if (state.sortKeys) {
-    // Something is wrong
-    throw new exception('sortKeys must be a boolean or a function');
-  }
-
-  for (index = 0, length = objectKeyList.length; index < length; index += 1) {
-    pairBuffer = '';
-
-    if (!compact || _result !== '') {
-      pairBuffer += generateNextLine(state, level);
-    }
-
-    objectKey = objectKeyList[index];
-    objectValue = object[objectKey];
-
-    if (state.replacer) {
-      objectValue = state.replacer.call(object, objectKey, objectValue);
-    }
-
-    if (!writeNode(state, level + 1, objectKey, true, true, true)) {
-      continue; // Skip this pair because of invalid key.
-    }
-
-    explicitPair = (state.tag !== null && state.tag !== '?') ||
-                   (state.dump && state.dump.length > 1024);
-
-    if (explicitPair) {
-      if (state.dump && CHAR_LINE_FEED === state.dump.charCodeAt(0)) {
-        pairBuffer += '?';
-      } else {
-        pairBuffer += '? ';
-      }
-    }
-
-    pairBuffer += state.dump;
-
-    if (explicitPair) {
-      pairBuffer += generateNextLine(state, level);
-    }
-
-    if (!writeNode(state, level + 1, objectValue, true, explicitPair)) {
-      continue; // Skip this pair because of invalid value.
-    }
-
-    if (state.dump && CHAR_LINE_FEED === state.dump.charCodeAt(0)) {
-      pairBuffer += ':';
-    } else {
-      pairBuffer += ': ';
-    }
-
-    pairBuffer += state.dump;
-
-    // Both key and value are valid.
-    _result += pairBuffer;
-  }
-
-  state.tag = _tag;
-  state.dump = _result || '{}'; // Empty mapping if no valid pairs.
-}
-
-function detectType(state, object, explicit) {
-  var _result, typeList, index, length, type, style;
-
-  typeList = explicit ? state.explicitTypes : state.implicitTypes;
-
-  for (index = 0, length = typeList.length; index < length; index += 1) {
-    type = typeList[index];
-
-    if ((type.instanceOf  || type.predicate) &&
-        (!type.instanceOf || ((typeof object === 'object') && (object instanceof type.instanceOf))) &&
-        (!type.predicate  || type.predicate(object))) {
-
-      if (explicit) {
-        if (type.multi && type.representName) {
-          state.tag = type.representName(object);
-        } else {
-          state.tag = type.tag;
-        }
-      } else {
-        state.tag = '?';
-      }
-
-      if (type.represent) {
-        style = state.styleMap[type.tag] || type.defaultStyle;
-
-        if (_toString.call(type.represent) === '[object Function]') {
-          _result = type.represent(object, style);
-        } else if (_hasOwnProperty.call(type.represent, style)) {
-          _result = type.represent[style](object, style);
-        } else {
-          throw new exception('!<' + type.tag + '> tag resolver accepts not "' + style + '" style');
-        }
-
-        state.dump = _result;
-      }
-
-      return true;
-    }
-  }
-
-  return false;
-}
-
-// Serializes `object` and writes it to global `result`.
-// Returns true on success, or false on invalid object.
-//
-function writeNode(state, level, object, block, compact, iskey, isblockseq) {
-  state.tag = null;
-  state.dump = object;
-
-  if (!detectType(state, object, false)) {
-    detectType(state, object, true);
-  }
-
-  var type = _toString.call(state.dump);
-  var inblock = block;
-  var tagStr;
-
-  if (block) {
-    block = (state.flowLevel < 0 || state.flowLevel > level);
-  }
-
-  var objectOrArray = type === '[object Object]' || type === '[object Array]',
-      duplicateIndex,
-      duplicate;
-
-  if (objectOrArray) {
-    duplicateIndex = state.duplicates.indexOf(object);
-    duplicate = duplicateIndex !== -1;
-  }
-
-  if ((state.tag !== null && state.tag !== '?') || duplicate || (state.indent !== 2 && level > 0)) {
-    compact = false;
-  }
-
-  if (duplicate && state.usedDuplicates[duplicateIndex]) {
-    state.dump = '*ref_' + duplicateIndex;
-  } else {
-    if (objectOrArray && duplicate && !state.usedDuplicates[duplicateIndex]) {
-      state.usedDuplicates[duplicateIndex] = true;
-    }
-    if (type === '[object Object]') {
-      if (block && (Object.keys(state.dump).length !== 0)) {
-        writeBlockMapping(state, level, state.dump, compact);
-        if (duplicate) {
-          state.dump = '&ref_' + duplicateIndex + state.dump;
-        }
-      } else {
-        writeFlowMapping(state, level, state.dump);
-        if (duplicate) {
-          state.dump = '&ref_' + duplicateIndex + ' ' + state.dump;
-        }
-      }
-    } else if (type === '[object Array]') {
-      if (block && (state.dump.length !== 0)) {
-        if (state.noArrayIndent && !isblockseq && level > 0) {
-          writeBlockSequence(state, level - 1, state.dump, compact);
-        } else {
-          writeBlockSequence(state, level, state.dump, compact);
-        }
-        if (duplicate) {
-          state.dump = '&ref_' + duplicateIndex + state.dump;
-        }
-      } else {
-        writeFlowSequence(state, level, state.dump);
-        if (duplicate) {
-          state.dump = '&ref_' + duplicateIndex + ' ' + state.dump;
-        }
-      }
-    } else if (type === '[object String]') {
-      if (state.tag !== '?') {
-        writeScalar(state, state.dump, level, iskey, inblock);
-      }
-    } else if (type === '[object Undefined]') {
-      return false;
-    } else {
-      if (state.skipInvalid) return false;
-      throw new exception('unacceptable kind of an object to dump ' + type);
-    }
-
-    if (state.tag !== null && state.tag !== '?') {
-      // Need to encode all characters except those allowed by the spec:
-      //
-      // [35] ns-dec-digit    ::=  [#x30-#x39] /* 0-9 */
-      // [36] ns-hex-digit    ::=  ns-dec-digit
-      //                         | [#x41-#x46] /* A-F */ | [#x61-#x66] /* a-f */
-      // [37] ns-ascii-letter ::=  [#x41-#x5A] /* A-Z */ | [#x61-#x7A] /* a-z */
-      // [38] ns-word-char    ::=  ns-dec-digit | ns-ascii-letter | “-”
-      // [39] ns-uri-char     ::=  “%” ns-hex-digit ns-hex-digit | ns-word-char | “#”
-      //                         | “;” | “/” | “?” | “:” | “@” | “&” | “=” | “+” | “$” | “,”
-      //                         | “_” | “.” | “!” | “~” | “*” | “'” | “(” | “)” | “[” | “]”
-      //
-      // Also need to encode '!' because it has special meaning (end of tag prefix).
-      //
-      tagStr = encodeURI(
-        state.tag[0] === '!' ? state.tag.slice(1) : state.tag
-      ).replace(/!/g, '%21');
-
-      if (state.tag[0] === '!') {
-        tagStr = '!' + tagStr;
-      } else if (tagStr.slice(0, 18) === 'tag:yaml.org,2002:') {
-        tagStr = '!!' + tagStr.slice(18);
-      } else {
-        tagStr = '!<' + tagStr + '>';
-      }
-
-      state.dump = tagStr + ' ' + state.dump;
-    }
-  }
-
-  return true;
-}
-
-function getDuplicateReferences(object, state) {
-  var objects = [],
-      duplicatesIndexes = [],
-      index,
-      length;
-
-  inspectNode(object, objects, duplicatesIndexes);
-
-  for (index = 0, length = duplicatesIndexes.length; index < length; index += 1) {
-    state.duplicates.push(objects[duplicatesIndexes[index]]);
-  }
-  state.usedDuplicates = new Array(length);
-}
-
-function inspectNode(object, objects, duplicatesIndexes) {
-  var objectKeyList,
-      index,
-      length;
-
-  if (object !== null && typeof object === 'object') {
-    index = objects.indexOf(object);
-    if (index !== -1) {
-      if (duplicatesIndexes.indexOf(index) === -1) {
-        duplicatesIndexes.push(index);
-      }
-    } else {
-      objects.push(object);
-
-      if (Array.isArray(object)) {
-        for (index = 0, length = object.length; index < length; index += 1) {
-          inspectNode(object[index], objects, duplicatesIndexes);
-        }
-      } else {
-        objectKeyList = Object.keys(object);
-
-        for (index = 0, length = objectKeyList.length; index < length; index += 1) {
-          inspectNode(object[objectKeyList[index]], objects, duplicatesIndexes);
-        }
-      }
-    }
-  }
-}
-
-function dump$1(input, options) {
-  options = options || {};
-
-  var state = new State(options);
-
-  if (!state.noRefs) getDuplicateReferences(input, state);
-
-  var value = input;
-
-  if (state.replacer) {
-    value = state.replacer.call({ '': value }, '', value);
-  }
-
-  if (writeNode(state, 0, value, true, true)) return state.dump + '\n';
-
-  return '';
-}
-
-var dump_1 = dump$1;
-
-var dumper = {
-	dump: dump_1
-};
-
-function renamed(from, to) {
-  return function () {
-    throw new Error('Function yaml.' + from + ' is removed in js-yaml 4. ' +
-      'Use yaml.' + to + ' instead, which is now safe by default.');
-  };
-}
-
-
-var Type                = type;
-var Schema              = schema;
-var FAILSAFE_SCHEMA     = failsafe;
-var JSON_SCHEMA         = json;
-var CORE_SCHEMA         = core;
-var DEFAULT_SCHEMA      = _default;
 var load                = loader.load;
-var loadAll             = loader.loadAll;
-var dump                = dumper.dump;
-var YAMLException       = exception;
-
-// Re-export all types in case user wants to create custom schema
-var types = {
-  binary:    binary,
-  float:     float,
-  map:       map,
-  null:      _null,
-  pairs:     pairs,
-  set:       set,
-  timestamp: timestamp,
-  bool:      bool$2,
-  int:       int,
-  merge:     merge,
-  omap:      omap,
-  seq:       seq,
-  str:       str
-};
-
-// Removed functions from JS-YAML 3.0.x
-var safeLoad            = renamed('safeLoad', 'load');
-var safeLoadAll         = renamed('safeLoadAll', 'loadAll');
-var safeDump            = renamed('safeDump', 'dump');
-
-var jsYaml = {
-	Type: Type,
-	Schema: Schema,
-	FAILSAFE_SCHEMA: FAILSAFE_SCHEMA,
-	JSON_SCHEMA: JSON_SCHEMA,
-	CORE_SCHEMA: CORE_SCHEMA,
-	DEFAULT_SCHEMA: DEFAULT_SCHEMA,
-	load: load,
-	loadAll: loadAll,
-	dump: dump,
-	YAMLException: YAMLException,
-	types: types,
-	safeLoad: safeLoad,
-	safeLoadAll: safeLoadAll,
-	safeDump: safeDump
-};
 
 var bufferUtil = {exports: {}};
 
@@ -37290,11 +36243,11 @@ function requireWebsocketServer () {
 
 requireWebsocketServer();
 
-function number$2(n) {
+function number$1(n) {
     if (!Number.isSafeInteger(n) || n < 0)
         throw new Error(`Wrong positive integer: ${n}`);
 }
-function bytes$2(b, ...lengths) {
+function bytes$1(b, ...lengths) {
     if (!(b instanceof Uint8Array))
         throw new Error('Expected Uint8Array');
     if (lengths.length > 0 && !lengths.includes(b.length))
@@ -37303,8 +36256,8 @@ function bytes$2(b, ...lengths) {
 function hash$1(hash) {
     if (typeof hash !== 'function' || typeof hash.create !== 'function')
         throw new Error('Hash should be wrapped by utils.wrapConstructor');
-    number$2(hash.outputLen);
-    number$2(hash.blockLen);
+    number$1(hash.outputLen);
+    number$1(hash.blockLen);
 }
 function exists$1(instance, checkFinished = true) {
     if (instance.destroyed)
@@ -37313,14 +36266,14 @@ function exists$1(instance, checkFinished = true) {
         throw new Error('Hash#digest() has already been called');
 }
 function output$1(out, instance) {
-    bytes$2(out);
+    bytes$1(out);
     const min = instance.outputLen;
     if (out.length < min) {
         throw new Error(`digestInto() expects output buffer of length at least ${min}`);
     }
 }
 
-const crypto$1 = typeof globalThis === 'object' && 'crypto' in globalThis ? globalThis.crypto : undefined;
+const crypto = typeof globalThis === 'object' && 'crypto' in globalThis ? globalThis.crypto : undefined;
 
 /*! noble-hashes - MIT License (c) 2022 Paul Miller (paulmillr.com) */
 // We use WebCrypto aka globalThis.crypto, which exists in browsers and node.js 16+.
@@ -37336,8 +36289,8 @@ const createView$1 = (arr) => new DataView(arr.buffer, arr.byteOffset, arr.byteL
 const rotr$1 = (word, shift) => (word << (32 - shift)) | (word >>> shift);
 // big-endian hardware is rare. Just in case someone still decides to run hashes:
 // early-throw an error because we don't support BE yet.
-const isLE$2 = new Uint8Array(new Uint32Array([0x11223344]).buffer)[0] === 0x44;
-if (!isLE$2)
+const isLE$1 = new Uint8Array(new Uint32Array([0x11223344]).buffer)[0] === 0x44;
+if (!isLE$1)
     throw new Error('Non little-endian hardware is not supported');
 /**
  * @example utf8ToBytes('abc') // new Uint8Array([97, 98, 99])
@@ -37362,7 +36315,7 @@ function toBytes$1(data) {
 /**
  * Copies several Uint8Arrays into one.
  */
-function concatBytes$2(...arrays) {
+function concatBytes$1(...arrays) {
     const r = new Uint8Array(arrays.reduce((sum, a) => sum + a.length, 0));
     let pad = 0; // walk through each item, ensure they have proper type
     arrays.forEach((a) => {
@@ -37391,9 +36344,9 @@ function wrapConstructor$1(hashCons) {
 /**
  * Secure PRNG. Uses `crypto.getRandomValues`, which defers to OS.
  */
-function randomBytes$1(bytesLength = 32) {
-    if (crypto$1 && typeof crypto$1.getRandomValues === 'function') {
-        return crypto$1.getRandomValues(new Uint8Array(bytesLength));
+function randomBytes(bytesLength = 32) {
+    if (crypto && typeof crypto.getRandomValues === 'function') {
+        return crypto.getRandomValues(new Uint8Array(bytesLength));
     }
     throw new Error('crypto.getRandomValues must be defined');
 }
@@ -37627,17 +36580,17 @@ BigInt(0);
 const _1n$4 = BigInt(1);
 const _2n$2 = BigInt(2);
 const u8a$1 = (a) => a instanceof Uint8Array;
-const hexes$2 = /* @__PURE__ */ Array.from({ length: 256 }, (_, i) => i.toString(16).padStart(2, '0'));
+const hexes$1 = /* @__PURE__ */ Array.from({ length: 256 }, (_, i) => i.toString(16).padStart(2, '0'));
 /**
  * @example bytesToHex(Uint8Array.from([0xca, 0xfe, 0x01, 0x23])) // 'cafe0123'
  */
-function bytesToHex$2(bytes) {
+function bytesToHex$1(bytes) {
     if (!u8a$1(bytes))
         throw new Error('Uint8Array expected');
     // pre-caching improves the speed 6x
     let hex = '';
     for (let i = 0; i < bytes.length; i++) {
-        hex += hexes$2[bytes[i]];
+        hex += hexes$1[bytes[i]];
     }
     return hex;
 }
@@ -37650,7 +36603,7 @@ function hexToNumber(hex) {
 /**
  * @example hexToBytes('cafe0123') // Uint8Array.from([0xca, 0xfe, 0x01, 0x23])
  */
-function hexToBytes$3(hex) {
+function hexToBytes$1(hex) {
     if (typeof hex !== 'string')
         throw new Error('hex string expected, got ' + typeof hex);
     const len = hex.length;
@@ -37669,15 +36622,15 @@ function hexToBytes$3(hex) {
 }
 // BE: Big Endian, LE: Little Endian
 function bytesToNumberBE(bytes) {
-    return hexToNumber(bytesToHex$2(bytes));
+    return hexToNumber(bytesToHex$1(bytes));
 }
 function bytesToNumberLE(bytes) {
     if (!u8a$1(bytes))
         throw new Error('Uint8Array expected');
-    return hexToNumber(bytesToHex$2(Uint8Array.from(bytes).reverse()));
+    return hexToNumber(bytesToHex$1(Uint8Array.from(bytes).reverse()));
 }
 function numberToBytesBE(n, len) {
-    return hexToBytes$3(n.toString(16).padStart(len * 2, '0'));
+    return hexToBytes$1(n.toString(16).padStart(len * 2, '0'));
 }
 function numberToBytesLE(n, len) {
     return numberToBytesBE(n, len).reverse();
@@ -37695,7 +36648,7 @@ function ensureBytes(title, hex, expectedLength) {
     let res;
     if (typeof hex === 'string') {
         try {
-            res = hexToBytes$3(hex);
+            res = hexToBytes$1(hex);
         }
         catch (e) {
             throw new Error(`${title} must be valid hex string, got "${hex}". Cause: ${e}`);
@@ -37717,7 +36670,7 @@ function ensureBytes(title, hex, expectedLength) {
 /**
  * Copies several Uint8Arrays into one.
  */
-function concatBytes$1(...arrays) {
+function concatBytes(...arrays) {
     const r = new Uint8Array(arrays.reduce((sum, a) => sum + a.length, 0));
     let pad = 0; // walk through each item, ensure they have proper type
     arrays.forEach((a) => {
@@ -37781,7 +36734,7 @@ function createHmacDrbg(hashLen, qByteLen, hmacFn) {
             out.push(sl);
             len += v.length;
         }
-        return concatBytes$1(...out);
+        return concatBytes(...out);
     };
     const genUntil = (seed, pred) => {
         reset();
@@ -37837,13 +36790,13 @@ function validateObject(object, validators, optValidators = {}) {
 var ut = /*#__PURE__*/Object.freeze({
     __proto__: null,
     bitMask: bitMask,
-    bytesToHex: bytesToHex$2,
+    bytesToHex: bytesToHex$1,
     bytesToNumberBE: bytesToNumberBE,
     bytesToNumberLE: bytesToNumberLE,
-    concatBytes: concatBytes$1,
+    concatBytes: concatBytes,
     createHmacDrbg: createHmacDrbg,
     ensureBytes: ensureBytes,
-    hexToBytes: hexToBytes$3,
+    hexToBytes: hexToBytes$1,
     hexToNumber: hexToNumber,
     numberToBytesBE: numberToBytesBE,
     numberToBytesLE: numberToBytesLE,
@@ -38454,7 +37407,7 @@ function weierstrassPoints(opts) {
     const toBytes = CURVE.toBytes ||
         ((_c, point, _isCompressed) => {
             const a = point.toAffine();
-            return concatBytes$1(Uint8Array.from([0x04]), Fp.toBytes(a.x), Fp.toBytes(a.y));
+            return concatBytes(Uint8Array.from([0x04]), Fp.toBytes(a.x), Fp.toBytes(a.y));
         });
     const fromBytes = CURVE.fromBytes ||
         ((bytes) => {
@@ -38495,7 +37448,7 @@ function weierstrassPoints(opts) {
         const { allowedPrivateKeyLengths: lengths, nByteLength, wrapPrivateKey, n } = CURVE;
         if (lengths && typeof key !== 'bigint') {
             if (key instanceof Uint8Array)
-                key = bytesToHex$2(key);
+                key = bytesToHex$1(key);
             // Normalize to hex string, pad. E.g. P521 would norm 130-132 char hex to 132-char bytes
             if (typeof key !== 'string' || !lengths.includes(key.length))
                 throw new Error('Invalid key');
@@ -38859,7 +37812,7 @@ function weierstrassPoints(opts) {
             return toBytes(Point, this, isCompressed);
         }
         toHex(isCompressed = true) {
-            return bytesToHex$2(this.toRawBytes(isCompressed));
+            return bytesToHex$1(this.toRawBytes(isCompressed));
         }
     }
     Point.BASE = new Point(CURVE.Gx, CURVE.Gy, Fp.ONE);
@@ -38907,7 +37860,7 @@ function weierstrass(curveDef) {
         toBytes(_c, point, isCompressed) {
             const a = point.toAffine();
             const x = Fp.toBytes(a.x);
-            const cat = concatBytes$1;
+            const cat = concatBytes;
             if (isCompressed) {
                 return cat(Uint8Array.from([point.hasEvenY() ? 0x02 : 0x03]), x);
             }
@@ -38943,7 +37896,7 @@ function weierstrass(curveDef) {
             }
         },
     });
-    const numToNByteStr = (num) => bytesToHex$2(numberToBytesBE(num, CURVE.nByteLength));
+    const numToNByteStr = (num) => bytesToHex$1(numberToBytesBE(num, CURVE.nByteLength));
     function isBiggerThanHalfOrder(number) {
         const HALF = CURVE_ORDER >> _1n$1;
         return number > HALF;
@@ -39013,14 +37966,14 @@ function weierstrass(curveDef) {
         }
         // DER-encoded
         toDERRawBytes() {
-            return hexToBytes$3(this.toDERHex());
+            return hexToBytes$1(this.toDERHex());
         }
         toDERHex() {
             return DER.hexFromSig({ r: this.r, s: this.s });
         }
         // padded bytes of r, then padded bytes of s
         toCompactRawBytes() {
-            return hexToBytes$3(this.toCompactHex());
+            return hexToBytes$1(this.toCompactHex());
         }
         toCompactHex() {
             return numToNByteStr(this.r) + numToNByteStr(this.s);
@@ -39157,7 +38110,7 @@ function weierstrass(curveDef) {
             const e = ent === true ? randomBytes(Fp.BYTES) : ent; // generate random bytes OR pass as-is
             seedArgs.push(ensureBytes('extraEntropy', e)); // check for being bytes
         }
-        const seed = concatBytes$1(...seedArgs); // Step D of RFC6979 3.2
+        const seed = concatBytes(...seedArgs); // Step D of RFC6979 3.2
         const m = h1int; // NOTE: no need to call bits2int second time here, it is inside truncateHash!
         // Converts signature params into point w r/s, checks result for validity.
         function k2sig(kBytes) {
@@ -39287,7 +38240,7 @@ function weierstrass(curveDef) {
 }
 
 // HMAC (RFC 2104)
-let HMAC$1 = class HMAC extends Hash$1 {
+class HMAC extends Hash$1 {
     constructor(hash, _key) {
         super();
         this.finished = false;
@@ -39321,7 +38274,7 @@ let HMAC$1 = class HMAC extends Hash$1 {
     }
     digestInto(out) {
         exists$1(this);
-        bytes$2(out, this.outputLen);
+        bytes$1(out, this.outputLen);
         this.finished = true;
         this.iHash.digestInto(out);
         this.oHash.update(out);
@@ -39351,23 +38304,23 @@ let HMAC$1 = class HMAC extends Hash$1 {
         this.oHash.destroy();
         this.iHash.destroy();
     }
-};
+}
 /**
  * HMAC: RFC2104 message authentication code.
  * @param hash - function that would be used e.g. sha256
  * @param key - message key
  * @param message - message data
  */
-const hmac$1 = (hash, key, message) => new HMAC$1(hash, key).update(message).digest();
-hmac$1.create = (hash, key) => new HMAC$1(hash, key);
+const hmac = (hash, key, message) => new HMAC(hash, key).update(message).digest();
+hmac.create = (hash, key) => new HMAC(hash, key);
 
 /*! noble-curves - MIT License (c) 2022 Paul Miller (paulmillr.com) */
 // connects noble-curves to noble-hashes
 function getHash(hash) {
     return {
         hash,
-        hmac: (key, ...msgs) => hmac$1(hash, key, concatBytes$2(...msgs)),
-        randomBytes: randomBytes$1,
+        hmac: (key, ...msgs) => hmac(hash, key, concatBytes$1(...msgs)),
+        randomBytes,
     };
 }
 function createCurve(curveDef, defHash) {
@@ -39463,10 +38416,10 @@ function taggedHash(tag, ...messages) {
     let tagP = TAGGED_HASH_PREFIXES[tag];
     if (tagP === undefined) {
         const tagH = sha256$1(Uint8Array.from(tag, (c) => c.charCodeAt(0)));
-        tagP = concatBytes$1(tagH, tagH);
+        tagP = concatBytes(tagH, tagH);
         TAGGED_HASH_PREFIXES[tag] = tagP;
     }
-    return sha256$1(concatBytes$1(tagP, ...messages));
+    return sha256$1(concatBytes(tagP, ...messages));
 }
 // ECDSA compact points are 33-byte. Schnorr is 32: we strip first byte 0x02 or 0x03
 const pointToBytes = (point) => point.toRawBytes(true).slice(1);
@@ -39514,7 +38467,7 @@ function schnorrGetPublicKey(privateKey) {
  * Creates Schnorr signature as per BIP340. Verifies itself before returning anything.
  * auxRand is optional and is not the sole source of k generation: bad CSPRNG won't be dangerous.
  */
-function schnorrSign(message, privateKey, auxRand = randomBytes$1(32)) {
+function schnorrSign(message, privateKey, auxRand = randomBytes(32)) {
     const m = ensureBytes('message', message);
     const { bytes: px, scalar: d } = schnorrGetExtPubKey(privateKey); // checks for isWithinCurveOrder
     const a = ensureBytes('auxRand', auxRand, 32); // Auxiliary random data a: a 32-byte array
@@ -39574,8 +38527,6 @@ const schnorr = /* @__PURE__ */ (() => ({
     },
 }))();
 
-const crypto = typeof globalThis === 'object' && 'crypto' in globalThis ? globalThis.crypto : undefined;
-
 /*! noble-hashes - MIT License (c) 2022 Paul Miller (paulmillr.com) */
 // We use WebCrypto aka globalThis.crypto, which exists in browsers and node.js 16+.
 // node.js versions earlier than v19 don't declare it in global scope.
@@ -39590,42 +38541,22 @@ const createView = (arr) => new DataView(arr.buffer, arr.byteOffset, arr.byteLen
 const rotr = (word, shift) => (word << (32 - shift)) | (word >>> shift);
 // big-endian hardware is rare. Just in case someone still decides to run hashes:
 // early-throw an error because we don't support BE yet.
-const isLE$1 = new Uint8Array(new Uint32Array([0x11223344]).buffer)[0] === 0x44;
-if (!isLE$1)
+const isLE = new Uint8Array(new Uint32Array([0x11223344]).buffer)[0] === 0x44;
+if (!isLE)
     throw new Error('Non little-endian hardware is not supported');
-const hexes$1 = Array.from({ length: 256 }, (v, i) => i.toString(16).padStart(2, '0'));
+const hexes = Array.from({ length: 256 }, (v, i) => i.toString(16).padStart(2, '0'));
 /**
  * @example bytesToHex(Uint8Array.from([0xca, 0xfe, 0x01, 0x23])) // 'cafe0123'
  */
-function bytesToHex$1(bytes) {
+function bytesToHex(bytes) {
     if (!u8a(bytes))
         throw new Error('Uint8Array expected');
     // pre-caching improves the speed 6x
     let hex = '';
     for (let i = 0; i < bytes.length; i++) {
-        hex += hexes$1[bytes[i]];
+        hex += hexes[bytes[i]];
     }
     return hex;
-}
-/**
- * @example hexToBytes('cafe0123') // Uint8Array.from([0xca, 0xfe, 0x01, 0x23])
- */
-function hexToBytes$2(hex) {
-    if (typeof hex !== 'string')
-        throw new Error('hex string expected, got ' + typeof hex);
-    const len = hex.length;
-    if (len % 2)
-        throw new Error('padded hex string expected, got unpadded hex of length ' + len);
-    const array = new Uint8Array(len / 2);
-    for (let i = 0; i < array.length; i++) {
-        const j = i * 2;
-        const hexByte = hex.slice(j, j + 2);
-        const byte = Number.parseInt(hexByte, 16);
-        if (Number.isNaN(byte) || byte < 0)
-            throw new Error('Invalid byte sequence');
-        array[i] = byte;
-    }
-    return array;
 }
 /**
  * @example utf8ToBytes('abc') // new Uint8Array([97, 98, 99])
@@ -39647,20 +38578,6 @@ function toBytes(data) {
         throw new Error(`expected Uint8Array, got ${typeof data}`);
     return data;
 }
-/**
- * Copies several Uint8Arrays into one.
- */
-function concatBytes(...arrays) {
-    const r = new Uint8Array(arrays.reduce((sum, a) => sum + a.length, 0));
-    let pad = 0; // walk through each item, ensure they have proper type
-    arrays.forEach((a) => {
-        if (!u8a(a))
-            throw new Error('Uint8Array expected');
-        r.set(a, pad);
-        pad += a.length;
-    });
-    return r;
-}
 // For runtime check if class implements interface
 class Hash {
     // Safe version that clones internal state
@@ -39676,25 +38593,16 @@ function wrapConstructor(hashCons) {
     hashC.create = () => hashCons();
     return hashC;
 }
-/**
- * Secure PRNG. Uses `crypto.getRandomValues`, which defers to OS.
- */
-function randomBytes(bytesLength = 32) {
-    if (crypto && typeof crypto.getRandomValues === 'function') {
-        return crypto.getRandomValues(new Uint8Array(bytesLength));
-    }
-    throw new Error('crypto.getRandomValues must be defined');
-}
 
-function number$1(n) {
+function number(n) {
     if (!Number.isSafeInteger(n) || n < 0)
         throw new Error(`Wrong positive integer: ${n}`);
 }
-function bool$1(b) {
+function bool(b) {
     if (typeof b !== 'boolean')
         throw new Error(`Expected boolean, not ${b}`);
 }
-function bytes$1(b, ...lengths) {
+function bytes(b, ...lengths) {
     if (!(b instanceof Uint8Array))
         throw new Error('Expected Uint8Array');
     if (lengths.length > 0 && !lengths.includes(b.length))
@@ -39703,8 +38611,8 @@ function bytes$1(b, ...lengths) {
 function hash(hash) {
     if (typeof hash !== 'function' || typeof hash.create !== 'function')
         throw new Error('Hash should be wrapped by utils.wrapConstructor');
-    number$1(hash.outputLen);
-    number$1(hash.blockLen);
+    number(hash.outputLen);
+    number(hash.blockLen);
 }
 function exists(instance, checkFinished = true) {
     if (instance.destroyed)
@@ -39713,16 +38621,16 @@ function exists(instance, checkFinished = true) {
         throw new Error('Hash#digest() has already been called');
 }
 function output(out, instance) {
-    bytes$1(out);
+    bytes(out);
     const min = instance.outputLen;
     if (out.length < min) {
         throw new Error(`digestInto() expects output buffer of length at least ${min}`);
     }
 }
 const assert = {
-    number: number$1,
-    bool: bool$1,
-    bytes: bytes$1,
+    number,
+    bool,
+    bytes,
     hash,
     exists,
     output,
@@ -39961,6 +38869,89 @@ class SHA224 extends SHA256 {
  */
 const sha256 = wrapConstructor(() => new SHA256());
 wrapConstructor(() => new SHA224());
+
+// pure.ts
+
+// core.ts
+var verifiedSymbol$1 = Symbol("verified");
+var isRecord$1 = (obj) => obj instanceof Object;
+function validateEvent$1(event) {
+  if (!isRecord$1(event))
+    return false;
+  if (typeof event.kind !== "number")
+    return false;
+  if (typeof event.content !== "string")
+    return false;
+  if (typeof event.created_at !== "number")
+    return false;
+  if (typeof event.pubkey !== "string")
+    return false;
+  if (!event.pubkey.match(/^[a-f0-9]{64}$/))
+    return false;
+  if (!Array.isArray(event.tags))
+    return false;
+  for (let i2 = 0; i2 < event.tags.length; i2++) {
+    let tag = event.tags[i2];
+    if (!Array.isArray(tag))
+      return false;
+    for (let j = 0; j < tag.length; j++) {
+      if (typeof tag[j] !== "string")
+        return false;
+    }
+  }
+  return true;
+}
+new TextDecoder("utf-8");
+var utf8Encoder$1 = new TextEncoder();
+
+// pure.ts
+var JS$1 = class JS {
+  generateSecretKey() {
+    return schnorr.utils.randomPrivateKey();
+  }
+  getPublicKey(secretKey) {
+    return bytesToHex(schnorr.getPublicKey(secretKey));
+  }
+  finalizeEvent(t, secretKey) {
+    const event = t;
+    event.pubkey = bytesToHex(schnorr.getPublicKey(secretKey));
+    event.id = getEventHash$1(event);
+    event.sig = bytesToHex(schnorr.sign(getEventHash$1(event), secretKey));
+    event[verifiedSymbol$1] = true;
+    return event;
+  }
+  verifyEvent(event) {
+    if (typeof event[verifiedSymbol$1] === "boolean")
+      return event[verifiedSymbol$1];
+    const hash = getEventHash$1(event);
+    if (hash !== event.id) {
+      event[verifiedSymbol$1] = false;
+      return false;
+    }
+    try {
+      const valid = schnorr.verify(event.sig, hash, event.pubkey);
+      event[verifiedSymbol$1] = valid;
+      return valid;
+    } catch (err) {
+      event[verifiedSymbol$1] = false;
+      return false;
+    }
+  }
+};
+function serializeEvent$1(evt) {
+  if (!validateEvent$1(evt))
+    throw new Error("can't serialize event with wrong or missing properties");
+  return JSON.stringify([0, evt.pubkey, evt.created_at, evt.kind, evt.tags, evt.content]);
+}
+function getEventHash$1(event) {
+  let eventHash = sha256(utf8Encoder$1.encode(serializeEvent$1(event)));
+  return bytesToHex(eventHash);
+}
+var i$1 = new JS$1();
+i$1.generateSecretKey;
+var getPublicKey = i$1.getPublicKey;
+var finalizeEvent = i$1.finalizeEvent;
+i$1.verifyEvent;
 
 /*! scure-base - MIT License (c) 2022 Paul Miller (paulmillr.com) */
 function assertNumber(n) {
@@ -40312,1344 +39303,10 @@ const CODERS = {
 };
 `Invalid encoding type. Available types: ${Object.keys(CODERS).join(', ')}`;
 
-function number(n) {
-    if (!Number.isSafeInteger(n) || n < 0)
-        throw new Error(`positive integer expected, not ${n}`);
-}
-function bool(b) {
-    if (typeof b !== 'boolean')
-        throw new Error(`boolean expected, not ${b}`);
-}
-function isBytes(a) {
-    return (a instanceof Uint8Array ||
-        (a != null && typeof a === 'object' && a.constructor.name === 'Uint8Array'));
-}
-function bytes(b, ...lengths) {
-    if (!isBytes(b))
-        throw new Error('Uint8Array expected');
-    if (lengths.length > 0 && !lengths.includes(b.length))
-        throw new Error(`Uint8Array expected of length ${lengths}, not of length=${b.length}`);
-}
-
-/*! noble-ciphers - MIT License (c) 2023 Paul Miller (paulmillr.com) */
-const u32 = (arr) => new Uint32Array(arr.buffer, arr.byteOffset, Math.floor(arr.byteLength / 4));
-// big-endian hardware is rare. Just in case someone still decides to run ciphers:
-// early-throw an error because we don't support BE yet.
-const isLE = new Uint8Array(new Uint32Array([0x11223344]).buffer)[0] === 0x44;
-if (!isLE)
-    throw new Error('Non little-endian hardware is not supported');
-// Array where index 0xf0 (240) is mapped to string 'f0'
-const hexes = /* @__PURE__ */ Array.from({ length: 256 }, (_, i) => i.toString(16).padStart(2, '0'));
-/**
- * @example bytesToHex(Uint8Array.from([0xca, 0xfe, 0x01, 0x23])) // 'cafe0123'
- */
-function bytesToHex(bytes$1) {
-    bytes(bytes$1);
-    // pre-caching improves the speed 6x
-    let hex = '';
-    for (let i = 0; i < bytes$1.length; i++) {
-        hex += hexes[bytes$1[i]];
-    }
-    return hex;
-}
-// We use optimized technique to convert hex string to byte array
-const asciis$1 = { _0: 48, _9: 57, _A: 65, _F: 70, _a: 97, _f: 102 };
-function asciiToBase16$1(char) {
-    if (char >= asciis$1._0 && char <= asciis$1._9)
-        return char - asciis$1._0;
-    if (char >= asciis$1._A && char <= asciis$1._F)
-        return char - (asciis$1._A - 10);
-    if (char >= asciis$1._a && char <= asciis$1._f)
-        return char - (asciis$1._a - 10);
-    return;
-}
-/**
- * @example hexToBytes('cafe0123') // Uint8Array.from([0xca, 0xfe, 0x01, 0x23])
- */
-function hexToBytes$1(hex) {
-    if (typeof hex !== 'string')
-        throw new Error('hex string expected, got ' + typeof hex);
-    const hl = hex.length;
-    const al = hl / 2;
-    if (hl % 2)
-        throw new Error('padded hex string expected, got unpadded hex of length ' + hl);
-    const array = new Uint8Array(al);
-    for (let ai = 0, hi = 0; ai < al; ai++, hi += 2) {
-        const n1 = asciiToBase16$1(hex.charCodeAt(hi));
-        const n2 = asciiToBase16$1(hex.charCodeAt(hi + 1));
-        if (n1 === undefined || n2 === undefined) {
-            const char = hex[hi] + hex[hi + 1];
-            throw new Error('hex string expected, got non-hex character "' + char + '" at index ' + hi);
-        }
-        array[ai] = n1 * 16 + n2;
-    }
-    return array;
-}
-function checkOpts(defaults, opts) {
-    if (opts == null || typeof opts !== 'object')
-        throw new Error('options must be defined');
-    const merged = Object.assign(defaults, opts);
-    return merged;
-}
-// Compares 2 u8a-s in kinda constant time
-function equalBytes(a, b) {
-    if (a.length !== b.length)
-        return false;
-    let diff = 0;
-    for (let i = 0; i < a.length; i++)
-        diff |= a[i] ^ b[i];
-    return diff === 0;
-}
-/**
- * @__NO_SIDE_EFFECTS__
- */
-const wrapCipher = (params, c) => {
-    Object.assign(c, params);
-    return c;
-};
-
-// prettier-ignore
-/*
-AES (Advanced Encryption Standard) aka Rijndael block cipher.
-
-Data is split into 128-bit blocks. Encrypted in 10/12/14 rounds (128/192/256 bits). In every round:
-1. **S-box**, table substitution
-2. **Shift rows**, cyclic shift left of all rows of data array
-3. **Mix columns**, multiplying every column by fixed polynomial
-4. **Add round key**, round_key xor i-th column of array
-
-Resources:
-- FIPS-197 https://csrc.nist.gov/files/pubs/fips/197/final/docs/fips-197.pdf
-- Original proposal: https://csrc.nist.gov/csrc/media/projects/cryptographic-standards-and-guidelines/documents/aes-development/rijndael-ammended.pdf
-*/
-const BLOCK_SIZE = 16;
-const POLY = 0x11b; // 1 + x + x**3 + x**4 + x**8
-// TODO: remove multiplication, binary ops only
-function mul2(n) {
-    return (n << 1) ^ (POLY & -(n >> 7));
-}
-function mul(a, b) {
-    let res = 0;
-    for (; b > 0; b >>= 1) {
-        // Montgomery ladder
-        res ^= a & -(b & 1); // if (b&1) res ^=a (but const-time).
-        a = mul2(a); // a = 2*a
-    }
-    return res;
-}
-// AES S-box is generated using finite field inversion,
-// an affine transform, and xor of a constant 0x63.
-const sbox = /* @__PURE__ */ (() => {
-    let t = new Uint8Array(256);
-    for (let i = 0, x = 1; i < 256; i++, x ^= mul2(x))
-        t[i] = x;
-    const box = new Uint8Array(256);
-    box[0] = 0x63; // first elm
-    for (let i = 0; i < 255; i++) {
-        let x = t[255 - i];
-        x |= x << 8;
-        box[t[i]] = (x ^ (x >> 4) ^ (x >> 5) ^ (x >> 6) ^ (x >> 7) ^ 0x63) & 0xff;
-    }
-    return box;
-})();
-// Inverted S-box
-const invSbox = /* @__PURE__ */ sbox.map((_, j) => sbox.indexOf(j));
-// Rotate u32 by 8
-const rotr32_8 = (n) => (n << 24) | (n >>> 8);
-const rotl32_8 = (n) => (n << 8) | (n >>> 24);
-// T-table is optimization suggested in 5.2 of original proposal (missed from FIPS-197). Changes:
-// - LE instead of BE
-// - bigger tables: T0 and T1 are merged into T01 table and T2 & T3 into T23;
-//   so index is u16, instead of u8. This speeds up things, unexpectedly
-function genTtable(sbox, fn) {
-    if (sbox.length !== 256)
-        throw new Error('Wrong sbox length');
-    const T0 = new Uint32Array(256).map((_, j) => fn(sbox[j]));
-    const T1 = T0.map(rotl32_8);
-    const T2 = T1.map(rotl32_8);
-    const T3 = T2.map(rotl32_8);
-    const T01 = new Uint32Array(256 * 256);
-    const T23 = new Uint32Array(256 * 256);
-    const sbox2 = new Uint16Array(256 * 256);
-    for (let i = 0; i < 256; i++) {
-        for (let j = 0; j < 256; j++) {
-            const idx = i * 256 + j;
-            T01[idx] = T0[i] ^ T1[j];
-            T23[idx] = T2[i] ^ T3[j];
-            sbox2[idx] = (sbox[i] << 8) | sbox[j];
-        }
-    }
-    return { sbox, sbox2, T0, T1, T2, T3, T01, T23 };
-}
-const tableEncoding = /* @__PURE__ */ genTtable(sbox, (s) => (mul(s, 3) << 24) | (s << 16) | (s << 8) | mul(s, 2));
-const tableDecoding = /* @__PURE__ */ genTtable(invSbox, (s) => (mul(s, 11) << 24) | (mul(s, 13) << 16) | (mul(s, 9) << 8) | mul(s, 14));
-const xPowers = /* @__PURE__ */ (() => {
-    const p = new Uint8Array(16);
-    for (let i = 0, x = 1; i < 16; i++, x = mul2(x))
-        p[i] = x;
-    return p;
-})();
-function expandKeyLE(key) {
-    bytes(key);
-    const len = key.length;
-    if (![16, 24, 32].includes(len))
-        throw new Error(`aes: wrong key size: should be 16, 24 or 32, got: ${len}`);
-    const { sbox2 } = tableEncoding;
-    const k32 = u32(key);
-    const Nk = k32.length;
-    const subByte = (n) => applySbox(sbox2, n, n, n, n);
-    const xk = new Uint32Array(len + 28); // expanded key
-    xk.set(k32);
-    // 4.3.1 Key expansion
-    for (let i = Nk; i < xk.length; i++) {
-        let t = xk[i - 1];
-        if (i % Nk === 0)
-            t = subByte(rotr32_8(t)) ^ xPowers[i / Nk - 1];
-        else if (Nk > 6 && i % Nk === 4)
-            t = subByte(t);
-        xk[i] = xk[i - Nk] ^ t;
-    }
-    return xk;
-}
-function expandKeyDecLE(key) {
-    const encKey = expandKeyLE(key);
-    const xk = encKey.slice();
-    const Nk = encKey.length;
-    const { sbox2 } = tableEncoding;
-    const { T0, T1, T2, T3 } = tableDecoding;
-    // Inverse key by chunks of 4 (rounds)
-    for (let i = 0; i < Nk; i += 4) {
-        for (let j = 0; j < 4; j++)
-            xk[i + j] = encKey[Nk - i - 4 + j];
-    }
-    encKey.fill(0);
-    // apply InvMixColumn except first & last round
-    for (let i = 4; i < Nk - 4; i++) {
-        const x = xk[i];
-        const w = applySbox(sbox2, x, x, x, x);
-        xk[i] = T0[w & 0xff] ^ T1[(w >>> 8) & 0xff] ^ T2[(w >>> 16) & 0xff] ^ T3[w >>> 24];
-    }
-    return xk;
-}
-// Apply tables
-function apply0123(T01, T23, s0, s1, s2, s3) {
-    return (T01[((s0 << 8) & 0xff00) | ((s1 >>> 8) & 0xff)] ^
-        T23[((s2 >>> 8) & 0xff00) | ((s3 >>> 24) & 0xff)]);
-}
-function applySbox(sbox2, s0, s1, s2, s3) {
-    return (sbox2[(s0 & 0xff) | (s1 & 0xff00)] |
-        (sbox2[((s2 >>> 16) & 0xff) | ((s3 >>> 16) & 0xff00)] << 16));
-}
-function encrypt$1(xk, s0, s1, s2, s3) {
-    const { sbox2, T01, T23 } = tableEncoding;
-    let k = 0;
-    (s0 ^= xk[k++]), (s1 ^= xk[k++]), (s2 ^= xk[k++]), (s3 ^= xk[k++]);
-    const rounds = xk.length / 4 - 2;
-    for (let i = 0; i < rounds; i++) {
-        const t0 = xk[k++] ^ apply0123(T01, T23, s0, s1, s2, s3);
-        const t1 = xk[k++] ^ apply0123(T01, T23, s1, s2, s3, s0);
-        const t2 = xk[k++] ^ apply0123(T01, T23, s2, s3, s0, s1);
-        const t3 = xk[k++] ^ apply0123(T01, T23, s3, s0, s1, s2);
-        (s0 = t0), (s1 = t1), (s2 = t2), (s3 = t3);
-    }
-    // last round (without mixcolumns, so using SBOX2 table)
-    const t0 = xk[k++] ^ applySbox(sbox2, s0, s1, s2, s3);
-    const t1 = xk[k++] ^ applySbox(sbox2, s1, s2, s3, s0);
-    const t2 = xk[k++] ^ applySbox(sbox2, s2, s3, s0, s1);
-    const t3 = xk[k++] ^ applySbox(sbox2, s3, s0, s1, s2);
-    return { s0: t0, s1: t1, s2: t2, s3: t3 };
-}
-function decrypt$1(xk, s0, s1, s2, s3) {
-    const { sbox2, T01, T23 } = tableDecoding;
-    let k = 0;
-    (s0 ^= xk[k++]), (s1 ^= xk[k++]), (s2 ^= xk[k++]), (s3 ^= xk[k++]);
-    const rounds = xk.length / 4 - 2;
-    for (let i = 0; i < rounds; i++) {
-        const t0 = xk[k++] ^ apply0123(T01, T23, s0, s3, s2, s1);
-        const t1 = xk[k++] ^ apply0123(T01, T23, s1, s0, s3, s2);
-        const t2 = xk[k++] ^ apply0123(T01, T23, s2, s1, s0, s3);
-        const t3 = xk[k++] ^ apply0123(T01, T23, s3, s2, s1, s0);
-        (s0 = t0), (s1 = t1), (s2 = t2), (s3 = t3);
-    }
-    // Last round
-    const t0 = xk[k++] ^ applySbox(sbox2, s0, s3, s2, s1);
-    const t1 = xk[k++] ^ applySbox(sbox2, s1, s0, s3, s2);
-    const t2 = xk[k++] ^ applySbox(sbox2, s2, s1, s0, s3);
-    const t3 = xk[k++] ^ applySbox(sbox2, s3, s2, s1, s0);
-    return { s0: t0, s1: t1, s2: t2, s3: t3 };
-}
-function getDst(len, dst) {
-    if (!dst)
-        return new Uint8Array(len);
-    bytes(dst);
-    if (dst.length < len)
-        throw new Error(`aes: wrong destination length, expected at least ${len}, got: ${dst.length}`);
-    return dst;
-}
-function validateBlockDecrypt(data) {
-    bytes(data);
-    if (data.length % BLOCK_SIZE !== 0) {
-        throw new Error(`aes/(cbc-ecb).decrypt ciphertext should consist of blocks with size ${BLOCK_SIZE}`);
-    }
-}
-function validateBlockEncrypt(plaintext, pcks5, dst) {
-    let outLen = plaintext.length;
-    const remaining = outLen % BLOCK_SIZE;
-    if (!pcks5 && remaining !== 0)
-        throw new Error('aec/(cbc-ecb): unpadded plaintext with disabled padding');
-    const b = u32(plaintext);
-    if (pcks5) {
-        let left = BLOCK_SIZE - remaining;
-        if (!left)
-            left = BLOCK_SIZE; // if no bytes left, create empty padding block
-        outLen = outLen + left;
-    }
-    const out = getDst(outLen, dst);
-    const o = u32(out);
-    return { b, o, out };
-}
-function validatePCKS(data, pcks5) {
-    if (!pcks5)
-        return data;
-    const len = data.length;
-    if (!len)
-        throw new Error(`aes/pcks5: empty ciphertext not allowed`);
-    const lastByte = data[len - 1];
-    if (lastByte <= 0 || lastByte > 16)
-        throw new Error(`aes/pcks5: wrong padding byte: ${lastByte}`);
-    const out = data.subarray(0, -lastByte);
-    for (let i = 0; i < lastByte; i++)
-        if (data[len - i - 1] !== lastByte)
-            throw new Error(`aes/pcks5: wrong padding`);
-    return out;
-}
-function padPCKS(left) {
-    const tmp = new Uint8Array(16);
-    const tmp32 = u32(tmp);
-    tmp.set(left);
-    const paddingByte = BLOCK_SIZE - left.length;
-    for (let i = BLOCK_SIZE - paddingByte; i < BLOCK_SIZE; i++)
-        tmp[i] = paddingByte;
-    return tmp32;
-}
-/**
- * CBC: Cipher-Block-Chaining. Key is previous round’s block.
- * Fragile: needs proper padding. Unauthenticated: needs MAC.
- */
-const cbc = wrapCipher({ blockSize: 16, nonceLength: 16 }, function cbc(key, iv, opts = {}) {
-    bytes(key);
-    bytes(iv, 16);
-    const pcks5 = !opts.disablePadding;
-    return {
-        encrypt: (plaintext, dst) => {
-            const xk = expandKeyLE(key);
-            const { b, o, out: _out } = validateBlockEncrypt(plaintext, pcks5, dst);
-            const n32 = u32(iv);
-            // prettier-ignore
-            let s0 = n32[0], s1 = n32[1], s2 = n32[2], s3 = n32[3];
-            let i = 0;
-            for (; i + 4 <= b.length;) {
-                (s0 ^= b[i + 0]), (s1 ^= b[i + 1]), (s2 ^= b[i + 2]), (s3 ^= b[i + 3]);
-                ({ s0, s1, s2, s3 } = encrypt$1(xk, s0, s1, s2, s3));
-                (o[i++] = s0), (o[i++] = s1), (o[i++] = s2), (o[i++] = s3);
-            }
-            if (pcks5) {
-                const tmp32 = padPCKS(plaintext.subarray(i * 4));
-                (s0 ^= tmp32[0]), (s1 ^= tmp32[1]), (s2 ^= tmp32[2]), (s3 ^= tmp32[3]);
-                ({ s0, s1, s2, s3 } = encrypt$1(xk, s0, s1, s2, s3));
-                (o[i++] = s0), (o[i++] = s1), (o[i++] = s2), (o[i++] = s3);
-            }
-            xk.fill(0);
-            return _out;
-        },
-        decrypt: (ciphertext, dst) => {
-            validateBlockDecrypt(ciphertext);
-            const xk = expandKeyDecLE(key);
-            const n32 = u32(iv);
-            const out = getDst(ciphertext.length, dst);
-            const b = u32(ciphertext);
-            const o = u32(out);
-            // prettier-ignore
-            let s0 = n32[0], s1 = n32[1], s2 = n32[2], s3 = n32[3];
-            for (let i = 0; i + 4 <= b.length;) {
-                // prettier-ignore
-                const ps0 = s0, ps1 = s1, ps2 = s2, ps3 = s3;
-                (s0 = b[i + 0]), (s1 = b[i + 1]), (s2 = b[i + 2]), (s3 = b[i + 3]);
-                const { s0: o0, s1: o1, s2: o2, s3: o3 } = decrypt$1(xk, s0, s1, s2, s3);
-                (o[i++] = o0 ^ ps0), (o[i++] = o1 ^ ps1), (o[i++] = o2 ^ ps2), (o[i++] = o3 ^ ps3);
-            }
-            xk.fill(0);
-            return validatePCKS(out, pcks5);
-        },
-    };
-});
-
-// Basic utils for ARX (add-rotate-xor) salsa and chacha ciphers.
-/*
-RFC8439 requires multi-step cipher stream, where
-authKey starts with counter: 0, actual msg with counter: 1.
-
-For this, we need a way to re-use nonce / counter:
-
-    const counter = new Uint8Array(4);
-    chacha(..., counter, ...); // counter is now 1
-    chacha(..., counter, ...); // counter is now 2
-
-This is complicated:
-
-- 32-bit counters are enough, no need for 64-bit: max ArrayBuffer size in JS is 4GB
-- Original papers don't allow mutating counters
-- Counter overflow is undefined [^1]
-- Idea A: allow providing (nonce | counter) instead of just nonce, re-use it
-- Caveat: Cannot be re-used through all cases:
-- * chacha has (counter | nonce)
-- * xchacha has (nonce16 | counter | nonce16)
-- Idea B: separate nonce / counter and provide separate API for counter re-use
-- Caveat: there are different counter sizes depending on an algorithm.
-- salsa & chacha also differ in structures of key & sigma:
-  salsa20:      s[0] | k(4) | s[1] | nonce(2) | ctr(2) | s[2] | k(4) | s[3]
-  chacha:       s(4) | k(8) | ctr(1) | nonce(3)
-  chacha20orig: s(4) | k(8) | ctr(2) | nonce(2)
-- Idea C: helper method such as `setSalsaState(key, nonce, sigma, data)`
-- Caveat: we can't re-use counter array
-
-xchacha [^2] uses the subkey and remaining 8 byte nonce with ChaCha20 as normal
-(prefixed by 4 NUL bytes, since [RFC8439] specifies a 12-byte nonce).
-
-[^1]: https://mailarchive.ietf.org/arch/msg/cfrg/gsOnTJzcbgG6OqD8Sc0GO5aR_tU/
-[^2]: https://datatracker.ietf.org/doc/html/draft-irtf-cfrg-xchacha#appendix-A.2
-*/
-// We can't make top-level var depend on utils.utf8ToBytes
-// because it's not present in all envs. Creating a similar fn here
-const _utf8ToBytes = (str) => Uint8Array.from(str.split('').map((c) => c.charCodeAt(0)));
-const sigma16 = _utf8ToBytes('expand 16-byte k');
-const sigma32 = _utf8ToBytes('expand 32-byte k');
-const sigma16_32 = u32(sigma16);
-const sigma32_32 = u32(sigma32);
-sigma32_32.slice();
-function rotl(a, b) {
-    return (a << b) | (a >>> (32 - b));
-}
-// Is byte array aligned to 4 byte offset (u32)?
-function isAligned32(b) {
-    return b.byteOffset % 4 === 0;
-}
-// Salsa and Chacha block length is always 512-bit
-const BLOCK_LEN = 64;
-const BLOCK_LEN32 = 16;
-// new Uint32Array([2**32])   // => Uint32Array(1) [ 0 ]
-// new Uint32Array([2**32-1]) // => Uint32Array(1) [ 4294967295 ]
-const MAX_COUNTER = 2 ** 32 - 1;
-const U32_EMPTY = new Uint32Array();
-function runCipher(core, sigma, key, nonce, data, output, counter, rounds) {
-    const len = data.length;
-    const block = new Uint8Array(BLOCK_LEN);
-    const b32 = u32(block);
-    // Make sure that buffers aligned to 4 bytes
-    const isAligned = isAligned32(data) && isAligned32(output);
-    const d32 = isAligned ? u32(data) : U32_EMPTY;
-    const o32 = isAligned ? u32(output) : U32_EMPTY;
-    for (let pos = 0; pos < len; counter++) {
-        core(sigma, key, nonce, b32, counter, rounds);
-        if (counter >= MAX_COUNTER)
-            throw new Error('arx: counter overflow');
-        const take = Math.min(BLOCK_LEN, len - pos);
-        // aligned to 4 bytes
-        if (isAligned && take === BLOCK_LEN) {
-            const pos32 = pos / 4;
-            if (pos % 4 !== 0)
-                throw new Error('arx: invalid block position');
-            for (let j = 0, posj; j < BLOCK_LEN32; j++) {
-                posj = pos32 + j;
-                o32[posj] = d32[posj] ^ b32[j];
-            }
-            pos += BLOCK_LEN;
-            continue;
-        }
-        for (let j = 0, posj; j < take; j++) {
-            posj = pos + j;
-            output[posj] = data[posj] ^ block[j];
-        }
-        pos += take;
-    }
-}
-function createCipher(core, opts) {
-    const { allowShortKeys, extendNonceFn, counterLength, counterRight, rounds } = checkOpts({ allowShortKeys: false, counterLength: 8, counterRight: false, rounds: 20 }, opts);
-    if (typeof core !== 'function')
-        throw new Error('core must be a function');
-    number(counterLength);
-    number(rounds);
-    bool(counterRight);
-    bool(allowShortKeys);
-    return (key, nonce, data, output, counter = 0) => {
-        bytes(key);
-        bytes(nonce);
-        bytes(data);
-        const len = data.length;
-        if (!output)
-            output = new Uint8Array(len);
-        bytes(output);
-        number(counter);
-        if (counter < 0 || counter >= MAX_COUNTER)
-            throw new Error('arx: counter overflow');
-        if (output.length < len)
-            throw new Error(`arx: output (${output.length}) is shorter than data (${len})`);
-        const toClean = [];
-        // Key & sigma
-        // key=16 -> sigma16, k=key|key
-        // key=32 -> sigma32, k=key
-        let l = key.length, k, sigma;
-        if (l === 32) {
-            k = key.slice();
-            toClean.push(k);
-            sigma = sigma32_32;
-        }
-        else if (l === 16 && allowShortKeys) {
-            k = new Uint8Array(32);
-            k.set(key);
-            k.set(key, 16);
-            sigma = sigma16_32;
-            toClean.push(k);
-        }
-        else {
-            throw new Error(`arx: invalid 32-byte key, got length=${l}`);
-        }
-        // Nonce
-        // salsa20:      8   (8-byte counter)
-        // chacha20orig: 8   (8-byte counter)
-        // chacha20:     12  (4-byte counter)
-        // xsalsa20:     24  (16 -> hsalsa,  8 -> old nonce)
-        // xchacha20:    24  (16 -> hchacha, 8 -> old nonce)
-        // Align nonce to 4 bytes
-        if (!isAligned32(nonce)) {
-            nonce = nonce.slice();
-            toClean.push(nonce);
-        }
-        const k32 = u32(k);
-        // hsalsa & hchacha: handle extended nonce
-        if (extendNonceFn) {
-            if (nonce.length !== 24)
-                throw new Error(`arx: extended nonce must be 24 bytes`);
-            extendNonceFn(sigma, k32, u32(nonce.subarray(0, 16)), k32);
-            nonce = nonce.subarray(16);
-        }
-        // Handle nonce counter
-        const nonceNcLen = 16 - counterLength;
-        if (nonceNcLen !== nonce.length)
-            throw new Error(`arx: nonce must be ${nonceNcLen} or 16 bytes`);
-        // Pad counter when nonce is 64 bit
-        if (nonceNcLen !== 12) {
-            const nc = new Uint8Array(12);
-            nc.set(nonce, counterRight ? 0 : 12 - nonce.length);
-            nonce = nc;
-            toClean.push(nonce);
-        }
-        const n32 = u32(nonce);
-        runCipher(core, sigma, k32, n32, data, output, counter, rounds);
-        while (toClean.length > 0)
-            toClean.pop().fill(0);
-        return output;
-    };
-}
-
-// prettier-ignore
-// ChaCha20 stream cipher was released in 2008. ChaCha aims to increase
-// the diffusion per round, but had slightly less cryptanalysis.
-// https://cr.yp.to/chacha.html, http://cr.yp.to/chacha/chacha-20080128.pdf
-/**
- * ChaCha core function.
- */
-// prettier-ignore
-function chachaCore(s, k, n, out, cnt, rounds = 20) {
-    let y00 = s[0], y01 = s[1], y02 = s[2], y03 = s[3], // "expa"   "nd 3"  "2-by"  "te k"
-    y04 = k[0], y05 = k[1], y06 = k[2], y07 = k[3], // Key      Key     Key     Key
-    y08 = k[4], y09 = k[5], y10 = k[6], y11 = k[7], // Key      Key     Key     Key
-    y12 = cnt, y13 = n[0], y14 = n[1], y15 = n[2]; // Counter  Counter	Nonce   Nonce
-    // Save state to temporary variables
-    let x00 = y00, x01 = y01, x02 = y02, x03 = y03, x04 = y04, x05 = y05, x06 = y06, x07 = y07, x08 = y08, x09 = y09, x10 = y10, x11 = y11, x12 = y12, x13 = y13, x14 = y14, x15 = y15;
-    for (let r = 0; r < rounds; r += 2) {
-        x00 = (x00 + x04) | 0;
-        x12 = rotl(x12 ^ x00, 16);
-        x08 = (x08 + x12) | 0;
-        x04 = rotl(x04 ^ x08, 12);
-        x00 = (x00 + x04) | 0;
-        x12 = rotl(x12 ^ x00, 8);
-        x08 = (x08 + x12) | 0;
-        x04 = rotl(x04 ^ x08, 7);
-        x01 = (x01 + x05) | 0;
-        x13 = rotl(x13 ^ x01, 16);
-        x09 = (x09 + x13) | 0;
-        x05 = rotl(x05 ^ x09, 12);
-        x01 = (x01 + x05) | 0;
-        x13 = rotl(x13 ^ x01, 8);
-        x09 = (x09 + x13) | 0;
-        x05 = rotl(x05 ^ x09, 7);
-        x02 = (x02 + x06) | 0;
-        x14 = rotl(x14 ^ x02, 16);
-        x10 = (x10 + x14) | 0;
-        x06 = rotl(x06 ^ x10, 12);
-        x02 = (x02 + x06) | 0;
-        x14 = rotl(x14 ^ x02, 8);
-        x10 = (x10 + x14) | 0;
-        x06 = rotl(x06 ^ x10, 7);
-        x03 = (x03 + x07) | 0;
-        x15 = rotl(x15 ^ x03, 16);
-        x11 = (x11 + x15) | 0;
-        x07 = rotl(x07 ^ x11, 12);
-        x03 = (x03 + x07) | 0;
-        x15 = rotl(x15 ^ x03, 8);
-        x11 = (x11 + x15) | 0;
-        x07 = rotl(x07 ^ x11, 7);
-        x00 = (x00 + x05) | 0;
-        x15 = rotl(x15 ^ x00, 16);
-        x10 = (x10 + x15) | 0;
-        x05 = rotl(x05 ^ x10, 12);
-        x00 = (x00 + x05) | 0;
-        x15 = rotl(x15 ^ x00, 8);
-        x10 = (x10 + x15) | 0;
-        x05 = rotl(x05 ^ x10, 7);
-        x01 = (x01 + x06) | 0;
-        x12 = rotl(x12 ^ x01, 16);
-        x11 = (x11 + x12) | 0;
-        x06 = rotl(x06 ^ x11, 12);
-        x01 = (x01 + x06) | 0;
-        x12 = rotl(x12 ^ x01, 8);
-        x11 = (x11 + x12) | 0;
-        x06 = rotl(x06 ^ x11, 7);
-        x02 = (x02 + x07) | 0;
-        x13 = rotl(x13 ^ x02, 16);
-        x08 = (x08 + x13) | 0;
-        x07 = rotl(x07 ^ x08, 12);
-        x02 = (x02 + x07) | 0;
-        x13 = rotl(x13 ^ x02, 8);
-        x08 = (x08 + x13) | 0;
-        x07 = rotl(x07 ^ x08, 7);
-        x03 = (x03 + x04) | 0;
-        x14 = rotl(x14 ^ x03, 16);
-        x09 = (x09 + x14) | 0;
-        x04 = rotl(x04 ^ x09, 12);
-        x03 = (x03 + x04) | 0;
-        x14 = rotl(x14 ^ x03, 8);
-        x09 = (x09 + x14) | 0;
-        x04 = rotl(x04 ^ x09, 7);
-    }
-    // Write output
-    let oi = 0;
-    out[oi++] = (y00 + x00) | 0;
-    out[oi++] = (y01 + x01) | 0;
-    out[oi++] = (y02 + x02) | 0;
-    out[oi++] = (y03 + x03) | 0;
-    out[oi++] = (y04 + x04) | 0;
-    out[oi++] = (y05 + x05) | 0;
-    out[oi++] = (y06 + x06) | 0;
-    out[oi++] = (y07 + x07) | 0;
-    out[oi++] = (y08 + x08) | 0;
-    out[oi++] = (y09 + x09) | 0;
-    out[oi++] = (y10 + x10) | 0;
-    out[oi++] = (y11 + x11) | 0;
-    out[oi++] = (y12 + x12) | 0;
-    out[oi++] = (y13 + x13) | 0;
-    out[oi++] = (y14 + x14) | 0;
-    out[oi++] = (y15 + x15) | 0;
-}
-/**
- * ChaCha stream cipher. Conforms to RFC 8439 (IETF, TLS). 12-byte nonce, 4-byte counter.
- * With 12-byte nonce, it's not safe to use fill it with random (CSPRNG), due to collision chance.
- */
-const chacha20 = /* @__PURE__ */ createCipher(chachaCore, {
-    counterRight: false,
-    counterLength: 4,
-    allowShortKeys: false,
-});
-
-// HMAC (RFC 2104)
-class HMAC extends Hash {
-    constructor(hash, _key) {
-        super();
-        this.finished = false;
-        this.destroyed = false;
-        assert.hash(hash);
-        const key = toBytes(_key);
-        this.iHash = hash.create();
-        if (typeof this.iHash.update !== 'function')
-            throw new Error('Expected instance of class which extends utils.Hash');
-        this.blockLen = this.iHash.blockLen;
-        this.outputLen = this.iHash.outputLen;
-        const blockLen = this.blockLen;
-        const pad = new Uint8Array(blockLen);
-        // blockLen can be bigger than outputLen
-        pad.set(key.length > blockLen ? hash.create().update(key).digest() : key);
-        for (let i = 0; i < pad.length; i++)
-            pad[i] ^= 0x36;
-        this.iHash.update(pad);
-        // By doing update (processing of first block) of outer hash here we can re-use it between multiple calls via clone
-        this.oHash = hash.create();
-        // Undo internal XOR && apply outer XOR
-        for (let i = 0; i < pad.length; i++)
-            pad[i] ^= 0x36 ^ 0x5c;
-        this.oHash.update(pad);
-        pad.fill(0);
-    }
-    update(buf) {
-        assert.exists(this);
-        this.iHash.update(buf);
-        return this;
-    }
-    digestInto(out) {
-        assert.exists(this);
-        assert.bytes(out, this.outputLen);
-        this.finished = true;
-        this.iHash.digestInto(out);
-        this.oHash.update(out);
-        this.oHash.digestInto(out);
-        this.destroy();
-    }
-    digest() {
-        const out = new Uint8Array(this.oHash.outputLen);
-        this.digestInto(out);
-        return out;
-    }
-    _cloneInto(to) {
-        // Create new instance without calling constructor since key already in state and we don't know it.
-        to || (to = Object.create(Object.getPrototypeOf(this), {}));
-        const { oHash, iHash, finished, destroyed, blockLen, outputLen } = this;
-        to = to;
-        to.finished = finished;
-        to.destroyed = destroyed;
-        to.blockLen = blockLen;
-        to.outputLen = outputLen;
-        to.oHash = oHash._cloneInto(to.oHash);
-        to.iHash = iHash._cloneInto(to.iHash);
-        return to;
-    }
-    destroy() {
-        this.destroyed = true;
-        this.oHash.destroy();
-        this.iHash.destroy();
-    }
-}
-/**
- * HMAC: RFC2104 message authentication code.
- * @param hash - function that would be used e.g. sha256
- * @param key - message key
- * @param message - message data
- */
-const hmac = (hash, key, message) => new HMAC(hash, key).update(message).digest();
-hmac.create = (hash, key) => new HMAC(hash, key);
-
-// HKDF (RFC 5869)
-// https://soatok.blog/2021/11/17/understanding-hkdf/
-/**
- * HKDF-Extract(IKM, salt) -> PRK
- * Arguments position differs from spec (IKM is first one, since it is not optional)
- * @param hash
- * @param ikm
- * @param salt
- * @returns
- */
-function extract(hash, ikm, salt) {
-    assert.hash(hash);
-    return hmac(hash, toBytes(salt), toBytes(ikm));
-}
-// HKDF-Expand(PRK, info, L) -> OKM
-const HKDF_COUNTER = new Uint8Array([0]);
-const EMPTY_BUFFER = new Uint8Array();
-/**
- * HKDF-expand from the spec.
- * @param prk - a pseudorandom key of at least HashLen octets (usually, the output from the extract step)
- * @param info - optional context and application specific information (can be a zero-length string)
- * @param length - length of output keying material in octets
- */
-function expand(hash, prk, info, length = 32) {
-    assert.hash(hash);
-    assert.number(length);
-    if (length > 255 * hash.outputLen)
-        throw new Error('Length should be <= 255*HashLen');
-    const blocks = Math.ceil(length / hash.outputLen);
-    if (info === undefined)
-        info = EMPTY_BUFFER;
-    // first L(ength) octets of T
-    const okm = new Uint8Array(blocks * hash.outputLen);
-    // Re-use HMAC instance between blocks
-    const HMAC = hmac.create(hash, prk);
-    const HMACTmp = HMAC._cloneInto();
-    const T = new Uint8Array(HMAC.outputLen);
-    for (let counter = 0; counter < blocks; counter++) {
-        HKDF_COUNTER[0] = counter + 1;
-        // T(0) = empty string (zero length)
-        // T(N) = HMAC-Hash(PRK, T(N-1) | info | N)
-        HMACTmp.update(counter === 0 ? EMPTY_BUFFER : T)
-            .update(info)
-            .update(HKDF_COUNTER)
-            .digestInto(T);
-        okm.set(T, hash.outputLen * counter);
-        HMAC._cloneInto(HMACTmp);
-    }
-    HMAC.destroy();
-    HMACTmp.destroy();
-    T.fill(0);
-    HKDF_COUNTER.fill(0);
-    return okm.slice(0, length);
-}
-
-var __defProp = Object.defineProperty;
-var __export = (target, all) => {
-  for (var name in all)
-    __defProp(target, name, { get: all[name], enumerable: true });
-};
-
-// core.ts
-var verifiedSymbol$1 = Symbol("verified");
-var isRecord$1 = (obj) => obj instanceof Object;
-function validateEvent$1(event) {
-  if (!isRecord$1(event))
-    return false;
-  if (typeof event.kind !== "number")
-    return false;
-  if (typeof event.content !== "string")
-    return false;
-  if (typeof event.created_at !== "number")
-    return false;
-  if (typeof event.pubkey !== "string")
-    return false;
-  if (!event.pubkey.match(/^[a-f0-9]{64}$/))
-    return false;
-  if (!Array.isArray(event.tags))
-    return false;
-  for (let i2 = 0; i2 < event.tags.length; i2++) {
-    let tag = event.tags[i2];
-    if (!Array.isArray(tag))
-      return false;
-    for (let j = 0; j < tag.length; j++) {
-      if (typeof tag[j] !== "string")
-        return false;
-    }
-  }
-  return true;
-}
-
-// utils.ts
-var utils_exports = {};
-__export(utils_exports, {
-  Queue: () => Queue,
-  QueueNode: () => QueueNode,
-  binarySearch: () => binarySearch,
-  bytesToHex: () => bytesToHex$1,
-  hexToBytes: () => hexToBytes$2,
-  insertEventIntoAscendingList: () => insertEventIntoAscendingList,
-  insertEventIntoDescendingList: () => insertEventIntoDescendingList,
-  normalizeURL: () => normalizeURL,
-  utf8Decoder: () => utf8Decoder,
-  utf8Encoder: () => utf8Encoder$1
-});
-var utf8Decoder = new TextDecoder("utf-8");
-var utf8Encoder$1 = new TextEncoder();
-function normalizeURL(url) {
-  try {
-    if (url.indexOf("://") === -1)
-      url = "wss://" + url;
-    let p = new URL(url);
-    if (p.protocol === "http:")
-      p.protocol = "ws:";
-    else if (p.protocol === "https:")
-      p.protocol = "wss:";
-    p.pathname = p.pathname.replace(/\/+/g, "/");
-    if (p.pathname.endsWith("/"))
-      p.pathname = p.pathname.slice(0, -1);
-    if (p.port === "80" && p.protocol === "ws:" || p.port === "443" && p.protocol === "wss:")
-      p.port = "";
-    p.searchParams.sort();
-    p.hash = "";
-    return p.toString();
-  } catch (e) {
-    throw new Error(`Invalid URL: ${url}`);
-  }
-}
-function insertEventIntoDescendingList(sortedArray, event) {
-  const [idx, found] = binarySearch(sortedArray, (b) => {
-    if (event.id === b.id)
-      return 0;
-    if (event.created_at === b.created_at)
-      return -1;
-    return b.created_at - event.created_at;
-  });
-  if (!found) {
-    sortedArray.splice(idx, 0, event);
-  }
-  return sortedArray;
-}
-function insertEventIntoAscendingList(sortedArray, event) {
-  const [idx, found] = binarySearch(sortedArray, (b) => {
-    if (event.id === b.id)
-      return 0;
-    if (event.created_at === b.created_at)
-      return -1;
-    return event.created_at - b.created_at;
-  });
-  if (!found) {
-    sortedArray.splice(idx, 0, event);
-  }
-  return sortedArray;
-}
-function binarySearch(arr, compare) {
-  let start = 0;
-  let end = arr.length - 1;
-  while (start <= end) {
-    const mid = Math.floor((start + end) / 2);
-    const cmp = compare(arr[mid]);
-    if (cmp === 0) {
-      return [mid, true];
-    }
-    if (cmp < 0) {
-      end = mid - 1;
-    } else {
-      start = mid + 1;
-    }
-  }
-  return [start, false];
-}
-var QueueNode = class {
-  value;
-  next = null;
-  prev = null;
-  constructor(message) {
-    this.value = message;
-  }
-};
-var Queue = class {
-  first;
-  last;
-  constructor() {
-    this.first = null;
-    this.last = null;
-  }
-  enqueue(value) {
-    const newNode = new QueueNode(value);
-    if (!this.last) {
-      this.first = newNode;
-      this.last = newNode;
-    } else if (this.last === this.first) {
-      this.last = newNode;
-      this.last.prev = this.first;
-      this.first.next = newNode;
-    } else {
-      newNode.prev = this.last;
-      this.last.next = newNode;
-      this.last = newNode;
-    }
-    return true;
-  }
-  dequeue() {
-    if (!this.first)
-      return null;
-    if (this.first === this.last) {
-      const target2 = this.first;
-      this.first = null;
-      this.last = null;
-      return target2.value;
-    }
-    const target = this.first;
-    this.first = target.next;
-    if (this.first) {
-      this.first.prev = null;
-    }
-    return target.value;
-  }
-};
-
-// pure.ts
-var JS$1 = class JS {
-  generateSecretKey() {
-    return schnorr.utils.randomPrivateKey();
-  }
-  getPublicKey(secretKey) {
-    return bytesToHex$1(schnorr.getPublicKey(secretKey));
-  }
-  finalizeEvent(t, secretKey) {
-    const event = t;
-    event.pubkey = bytesToHex$1(schnorr.getPublicKey(secretKey));
-    event.id = getEventHash$1(event);
-    event.sig = bytesToHex$1(schnorr.sign(getEventHash$1(event), secretKey));
-    event[verifiedSymbol$1] = true;
-    return event;
-  }
-  verifyEvent(event) {
-    if (typeof event[verifiedSymbol$1] === "boolean")
-      return event[verifiedSymbol$1];
-    const hash = getEventHash$1(event);
-    if (hash !== event.id) {
-      event[verifiedSymbol$1] = false;
-      return false;
-    }
-    try {
-      const valid = schnorr.verify(event.sig, hash, event.pubkey);
-      event[verifiedSymbol$1] = valid;
-      return valid;
-    } catch (err) {
-      event[verifiedSymbol$1] = false;
-      return false;
-    }
-  }
-};
-function serializeEvent$1(evt) {
-  if (!validateEvent$1(evt))
-    throw new Error("can't serialize event with wrong or missing properties");
-  return JSON.stringify([0, evt.pubkey, evt.created_at, evt.kind, evt.tags, evt.content]);
-}
-function getEventHash$1(event) {
-  let eventHash = sha256(utf8Encoder$1.encode(serializeEvent$1(event)));
-  return bytesToHex$1(eventHash);
-}
-var i$1 = new JS$1();
-var generateSecretKey = i$1.generateSecretKey;
-var getPublicKey = i$1.getPublicKey;
-var finalizeEvent = i$1.finalizeEvent;
-var verifyEvent = i$1.verifyEvent;
-
-// kinds.ts
-var kinds_exports = {};
-__export(kinds_exports, {
-  Application: () => Application,
-  BadgeAward: () => BadgeAward,
-  BadgeDefinition: () => BadgeDefinition,
-  BlockedRelaysList: () => BlockedRelaysList,
-  BlossomServerList: () => BlossomServerList,
-  BookmarkList: () => BookmarkList,
-  Bookmarksets: () => Bookmarksets,
-  Calendar: () => Calendar,
-  CalendarEventRSVP: () => CalendarEventRSVP,
-  ChannelCreation: () => ChannelCreation,
-  ChannelHideMessage: () => ChannelHideMessage,
-  ChannelMessage: () => ChannelMessage,
-  ChannelMetadata: () => ChannelMetadata,
-  ChannelMuteUser: () => ChannelMuteUser,
-  ChatMessage: () => ChatMessage,
-  ClassifiedListing: () => ClassifiedListing,
-  ClientAuth: () => ClientAuth,
-  Comment: () => Comment,
-  CommunitiesList: () => CommunitiesList,
-  CommunityDefinition: () => CommunityDefinition,
-  CommunityPostApproval: () => CommunityPostApproval,
-  Contacts: () => Contacts,
-  CreateOrUpdateProduct: () => CreateOrUpdateProduct,
-  CreateOrUpdateStall: () => CreateOrUpdateStall,
-  Curationsets: () => Curationsets,
-  Date: () => Date2,
-  DirectMessageRelaysList: () => DirectMessageRelaysList,
-  DraftClassifiedListing: () => DraftClassifiedListing,
-  DraftLong: () => DraftLong,
-  Emojisets: () => Emojisets,
-  EncryptedDirectMessage: () => EncryptedDirectMessage,
-  EventDeletion: () => EventDeletion,
-  FavoriteRelays: () => FavoriteRelays,
-  FileMessage: () => FileMessage,
-  FileMetadata: () => FileMetadata,
-  FileServerPreference: () => FileServerPreference,
-  Followsets: () => Followsets,
-  ForumThread: () => ForumThread,
-  GenericRepost: () => GenericRepost,
-  Genericlists: () => Genericlists,
-  GiftWrap: () => GiftWrap,
-  GroupMetadata: () => GroupMetadata,
-  HTTPAuth: () => HTTPAuth,
-  Handlerinformation: () => Handlerinformation,
-  Handlerrecommendation: () => Handlerrecommendation,
-  Highlights: () => Highlights,
-  InterestsList: () => InterestsList,
-  Interestsets: () => Interestsets,
-  JobFeedback: () => JobFeedback,
-  JobRequest: () => JobRequest,
-  JobResult: () => JobResult,
-  Label: () => Label,
-  LightningPubRPC: () => LightningPubRPC,
-  LiveChatMessage: () => LiveChatMessage,
-  LiveEvent: () => LiveEvent,
-  LongFormArticle: () => LongFormArticle,
-  Metadata: () => Metadata,
-  Mutelist: () => Mutelist,
-  NWCWalletInfo: () => NWCWalletInfo,
-  NWCWalletRequest: () => NWCWalletRequest,
-  NWCWalletResponse: () => NWCWalletResponse,
-  NormalVideo: () => NormalVideo,
-  NostrConnect: () => NostrConnect,
-  OpenTimestamps: () => OpenTimestamps,
-  Photo: () => Photo,
-  Pinlist: () => Pinlist,
-  Poll: () => Poll,
-  PollResponse: () => PollResponse,
-  PrivateDirectMessage: () => PrivateDirectMessage,
-  ProblemTracker: () => ProblemTracker,
-  ProfileBadges: () => ProfileBadges,
-  PublicChatsList: () => PublicChatsList,
-  Reaction: () => Reaction,
-  RecommendRelay: () => RecommendRelay,
-  RelayList: () => RelayList,
-  RelayReview: () => RelayReview,
-  Relaysets: () => Relaysets,
-  Report: () => Report,
-  Reporting: () => Reporting,
-  Repost: () => Repost,
-  Seal: () => Seal,
-  SearchRelaysList: () => SearchRelaysList,
-  ShortTextNote: () => ShortTextNote,
-  ShortVideo: () => ShortVideo,
-  Time: () => Time,
-  UserEmojiList: () => UserEmojiList,
-  UserStatuses: () => UserStatuses,
-  Voice: () => Voice,
-  VoiceComment: () => VoiceComment,
-  Zap: () => Zap,
-  ZapGoal: () => ZapGoal,
-  ZapRequest: () => ZapRequest,
-  classifyKind: () => classifyKind,
-  isAddressableKind: () => isAddressableKind,
-  isEphemeralKind: () => isEphemeralKind,
-  isKind: () => isKind,
-  isRegularKind: () => isRegularKind,
-  isReplaceableKind: () => isReplaceableKind
-});
-function isRegularKind(kind) {
-  return kind < 1e4 && kind !== 0 && kind !== 3;
-}
-function isReplaceableKind(kind) {
-  return kind === 0 || kind === 3 || 1e4 <= kind && kind < 2e4;
-}
-function isEphemeralKind(kind) {
-  return 2e4 <= kind && kind < 3e4;
-}
-function isAddressableKind(kind) {
-  return 3e4 <= kind && kind < 4e4;
-}
-function classifyKind(kind) {
-  if (isRegularKind(kind))
-    return "regular";
-  if (isReplaceableKind(kind))
-    return "replaceable";
-  if (isEphemeralKind(kind))
-    return "ephemeral";
-  if (isAddressableKind(kind))
-    return "parameterized";
-  return "unknown";
-}
-function isKind(event, kind) {
-  const kindAsArray = kind instanceof Array ? kind : [kind];
-  return validateEvent$1(event) && kindAsArray.includes(event.kind) || false;
-}
-var Metadata = 0;
-var ShortTextNote = 1;
-var RecommendRelay = 2;
-var Contacts = 3;
-var EncryptedDirectMessage = 4;
-var EventDeletion = 5;
-var Repost = 6;
-var Reaction = 7;
-var BadgeAward = 8;
-var ChatMessage = 9;
-var ForumThread = 11;
-var Seal = 13;
-var PrivateDirectMessage = 14;
-var FileMessage = 15;
-var GenericRepost = 16;
-var Photo = 20;
-var NormalVideo = 21;
-var ShortVideo = 22;
-var ChannelCreation = 40;
-var ChannelMetadata = 41;
-var ChannelMessage = 42;
-var ChannelHideMessage = 43;
-var ChannelMuteUser = 44;
-var OpenTimestamps = 1040;
-var GiftWrap = 1059;
-var Poll = 1068;
-var FileMetadata = 1063;
-var Comment = 1111;
-var LiveChatMessage = 1311;
-var Voice = 1222;
-var VoiceComment = 1244;
-var ProblemTracker = 1971;
-var Report = 1984;
-var Reporting = 1984;
-var Label = 1985;
-var CommunityPostApproval = 4550;
-var JobRequest = 5999;
-var JobResult = 6999;
-var JobFeedback = 7e3;
-var ZapGoal = 9041;
-var ZapRequest = 9734;
-var Zap = 9735;
-var Highlights = 9802;
-var PollResponse = 1018;
-var Mutelist = 1e4;
-var Pinlist = 10001;
-var RelayList = 10002;
-var BookmarkList = 10003;
-var CommunitiesList = 10004;
-var PublicChatsList = 10005;
-var BlockedRelaysList = 10006;
-var SearchRelaysList = 10007;
-var FavoriteRelays = 10012;
-var InterestsList = 10015;
-var UserEmojiList = 10030;
-var DirectMessageRelaysList = 10050;
-var FileServerPreference = 10096;
-var BlossomServerList = 10063;
-var NWCWalletInfo = 13194;
-var LightningPubRPC = 21e3;
-var ClientAuth = 22242;
-var NWCWalletRequest = 23194;
-var NWCWalletResponse = 23195;
-var NostrConnect = 24133;
-var HTTPAuth = 27235;
-var Followsets = 3e4;
-var Genericlists = 30001;
-var Relaysets = 30002;
-var Bookmarksets = 30003;
-var Curationsets = 30004;
-var ProfileBadges = 30008;
-var BadgeDefinition = 30009;
-var Interestsets = 30015;
-var CreateOrUpdateStall = 30017;
-var CreateOrUpdateProduct = 30018;
-var LongFormArticle = 30023;
-var DraftLong = 30024;
-var Emojisets = 30030;
-var Application = 30078;
-var LiveEvent = 30311;
-var UserStatuses = 30315;
-var ClassifiedListing = 30402;
-var DraftClassifiedListing = 30403;
-var Date2 = 31922;
-var Time = 31923;
-var Calendar = 31924;
-var CalendarEventRSVP = 31925;
-var RelayReview = 31987;
-var Handlerrecommendation = 31989;
-var Handlerinformation = 31990;
-var CommunityDefinition = 34550;
-var GroupMetadata = 39e3;
-
-// fakejson.ts
-var fakejson_exports = {};
-__export(fakejson_exports, {
-  getHex64: () => getHex64,
-  getInt: () => getInt,
-  getSubscriptionId: () => getSubscriptionId,
-  matchEventId: () => matchEventId,
-  matchEventKind: () => matchEventKind,
-  matchEventPubkey: () => matchEventPubkey
-});
-function getHex64(json, field) {
-  let len = field.length + 3;
-  let idx = json.indexOf(`"${field}":`) + len;
-  let s = json.slice(idx).indexOf(`"`) + idx + 1;
-  return json.slice(s, s + 64);
-}
-function getInt(json, field) {
-  let len = field.length;
-  let idx = json.indexOf(`"${field}":`) + len + 3;
-  let sliced = json.slice(idx);
-  let end = Math.min(sliced.indexOf(","), sliced.indexOf("}"));
-  return parseInt(sliced.slice(0, end), 10);
-}
-function getSubscriptionId(json) {
-  let idx = json.slice(0, 22).indexOf(`"EVENT"`);
-  if (idx === -1)
-    return null;
-  let pstart = json.slice(idx + 7 + 1).indexOf(`"`);
-  if (pstart === -1)
-    return null;
-  let start = idx + 7 + 1 + pstart;
-  let pend = json.slice(start + 1, 80).indexOf(`"`);
-  if (pend === -1)
-    return null;
-  let end = start + 1 + pend;
-  return json.slice(start + 1, end);
-}
-function matchEventId(json, id) {
-  return id === getHex64(json, "id");
-}
-function matchEventPubkey(json, pubkey) {
-  return pubkey === getHex64(json, "pubkey");
-}
-function matchEventKind(json, kind) {
-  return kind === getInt(json, "kind");
-}
-
-// nip42.ts
-var nip42_exports = {};
-__export(nip42_exports, {
-  makeAuthEvent: () => makeAuthEvent
-});
-function makeAuthEvent(relayURL, challenge) {
-  return {
-    kind: ClientAuth,
-    created_at: Math.floor(Date.now() / 1e3),
-    tags: [
-      ["relay", relayURL],
-      ["challenge", challenge]
-    ],
-    content: ""
-  };
-}
-
-// relay.ts
-var _WebSocket$1;
-try {
-  _WebSocket$1 = WebSocket;
-} catch {
-}
-
-// pool.ts
-var _WebSocket2;
-try {
-  _WebSocket2 = WebSocket;
-} catch {
-}
-
 // nip19.ts
-var nip19_exports = {};
-__export(nip19_exports, {
-  BECH32_REGEX: () => BECH32_REGEX,
-  Bech32MaxSize: () => Bech32MaxSize,
-  NostrTypeGuard: () => NostrTypeGuard,
-  decode: () => decode,
-  decodeNostrURI: () => decodeNostrURI,
-  encodeBytes: () => encodeBytes,
-  naddrEncode: () => naddrEncode,
-  neventEncode: () => neventEncode,
-  noteEncode: () => noteEncode,
-  nprofileEncode: () => nprofileEncode,
-  npubEncode: () => npubEncode,
-  nsecEncode: () => nsecEncode
-});
-var NostrTypeGuard = {
-  isNProfile: (value) => /^nprofile1[a-z\d]+$/.test(value || ""),
-  isNEvent: (value) => /^nevent1[a-z\d]+$/.test(value || ""),
-  isNAddr: (value) => /^naddr1[a-z\d]+$/.test(value || ""),
-  isNSec: (value) => /^nsec1[a-z\d]{58}$/.test(value || ""),
-  isNPub: (value) => /^npub1[a-z\d]{58}$/.test(value || ""),
-  isNote: (value) => /^note1[a-z\d]+$/.test(value || ""),
-  isNcryptsec: (value) => /^ncryptsec1[a-z\d]+$/.test(value || "")
-};
+var utf8Decoder = new TextDecoder("utf-8");
+new TextEncoder();
 var Bech32MaxSize = 5e3;
-var BECH32_REGEX = /[\x21-\x7E]{1,83}1[023456789acdefghjklmnpqrstuvwxyz]{6,}/;
-function integerToUint8Array(number) {
-  const uint8Array = new Uint8Array(4);
-  uint8Array[0] = number >> 24 & 255;
-  uint8Array[1] = number >> 16 & 255;
-  uint8Array[2] = number >> 8 & 255;
-  uint8Array[3] = number & 255;
-  return uint8Array;
-}
-function decodeNostrURI(nip19code) {
-  try {
-    if (nip19code.startsWith("nostr:"))
-      nip19code = nip19code.substring(6);
-    return decode(nip19code);
-  } catch (_err) {
-    return { type: "invalid", data: null };
-  }
-}
 function decode(code) {
   let { prefix, words } = bech32.decode(code, Bech32MaxSize);
   let data = new Uint8Array(bech32.fromWords(words));
@@ -41663,7 +39320,7 @@ function decode(code) {
       return {
         type: "nprofile",
         data: {
-          pubkey: bytesToHex$1(tlv[0][0]),
+          pubkey: bytesToHex(tlv[0][0]),
           relays: tlv[1] ? tlv[1].map((d) => utf8Decoder.decode(d)) : []
         }
       };
@@ -41681,10 +39338,10 @@ function decode(code) {
       return {
         type: "nevent",
         data: {
-          id: bytesToHex$1(tlv[0][0]),
+          id: bytesToHex(tlv[0][0]),
           relays: tlv[1] ? tlv[1].map((d) => utf8Decoder.decode(d)) : [],
-          author: tlv[2]?.[0] ? bytesToHex$1(tlv[2][0]) : void 0,
-          kind: tlv[3]?.[0] ? parseInt(bytesToHex$1(tlv[3][0]), 16) : void 0
+          author: tlv[2]?.[0] ? bytesToHex(tlv[2][0]) : void 0,
+          kind: tlv[3]?.[0] ? parseInt(bytesToHex(tlv[3][0]), 16) : void 0
         }
       };
     }
@@ -41704,8 +39361,8 @@ function decode(code) {
         type: "naddr",
         data: {
           identifier: utf8Decoder.decode(tlv[0][0]),
-          pubkey: bytesToHex$1(tlv[2][0]),
-          kind: parseInt(bytesToHex$1(tlv[3][0]), 16),
+          pubkey: bytesToHex(tlv[2][0]),
+          kind: parseInt(bytesToHex(tlv[3][0]), 16),
           relays: tlv[1] ? tlv[1].map((d) => utf8Decoder.decode(d)) : []
         }
       };
@@ -41714,7 +39371,7 @@ function decode(code) {
       return { type: prefix, data };
     case "npub":
     case "note":
-      return { type: prefix, data: bytesToHex$1(data) };
+      return { type: prefix, data: bytesToHex(data) };
     default:
       throw new Error(`unknown prefix ${prefix}`);
   }
@@ -41733,1817 +39390,6 @@ function parseTLV(data) {
     result[t].push(v);
   }
   return result;
-}
-function nsecEncode(key) {
-  return encodeBytes("nsec", key);
-}
-function npubEncode(hex) {
-  return encodeBytes("npub", hexToBytes$2(hex));
-}
-function noteEncode(hex) {
-  return encodeBytes("note", hexToBytes$2(hex));
-}
-function encodeBech32(prefix, data) {
-  let words = bech32.toWords(data);
-  return bech32.encode(prefix, words, Bech32MaxSize);
-}
-function encodeBytes(prefix, bytes) {
-  return encodeBech32(prefix, bytes);
-}
-function nprofileEncode(profile) {
-  let data = encodeTLV({
-    0: [hexToBytes$2(profile.pubkey)],
-    1: (profile.relays || []).map((url) => utf8Encoder$1.encode(url))
-  });
-  return encodeBech32("nprofile", data);
-}
-function neventEncode(event) {
-  let kindArray;
-  if (event.kind !== void 0) {
-    kindArray = integerToUint8Array(event.kind);
-  }
-  let data = encodeTLV({
-    0: [hexToBytes$2(event.id)],
-    1: (event.relays || []).map((url) => utf8Encoder$1.encode(url)),
-    2: event.author ? [hexToBytes$2(event.author)] : [],
-    3: kindArray ? [new Uint8Array(kindArray)] : []
-  });
-  return encodeBech32("nevent", data);
-}
-function naddrEncode(addr) {
-  let kind = new ArrayBuffer(4);
-  new DataView(kind).setUint32(0, addr.kind, false);
-  let data = encodeTLV({
-    0: [utf8Encoder$1.encode(addr.identifier)],
-    1: (addr.relays || []).map((url) => utf8Encoder$1.encode(url)),
-    2: [hexToBytes$2(addr.pubkey)],
-    3: [new Uint8Array(kind)]
-  });
-  return encodeBech32("naddr", data);
-}
-function encodeTLV(tlv) {
-  let entries = [];
-  Object.entries(tlv).reverse().forEach(([t, vs]) => {
-    vs.forEach((v) => {
-      let entry = new Uint8Array(v.length + 2);
-      entry.set([parseInt(t)], 0);
-      entry.set([v.length], 1);
-      entry.set(v, 2);
-      entries.push(entry);
-    });
-  });
-  return concatBytes(...entries);
-}
-
-// nip04.ts
-var nip04_exports = {};
-__export(nip04_exports, {
-  decrypt: () => decrypt,
-  encrypt: () => encrypt
-});
-function encrypt(secretKey, pubkey, text) {
-  const privkey = secretKey instanceof Uint8Array ? bytesToHex$1(secretKey) : secretKey;
-  const key = secp256k1.getSharedSecret(privkey, "02" + pubkey);
-  const normalizedKey = getNormalizedX(key);
-  let iv = Uint8Array.from(randomBytes(16));
-  let plaintext = utf8Encoder$1.encode(text);
-  let ciphertext = cbc(normalizedKey, iv).encrypt(plaintext);
-  let ctb64 = base64.encode(new Uint8Array(ciphertext));
-  let ivb64 = base64.encode(new Uint8Array(iv.buffer));
-  return `${ctb64}?iv=${ivb64}`;
-}
-function decrypt(secretKey, pubkey, data) {
-  const privkey = secretKey instanceof Uint8Array ? bytesToHex$1(secretKey) : secretKey;
-  let [ctb64, ivb64] = data.split("?iv=");
-  let key = secp256k1.getSharedSecret(privkey, "02" + pubkey);
-  let normalizedKey = getNormalizedX(key);
-  let iv = base64.decode(ivb64);
-  let ciphertext = base64.decode(ctb64);
-  let plaintext = cbc(normalizedKey, iv).decrypt(ciphertext);
-  return utf8Decoder.decode(plaintext);
-}
-function getNormalizedX(key) {
-  return key.slice(1, 33);
-}
-
-// nip05.ts
-var nip05_exports = {};
-__export(nip05_exports, {
-  NIP05_REGEX: () => NIP05_REGEX,
-  isNip05: () => isNip05,
-  isValid: () => isValid,
-  queryProfile: () => queryProfile,
-  searchDomain: () => searchDomain,
-  useFetchImplementation: () => useFetchImplementation
-});
-var NIP05_REGEX = /^(?:([\w.+-]+)@)?([\w_-]+(\.[\w_-]+)+)$/;
-var isNip05 = (value) => NIP05_REGEX.test(value || "");
-var _fetch;
-try {
-  _fetch = fetch;
-} catch (_) {
-}
-function useFetchImplementation(fetchImplementation) {
-  _fetch = fetchImplementation;
-}
-async function searchDomain(domain, query = "") {
-  try {
-    const url = `https://${domain}/.well-known/nostr.json?name=${query}`;
-    const res = await _fetch(url, { redirect: "manual" });
-    if (res.status !== 200) {
-      throw Error("Wrong response code");
-    }
-    const json = await res.json();
-    return json.names;
-  } catch (_) {
-    return {};
-  }
-}
-async function queryProfile(fullname) {
-  const match = fullname.match(NIP05_REGEX);
-  if (!match)
-    return null;
-  const [, name = "_", domain] = match;
-  try {
-    const url = `https://${domain}/.well-known/nostr.json?name=${name}`;
-    const res = await _fetch(url, { redirect: "manual" });
-    if (res.status !== 200) {
-      throw Error("Wrong response code");
-    }
-    const json = await res.json();
-    const pubkey = json.names[name];
-    return pubkey ? { pubkey, relays: json.relays?.[pubkey] } : null;
-  } catch (_e) {
-    return null;
-  }
-}
-async function isValid(pubkey, nip05) {
-  const res = await queryProfile(nip05);
-  return res ? res.pubkey === pubkey : false;
-}
-
-// nip10.ts
-var nip10_exports = {};
-__export(nip10_exports, {
-  parse: () => parse
-});
-function parse(event) {
-  const result = {
-    reply: void 0,
-    root: void 0,
-    mentions: [],
-    profiles: [],
-    quotes: []
-  };
-  let maybeParent;
-  let maybeRoot;
-  for (let i2 = event.tags.length - 1; i2 >= 0; i2--) {
-    const tag = event.tags[i2];
-    if (tag[0] === "e" && tag[1]) {
-      const [_, eTagEventId, eTagRelayUrl, eTagMarker, eTagAuthor] = tag;
-      const eventPointer = {
-        id: eTagEventId,
-        relays: eTagRelayUrl ? [eTagRelayUrl] : [],
-        author: eTagAuthor
-      };
-      if (eTagMarker === "root") {
-        result.root = eventPointer;
-        continue;
-      }
-      if (eTagMarker === "reply") {
-        result.reply = eventPointer;
-        continue;
-      }
-      if (eTagMarker === "mention") {
-        result.mentions.push(eventPointer);
-        continue;
-      }
-      if (!maybeParent) {
-        maybeParent = eventPointer;
-      } else {
-        maybeRoot = eventPointer;
-      }
-      result.mentions.push(eventPointer);
-      continue;
-    }
-    if (tag[0] === "q" && tag[1]) {
-      const [_, eTagEventId, eTagRelayUrl] = tag;
-      result.quotes.push({
-        id: eTagEventId,
-        relays: eTagRelayUrl ? [eTagRelayUrl] : []
-      });
-    }
-    if (tag[0] === "p" && tag[1]) {
-      result.profiles.push({
-        pubkey: tag[1],
-        relays: tag[2] ? [tag[2]] : []
-      });
-      continue;
-    }
-  }
-  if (!result.root) {
-    result.root = maybeRoot || maybeParent || result.reply;
-  }
-  if (!result.reply) {
-    result.reply = maybeParent || result.root;
-  }
-  [result.reply, result.root].forEach((ref) => {
-    if (!ref)
-      return;
-    let idx = result.mentions.indexOf(ref);
-    if (idx !== -1) {
-      result.mentions.splice(idx, 1);
-    }
-    if (ref.author) {
-      let author = result.profiles.find((p) => p.pubkey === ref.author);
-      if (author && author.relays) {
-        if (!ref.relays) {
-          ref.relays = [];
-        }
-        author.relays.forEach((url) => {
-          if (ref.relays?.indexOf(url) === -1)
-            ref.relays.push(url);
-        });
-        author.relays = ref.relays;
-      }
-    }
-  });
-  result.mentions.forEach((ref) => {
-    if (ref.author) {
-      let author = result.profiles.find((p) => p.pubkey === ref.author);
-      if (author && author.relays) {
-        if (!ref.relays) {
-          ref.relays = [];
-        }
-        author.relays.forEach((url) => {
-          if (ref.relays.indexOf(url) === -1)
-            ref.relays.push(url);
-        });
-        author.relays = ref.relays;
-      }
-    }
-  });
-  return result;
-}
-
-// nip11.ts
-var nip11_exports = {};
-__export(nip11_exports, {
-  fetchRelayInformation: () => fetchRelayInformation,
-  useFetchImplementation: () => useFetchImplementation2
-});
-var _fetch2;
-try {
-  _fetch2 = fetch;
-} catch {
-}
-function useFetchImplementation2(fetchImplementation) {
-  _fetch2 = fetchImplementation;
-}
-async function fetchRelayInformation(url) {
-  return await (await fetch(url.replace("ws://", "http://").replace("wss://", "https://"), {
-    headers: { Accept: "application/nostr+json" }
-  })).json();
-}
-
-// nip13.ts
-var nip13_exports = {};
-__export(nip13_exports, {
-  fastEventHash: () => fastEventHash,
-  getPow: () => getPow,
-  minePow: () => minePow
-});
-function getPow(hex) {
-  let count = 0;
-  for (let i2 = 0; i2 < 64; i2 += 8) {
-    const nibble = parseInt(hex.substring(i2, i2 + 8), 16);
-    if (nibble === 0) {
-      count += 32;
-    } else {
-      count += Math.clz32(nibble);
-      break;
-    }
-  }
-  return count;
-}
-function minePow(unsigned, difficulty) {
-  let count = 0;
-  const event = unsigned;
-  const tag = ["nonce", count.toString(), difficulty.toString()];
-  event.tags.push(tag);
-  while (true) {
-    const now2 = Math.floor(new Date().getTime() / 1e3);
-    if (now2 !== event.created_at) {
-      count = 0;
-      event.created_at = now2;
-    }
-    tag[1] = (++count).toString();
-    event.id = fastEventHash(event);
-    if (getPow(event.id) >= difficulty) {
-      break;
-    }
-  }
-  return event;
-}
-function fastEventHash(evt) {
-  return bytesToHex$1(
-    sha256(utf8Encoder$1.encode(JSON.stringify([0, evt.pubkey, evt.created_at, evt.kind, evt.tags, evt.content])))
-  );
-}
-
-// nip17.ts
-var nip17_exports = {};
-__export(nip17_exports, {
-  unwrapEvent: () => unwrapEvent2,
-  unwrapManyEvents: () => unwrapManyEvents2,
-  wrapEvent: () => wrapEvent2,
-  wrapManyEvents: () => wrapManyEvents2
-});
-
-// nip59.ts
-var nip59_exports = {};
-__export(nip59_exports, {
-  createRumor: () => createRumor,
-  createSeal: () => createSeal,
-  createWrap: () => createWrap,
-  unwrapEvent: () => unwrapEvent,
-  unwrapManyEvents: () => unwrapManyEvents,
-  wrapEvent: () => wrapEvent,
-  wrapManyEvents: () => wrapManyEvents
-});
-
-// nip44.ts
-var nip44_exports = {};
-__export(nip44_exports, {
-  decrypt: () => decrypt2,
-  encrypt: () => encrypt2,
-  getConversationKey: () => getConversationKey,
-  v2: () => v2
-});
-var minPlaintextSize = 1;
-var maxPlaintextSize = 65535;
-function getConversationKey(privkeyA, pubkeyB) {
-  const sharedX = secp256k1.getSharedSecret(privkeyA, "02" + pubkeyB).subarray(1, 33);
-  return extract(sha256, sharedX, "nip44-v2");
-}
-function getMessageKeys(conversationKey, nonce) {
-  const keys = expand(sha256, conversationKey, nonce, 76);
-  return {
-    chacha_key: keys.subarray(0, 32),
-    chacha_nonce: keys.subarray(32, 44),
-    hmac_key: keys.subarray(44, 76)
-  };
-}
-function calcPaddedLen(len) {
-  if (!Number.isSafeInteger(len) || len < 1)
-    throw new Error("expected positive integer");
-  if (len <= 32)
-    return 32;
-  const nextPower = 1 << Math.floor(Math.log2(len - 1)) + 1;
-  const chunk = nextPower <= 256 ? 32 : nextPower / 8;
-  return chunk * (Math.floor((len - 1) / chunk) + 1);
-}
-function writeU16BE(num) {
-  if (!Number.isSafeInteger(num) || num < minPlaintextSize || num > maxPlaintextSize)
-    throw new Error("invalid plaintext size: must be between 1 and 65535 bytes");
-  const arr = new Uint8Array(2);
-  new DataView(arr.buffer).setUint16(0, num, false);
-  return arr;
-}
-function pad(plaintext) {
-  const unpadded = utf8Encoder$1.encode(plaintext);
-  const unpaddedLen = unpadded.length;
-  const prefix = writeU16BE(unpaddedLen);
-  const suffix = new Uint8Array(calcPaddedLen(unpaddedLen) - unpaddedLen);
-  return concatBytes(prefix, unpadded, suffix);
-}
-function unpad(padded) {
-  const unpaddedLen = new DataView(padded.buffer).getUint16(0);
-  const unpadded = padded.subarray(2, 2 + unpaddedLen);
-  if (unpaddedLen < minPlaintextSize || unpaddedLen > maxPlaintextSize || unpadded.length !== unpaddedLen || padded.length !== 2 + calcPaddedLen(unpaddedLen))
-    throw new Error("invalid padding");
-  return utf8Decoder.decode(unpadded);
-}
-function hmacAad(key, message, aad) {
-  if (aad.length !== 32)
-    throw new Error("AAD associated data must be 32 bytes");
-  const combined = concatBytes(aad, message);
-  return hmac(sha256, key, combined);
-}
-function decodePayload(payload) {
-  if (typeof payload !== "string")
-    throw new Error("payload must be a valid string");
-  const plen = payload.length;
-  if (plen < 132 || plen > 87472)
-    throw new Error("invalid payload length: " + plen);
-  if (payload[0] === "#")
-    throw new Error("unknown encryption version");
-  let data;
-  try {
-    data = base64.decode(payload);
-  } catch (error) {
-    throw new Error("invalid base64: " + error.message);
-  }
-  const dlen = data.length;
-  if (dlen < 99 || dlen > 65603)
-    throw new Error("invalid data length: " + dlen);
-  const vers = data[0];
-  if (vers !== 2)
-    throw new Error("unknown encryption version " + vers);
-  return {
-    nonce: data.subarray(1, 33),
-    ciphertext: data.subarray(33, -32),
-    mac: data.subarray(-32)
-  };
-}
-function encrypt2(plaintext, conversationKey, nonce = randomBytes(32)) {
-  const { chacha_key, chacha_nonce, hmac_key } = getMessageKeys(conversationKey, nonce);
-  const padded = pad(plaintext);
-  const ciphertext = chacha20(chacha_key, chacha_nonce, padded);
-  const mac = hmacAad(hmac_key, ciphertext, nonce);
-  return base64.encode(concatBytes(new Uint8Array([2]), nonce, ciphertext, mac));
-}
-function decrypt2(payload, conversationKey) {
-  const { nonce, ciphertext, mac } = decodePayload(payload);
-  const { chacha_key, chacha_nonce, hmac_key } = getMessageKeys(conversationKey, nonce);
-  const calculatedMac = hmacAad(hmac_key, ciphertext, nonce);
-  if (!equalBytes(calculatedMac, mac))
-    throw new Error("invalid MAC");
-  const padded = chacha20(chacha_key, chacha_nonce, ciphertext);
-  return unpad(padded);
-}
-var v2 = {
-  utils: {
-    getConversationKey,
-    calcPaddedLen
-  },
-  encrypt: encrypt2,
-  decrypt: decrypt2
-};
-
-// nip59.ts
-var TWO_DAYS = 2 * 24 * 60 * 60;
-var now = () => Math.round(Date.now() / 1e3);
-var randomNow = () => Math.round(now() - Math.random() * TWO_DAYS);
-var nip44ConversationKey = (privateKey, publicKey) => getConversationKey(privateKey, publicKey);
-var nip44Encrypt = (data, privateKey, publicKey) => encrypt2(JSON.stringify(data), nip44ConversationKey(privateKey, publicKey));
-var nip44Decrypt = (data, privateKey) => JSON.parse(decrypt2(data.content, nip44ConversationKey(privateKey, data.pubkey)));
-function createRumor(event, privateKey) {
-  const rumor = {
-    created_at: now(),
-    content: "",
-    tags: [],
-    ...event,
-    pubkey: getPublicKey(privateKey)
-  };
-  rumor.id = getEventHash$1(rumor);
-  return rumor;
-}
-function createSeal(rumor, privateKey, recipientPublicKey) {
-  return finalizeEvent(
-    {
-      kind: Seal,
-      content: nip44Encrypt(rumor, privateKey, recipientPublicKey),
-      created_at: randomNow(),
-      tags: []
-    },
-    privateKey
-  );
-}
-function createWrap(seal, recipientPublicKey) {
-  const randomKey = generateSecretKey();
-  return finalizeEvent(
-    {
-      kind: GiftWrap,
-      content: nip44Encrypt(seal, randomKey, recipientPublicKey),
-      created_at: randomNow(),
-      tags: [["p", recipientPublicKey]]
-    },
-    randomKey
-  );
-}
-function wrapEvent(event, senderPrivateKey, recipientPublicKey) {
-  const rumor = createRumor(event, senderPrivateKey);
-  const seal = createSeal(rumor, senderPrivateKey, recipientPublicKey);
-  return createWrap(seal, recipientPublicKey);
-}
-function wrapManyEvents(event, senderPrivateKey, recipientsPublicKeys) {
-  if (!recipientsPublicKeys || recipientsPublicKeys.length === 0) {
-    throw new Error("At least one recipient is required.");
-  }
-  const senderPublicKey = getPublicKey(senderPrivateKey);
-  const wrappeds = [wrapEvent(event, senderPrivateKey, senderPublicKey)];
-  recipientsPublicKeys.forEach((recipientPublicKey) => {
-    wrappeds.push(wrapEvent(event, senderPrivateKey, recipientPublicKey));
-  });
-  return wrappeds;
-}
-function unwrapEvent(wrap, recipientPrivateKey) {
-  const unwrappedSeal = nip44Decrypt(wrap, recipientPrivateKey);
-  return nip44Decrypt(unwrappedSeal, recipientPrivateKey);
-}
-function unwrapManyEvents(wrappedEvents, recipientPrivateKey) {
-  let unwrappedEvents = [];
-  wrappedEvents.forEach((e) => {
-    unwrappedEvents.push(unwrapEvent(e, recipientPrivateKey));
-  });
-  unwrappedEvents.sort((a, b) => a.created_at - b.created_at);
-  return unwrappedEvents;
-}
-
-// nip17.ts
-function createEvent$1(recipients, message, conversationTitle, replyTo) {
-  const baseEvent = {
-    created_at: Math.ceil(Date.now() / 1e3),
-    kind: PrivateDirectMessage,
-    tags: [],
-    content: message
-  };
-  const recipientsArray = Array.isArray(recipients) ? recipients : [recipients];
-  recipientsArray.forEach(({ publicKey, relayUrl }) => {
-    baseEvent.tags.push(relayUrl ? ["p", publicKey, relayUrl] : ["p", publicKey]);
-  });
-  if (replyTo) {
-    baseEvent.tags.push(["e", replyTo.eventId, replyTo.relayUrl || "", "reply"]);
-  }
-  if (conversationTitle) {
-    baseEvent.tags.push(["subject", conversationTitle]);
-  }
-  return baseEvent;
-}
-function wrapEvent2(senderPrivateKey, recipient, message, conversationTitle, replyTo) {
-  const event = createEvent$1(recipient, message, conversationTitle, replyTo);
-  return wrapEvent(event, senderPrivateKey, recipient.publicKey);
-}
-function wrapManyEvents2(senderPrivateKey, recipients, message, conversationTitle, replyTo) {
-  if (!recipients || recipients.length === 0) {
-    throw new Error("At least one recipient is required.");
-  }
-  const senderPublicKey = getPublicKey(senderPrivateKey);
-  return [{ publicKey: senderPublicKey }, ...recipients].map(
-    (recipient) => wrapEvent2(senderPrivateKey, recipient, message, conversationTitle, replyTo)
-  );
-}
-var unwrapEvent2 = unwrapEvent;
-var unwrapManyEvents2 = unwrapManyEvents;
-
-// nip18.ts
-var nip18_exports = {};
-__export(nip18_exports, {
-  finishRepostEvent: () => finishRepostEvent,
-  getRepostedEvent: () => getRepostedEvent,
-  getRepostedEventPointer: () => getRepostedEventPointer
-});
-function finishRepostEvent(t, reposted, relayUrl, privateKey) {
-  let kind;
-  const tags = [...t.tags ?? [], ["e", reposted.id, relayUrl], ["p", reposted.pubkey]];
-  if (reposted.kind === ShortTextNote) {
-    kind = Repost;
-  } else {
-    kind = GenericRepost;
-    tags.push(["k", String(reposted.kind)]);
-  }
-  return finalizeEvent(
-    {
-      kind,
-      tags,
-      content: t.content === "" || reposted.tags?.find((tag) => tag[0] === "-") ? "" : JSON.stringify(reposted),
-      created_at: t.created_at
-    },
-    privateKey
-  );
-}
-function getRepostedEventPointer(event) {
-  if (![Repost, GenericRepost].includes(event.kind)) {
-    return void 0;
-  }
-  let lastETag;
-  let lastPTag;
-  for (let i2 = event.tags.length - 1; i2 >= 0 && (lastETag === void 0 || lastPTag === void 0); i2--) {
-    const tag = event.tags[i2];
-    if (tag.length >= 2) {
-      if (tag[0] === "e" && lastETag === void 0) {
-        lastETag = tag;
-      } else if (tag[0] === "p" && lastPTag === void 0) {
-        lastPTag = tag;
-      }
-    }
-  }
-  if (lastETag === void 0) {
-    return void 0;
-  }
-  return {
-    id: lastETag[1],
-    relays: [lastETag[2], lastPTag?.[2]].filter((x) => typeof x === "string"),
-    author: lastPTag?.[1]
-  };
-}
-function getRepostedEvent(event, { skipVerification } = {}) {
-  const pointer = getRepostedEventPointer(event);
-  if (pointer === void 0 || event.content === "") {
-    return void 0;
-  }
-  let repostedEvent;
-  try {
-    repostedEvent = JSON.parse(event.content);
-  } catch (error) {
-    return void 0;
-  }
-  if (repostedEvent.id !== pointer.id) {
-    return void 0;
-  }
-  if (!skipVerification && !verifyEvent(repostedEvent)) {
-    return void 0;
-  }
-  return repostedEvent;
-}
-
-// nip21.ts
-var nip21_exports = {};
-__export(nip21_exports, {
-  NOSTR_URI_REGEX: () => NOSTR_URI_REGEX,
-  parse: () => parse2,
-  test: () => test
-});
-var NOSTR_URI_REGEX = new RegExp(`nostr:(${BECH32_REGEX.source})`);
-function test(value) {
-  return typeof value === "string" && new RegExp(`^${NOSTR_URI_REGEX.source}$`).test(value);
-}
-function parse2(uri) {
-  const match = uri.match(new RegExp(`^${NOSTR_URI_REGEX.source}$`));
-  if (!match)
-    throw new Error(`Invalid Nostr URI: ${uri}`);
-  return {
-    uri: match[0],
-    value: match[1],
-    decoded: decode(match[1])
-  };
-}
-
-// nip25.ts
-var nip25_exports = {};
-__export(nip25_exports, {
-  finishReactionEvent: () => finishReactionEvent,
-  getReactedEventPointer: () => getReactedEventPointer
-});
-function finishReactionEvent(t, reacted, privateKey) {
-  const inheritedTags = reacted.tags.filter((tag) => tag.length >= 2 && (tag[0] === "e" || tag[0] === "p"));
-  return finalizeEvent(
-    {
-      ...t,
-      kind: Reaction,
-      tags: [...t.tags ?? [], ...inheritedTags, ["e", reacted.id], ["p", reacted.pubkey]],
-      content: t.content ?? "+"
-    },
-    privateKey
-  );
-}
-function getReactedEventPointer(event) {
-  if (event.kind !== Reaction) {
-    return void 0;
-  }
-  let lastETag;
-  let lastPTag;
-  for (let i2 = event.tags.length - 1; i2 >= 0 && (lastETag === void 0 || lastPTag === void 0); i2--) {
-    const tag = event.tags[i2];
-    if (tag.length >= 2) {
-      if (tag[0] === "e" && lastETag === void 0) {
-        lastETag = tag;
-      } else if (tag[0] === "p" && lastPTag === void 0) {
-        lastPTag = tag;
-      }
-    }
-  }
-  if (lastETag === void 0 || lastPTag === void 0) {
-    return void 0;
-  }
-  return {
-    id: lastETag[1],
-    relays: [lastETag[2], lastPTag[2]].filter((x) => x !== void 0),
-    author: lastPTag[1]
-  };
-}
-
-// nip27.ts
-var nip27_exports = {};
-__export(nip27_exports, {
-  parse: () => parse3
-});
-var noCharacter = /\W/m;
-var noURLCharacter = /[^\w\/] |[^\w\/]$|$|,| /m;
-var MAX_HASHTAG_LENGTH = 42;
-function* parse3(content) {
-  let emojis = [];
-  if (typeof content !== "string") {
-    for (let i2 = 0; i2 < content.tags.length; i2++) {
-      const tag = content.tags[i2];
-      if (tag[0] === "emoji" && tag.length >= 3) {
-        emojis.push({ type: "emoji", shortcode: tag[1], url: tag[2] });
-      }
-    }
-    content = content.content;
-  }
-  const max = content.length;
-  let prevIndex = 0;
-  let index = 0;
-  mainloop:
-    while (index < max) {
-      const u = content.indexOf(":", index);
-      const h = content.indexOf("#", index);
-      if (u === -1 && h === -1) {
-        break mainloop;
-      }
-      if (u === -1 || h >= 0 && h < u) {
-        if (h === 0 || content[h - 1] === " ") {
-          const m = content.slice(h + 1, h + MAX_HASHTAG_LENGTH).match(noCharacter);
-          const end = m ? h + 1 + m.index : max;
-          yield { type: "text", text: content.slice(prevIndex, h) };
-          yield { type: "hashtag", value: content.slice(h + 1, end) };
-          index = end;
-          prevIndex = index;
-          continue mainloop;
-        }
-        index = h + 1;
-        continue mainloop;
-      }
-      if (content.slice(u - 5, u) === "nostr") {
-        const m = content.slice(u + 60).match(noCharacter);
-        const end = m ? u + 60 + m.index : max;
-        try {
-          let pointer;
-          let { data, type } = decode(content.slice(u + 1, end));
-          switch (type) {
-            case "npub":
-              pointer = { pubkey: data };
-              break;
-            case "note":
-              pointer = { id: data };
-              break;
-            case "nsec":
-              index = end + 1;
-              continue;
-            default:
-              pointer = data;
-          }
-          if (prevIndex !== u - 5) {
-            yield { type: "text", text: content.slice(prevIndex, u - 5) };
-          }
-          yield { type: "reference", pointer };
-          index = end;
-          prevIndex = index;
-          continue mainloop;
-        } catch (_err) {
-          index = u + 1;
-          continue mainloop;
-        }
-      } else if (content.slice(u - 5, u) === "https" || content.slice(u - 4, u) === "http") {
-        const m = content.slice(u + 4).match(noURLCharacter);
-        const end = m ? u + 4 + m.index : max;
-        const prefixLen = content[u - 1] === "s" ? 5 : 4;
-        try {
-          let url = new URL(content.slice(u - prefixLen, end));
-          if (url.hostname.indexOf(".") === -1) {
-            throw new Error("invalid url");
-          }
-          if (prevIndex !== u - prefixLen) {
-            yield { type: "text", text: content.slice(prevIndex, u - prefixLen) };
-          }
-          if (/\.(png|jpe?g|gif|webp|heic|svg)$/i.test(url.pathname)) {
-            yield { type: "image", url: url.toString() };
-            index = end;
-            prevIndex = index;
-            continue mainloop;
-          }
-          if (/\.(mp4|avi|webm|mkv|mov)$/i.test(url.pathname)) {
-            yield { type: "video", url: url.toString() };
-            index = end;
-            prevIndex = index;
-            continue mainloop;
-          }
-          if (/\.(mp3|aac|ogg|opus|wav|flac)$/i.test(url.pathname)) {
-            yield { type: "audio", url: url.toString() };
-            index = end;
-            prevIndex = index;
-            continue mainloop;
-          }
-          yield { type: "url", url: url.toString() };
-          index = end;
-          prevIndex = index;
-          continue mainloop;
-        } catch (_err) {
-          index = end + 1;
-          continue mainloop;
-        }
-      } else if (content.slice(u - 3, u) === "wss" || content.slice(u - 2, u) === "ws") {
-        const m = content.slice(u + 4).match(noURLCharacter);
-        const end = m ? u + 4 + m.index : max;
-        const prefixLen = content[u - 1] === "s" ? 3 : 2;
-        try {
-          let url = new URL(content.slice(u - prefixLen, end));
-          if (url.hostname.indexOf(".") === -1) {
-            throw new Error("invalid ws url");
-          }
-          if (prevIndex !== u - prefixLen) {
-            yield { type: "text", text: content.slice(prevIndex, u - prefixLen) };
-          }
-          yield { type: "relay", url: url.toString() };
-          index = end;
-          prevIndex = index;
-          continue mainloop;
-        } catch (_err) {
-          index = end + 1;
-          continue mainloop;
-        }
-      } else {
-        for (let e = 0; e < emojis.length; e++) {
-          const emoji = emojis[e];
-          if (content[u + emoji.shortcode.length + 1] === ":" && content.slice(u + 1, u + emoji.shortcode.length + 1) === emoji.shortcode) {
-            if (prevIndex !== u) {
-              yield { type: "text", text: content.slice(prevIndex, u) };
-            }
-            yield emoji;
-            index = u + emoji.shortcode.length + 2;
-            prevIndex = index;
-            continue mainloop;
-          }
-        }
-        index = u + 1;
-        continue mainloop;
-      }
-    }
-  if (prevIndex !== max) {
-    yield { type: "text", text: content.slice(prevIndex) };
-  }
-}
-
-// nip28.ts
-var nip28_exports = {};
-__export(nip28_exports, {
-  channelCreateEvent: () => channelCreateEvent,
-  channelHideMessageEvent: () => channelHideMessageEvent,
-  channelMessageEvent: () => channelMessageEvent,
-  channelMetadataEvent: () => channelMetadataEvent,
-  channelMuteUserEvent: () => channelMuteUserEvent
-});
-var channelCreateEvent = (t, privateKey) => {
-  let content;
-  if (typeof t.content === "object") {
-    content = JSON.stringify(t.content);
-  } else if (typeof t.content === "string") {
-    content = t.content;
-  } else {
-    return void 0;
-  }
-  return finalizeEvent(
-    {
-      kind: ChannelCreation,
-      tags: [...t.tags ?? []],
-      content,
-      created_at: t.created_at
-    },
-    privateKey
-  );
-};
-var channelMetadataEvent = (t, privateKey) => {
-  let content;
-  if (typeof t.content === "object") {
-    content = JSON.stringify(t.content);
-  } else if (typeof t.content === "string") {
-    content = t.content;
-  } else {
-    return void 0;
-  }
-  return finalizeEvent(
-    {
-      kind: ChannelMetadata,
-      tags: [["e", t.channel_create_event_id], ...t.tags ?? []],
-      content,
-      created_at: t.created_at
-    },
-    privateKey
-  );
-};
-var channelMessageEvent = (t, privateKey) => {
-  const tags = [["e", t.channel_create_event_id, t.relay_url, "root"]];
-  if (t.reply_to_channel_message_event_id) {
-    tags.push(["e", t.reply_to_channel_message_event_id, t.relay_url, "reply"]);
-  }
-  return finalizeEvent(
-    {
-      kind: ChannelMessage,
-      tags: [...tags, ...t.tags ?? []],
-      content: t.content,
-      created_at: t.created_at
-    },
-    privateKey
-  );
-};
-var channelHideMessageEvent = (t, privateKey) => {
-  let content;
-  if (typeof t.content === "object") {
-    content = JSON.stringify(t.content);
-  } else if (typeof t.content === "string") {
-    content = t.content;
-  } else {
-    return void 0;
-  }
-  return finalizeEvent(
-    {
-      kind: ChannelHideMessage,
-      tags: [["e", t.channel_message_event_id], ...t.tags ?? []],
-      content,
-      created_at: t.created_at
-    },
-    privateKey
-  );
-};
-var channelMuteUserEvent = (t, privateKey) => {
-  let content;
-  if (typeof t.content === "object") {
-    content = JSON.stringify(t.content);
-  } else if (typeof t.content === "string") {
-    content = t.content;
-  } else {
-    return void 0;
-  }
-  return finalizeEvent(
-    {
-      kind: ChannelMuteUser,
-      tags: [["p", t.pubkey_to_mute], ...t.tags ?? []],
-      content,
-      created_at: t.created_at
-    },
-    privateKey
-  );
-};
-
-// nip30.ts
-var nip30_exports = {};
-__export(nip30_exports, {
-  EMOJI_SHORTCODE_REGEX: () => EMOJI_SHORTCODE_REGEX,
-  matchAll: () => matchAll,
-  regex: () => regex,
-  replaceAll: () => replaceAll
-});
-var EMOJI_SHORTCODE_REGEX = /:(\w+):/;
-var regex = () => new RegExp(`\\B${EMOJI_SHORTCODE_REGEX.source}\\B`, "g");
-function* matchAll(content) {
-  const matches = content.matchAll(regex());
-  for (const match of matches) {
-    try {
-      const [shortcode, name] = match;
-      yield {
-        shortcode,
-        name,
-        start: match.index,
-        end: match.index + shortcode.length
-      };
-    } catch (_e) {
-    }
-  }
-}
-function replaceAll(content, replacer) {
-  return content.replaceAll(regex(), (shortcode, name) => {
-    return replacer({
-      shortcode,
-      name
-    });
-  });
-}
-
-// nip39.ts
-var nip39_exports = {};
-__export(nip39_exports, {
-  useFetchImplementation: () => useFetchImplementation3,
-  validateGithub: () => validateGithub
-});
-var _fetch3;
-try {
-  _fetch3 = fetch;
-} catch {
-}
-function useFetchImplementation3(fetchImplementation) {
-  _fetch3 = fetchImplementation;
-}
-async function validateGithub(pubkey, username, proof) {
-  try {
-    let res = await (await _fetch3(`https://gist.github.com/${username}/${proof}/raw`)).text();
-    return res === `Verifying that I control the following Nostr public key: ${pubkey}`;
-  } catch (_) {
-    return false;
-  }
-}
-
-// nip47.ts
-var nip47_exports = {};
-__export(nip47_exports, {
-  makeNwcRequestEvent: () => makeNwcRequestEvent,
-  parseConnectionString: () => parseConnectionString
-});
-function parseConnectionString(connectionString) {
-  const { host, pathname, searchParams } = new URL(connectionString);
-  const pubkey = pathname || host;
-  const relay = searchParams.get("relay");
-  const secret = searchParams.get("secret");
-  if (!pubkey || !relay || !secret) {
-    throw new Error("invalid connection string");
-  }
-  return { pubkey, relay, secret };
-}
-async function makeNwcRequestEvent(pubkey, secretKey, invoice) {
-  const content = {
-    method: "pay_invoice",
-    params: {
-      invoice
-    }
-  };
-  const encryptedContent = encrypt(secretKey, pubkey, JSON.stringify(content));
-  const eventTemplate = {
-    kind: NWCWalletRequest,
-    created_at: Math.round(Date.now() / 1e3),
-    content: encryptedContent,
-    tags: [["p", pubkey]]
-  };
-  return finalizeEvent(eventTemplate, secretKey);
-}
-
-// nip54.ts
-var nip54_exports = {};
-__export(nip54_exports, {
-  normalizeIdentifier: () => normalizeIdentifier
-});
-function normalizeIdentifier(name) {
-  name = name.trim().toLowerCase();
-  name = name.normalize("NFKC");
-  return Array.from(name).map((char) => {
-    if (/\p{Letter}/u.test(char) || /\p{Number}/u.test(char)) {
-      return char;
-    }
-    return "-";
-  }).join("");
-}
-
-// nip57.ts
-var nip57_exports = {};
-__export(nip57_exports, {
-  getSatoshisAmountFromBolt11: () => getSatoshisAmountFromBolt11,
-  getZapEndpoint: () => getZapEndpoint,
-  makeZapReceipt: () => makeZapReceipt,
-  makeZapRequest: () => makeZapRequest,
-  useFetchImplementation: () => useFetchImplementation4,
-  validateZapRequest: () => validateZapRequest
-});
-var _fetch4;
-try {
-  _fetch4 = fetch;
-} catch {
-}
-function useFetchImplementation4(fetchImplementation) {
-  _fetch4 = fetchImplementation;
-}
-async function getZapEndpoint(metadata) {
-  try {
-    let lnurl = "";
-    let { lud06, lud16 } = JSON.parse(metadata.content);
-    if (lud16) {
-      let [name, domain] = lud16.split("@");
-      lnurl = new URL(`/.well-known/lnurlp/${name}`, `https://${domain}`).toString();
-    } else if (lud06) {
-      let { words } = bech32.decode(lud06, 1e3);
-      let data = bech32.fromWords(words);
-      lnurl = utf8Decoder.decode(data);
-    } else {
-      return null;
-    }
-    let res = await _fetch4(lnurl);
-    let body = await res.json();
-    if (body.allowsNostr && body.nostrPubkey) {
-      return body.callback;
-    }
-  } catch (err) {
-  }
-  return null;
-}
-function makeZapRequest(params) {
-  let zr = {
-    kind: 9734,
-    created_at: Math.round(Date.now() / 1e3),
-    content: params.comment || "",
-    tags: [
-      ["p", "pubkey" in params ? params.pubkey : params.event.pubkey],
-      ["amount", params.amount.toString()],
-      ["relays", ...params.relays]
-    ]
-  };
-  if ("event" in params) {
-    zr.tags.push(["e", params.event.id]);
-    if (isReplaceableKind(params.event.kind)) {
-      const a = ["a", `${params.event.kind}:${params.event.pubkey}:`];
-      zr.tags.push(a);
-    } else if (isAddressableKind(params.event.kind)) {
-      let d = params.event.tags.find(([t, v]) => t === "d" && v);
-      if (!d)
-        throw new Error("d tag not found or is empty");
-      const a = ["a", `${params.event.kind}:${params.event.pubkey}:${d[1]}`];
-      zr.tags.push(a);
-    }
-    zr.tags.push(["k", params.event.kind.toString()]);
-  }
-  return zr;
-}
-function validateZapRequest(zapRequestString) {
-  let zapRequest;
-  try {
-    zapRequest = JSON.parse(zapRequestString);
-  } catch (err) {
-    return "Invalid zap request JSON.";
-  }
-  if (!validateEvent$1(zapRequest))
-    return "Zap request is not a valid Nostr event.";
-  if (!verifyEvent(zapRequest))
-    return "Invalid signature on zap request.";
-  let p = zapRequest.tags.find(([t, v]) => t === "p" && v);
-  if (!p)
-    return "Zap request doesn't have a 'p' tag.";
-  if (!p[1].match(/^[a-f0-9]{64}$/))
-    return "Zap request 'p' tag is not valid hex.";
-  let e = zapRequest.tags.find(([t, v]) => t === "e" && v);
-  if (e && !e[1].match(/^[a-f0-9]{64}$/))
-    return "Zap request 'e' tag is not valid hex.";
-  let relays = zapRequest.tags.find(([t, v]) => t === "relays" && v);
-  if (!relays)
-    return "Zap request doesn't have a 'relays' tag.";
-  return null;
-}
-function makeZapReceipt({
-  zapRequest,
-  preimage,
-  bolt11,
-  paidAt
-}) {
-  let zr = JSON.parse(zapRequest);
-  let tagsFromZapRequest = zr.tags.filter(([t]) => t === "e" || t === "p" || t === "a");
-  let zap = {
-    kind: 9735,
-    created_at: Math.round(paidAt.getTime() / 1e3),
-    content: "",
-    tags: [...tagsFromZapRequest, ["P", zr.pubkey], ["bolt11", bolt11], ["description", zapRequest]]
-  };
-  if (preimage) {
-    zap.tags.push(["preimage", preimage]);
-  }
-  return zap;
-}
-function getSatoshisAmountFromBolt11(bolt11) {
-  if (bolt11.length < 50) {
-    return 0;
-  }
-  bolt11 = bolt11.substring(0, 50);
-  const idx = bolt11.lastIndexOf("1");
-  if (idx === -1) {
-    return 0;
-  }
-  const hrp = bolt11.substring(0, idx);
-  if (!hrp.startsWith("lnbc")) {
-    return 0;
-  }
-  const amount = hrp.substring(4);
-  if (amount.length < 1) {
-    return 0;
-  }
-  const char = amount[amount.length - 1];
-  const digit = char.charCodeAt(0) - "0".charCodeAt(0);
-  const isDigit = digit >= 0 && digit <= 9;
-  let cutPoint = amount.length - 1;
-  if (isDigit) {
-    cutPoint++;
-  }
-  if (cutPoint < 1) {
-    return 0;
-  }
-  const num = parseInt(amount.substring(0, cutPoint));
-  switch (char) {
-    case "m":
-      return num * 1e5;
-    case "u":
-      return num * 100;
-    case "n":
-      return num / 10;
-    case "p":
-      return num / 1e4;
-    default:
-      return num * 1e8;
-  }
-}
-
-// nip77.ts
-var nip77_exports = {};
-__export(nip77_exports, {
-  Negentropy: () => Negentropy,
-  NegentropyStorageVector: () => NegentropyStorageVector,
-  NegentropySync: () => NegentropySync
-});
-var PROTOCOL_VERSION = 97;
-var ID_SIZE = 32;
-var FINGERPRINT_SIZE = 16;
-var Mode = {
-  Skip: 0,
-  Fingerprint: 1,
-  IdList: 2
-};
-var WrappedBuffer = class {
-  _raw;
-  length;
-  constructor(buffer) {
-    if (typeof buffer === "number") {
-      this._raw = new Uint8Array(buffer);
-      this.length = 0;
-    } else if (buffer instanceof Uint8Array) {
-      this._raw = new Uint8Array(buffer);
-      this.length = buffer.length;
-    } else {
-      this._raw = new Uint8Array(512);
-      this.length = 0;
-    }
-  }
-  unwrap() {
-    return this._raw.subarray(0, this.length);
-  }
-  get capacity() {
-    return this._raw.byteLength;
-  }
-  extend(buf) {
-    if (buf instanceof WrappedBuffer)
-      buf = buf.unwrap();
-    if (typeof buf.length !== "number")
-      throw Error("bad length");
-    const targetSize = buf.length + this.length;
-    if (this.capacity < targetSize) {
-      const oldRaw = this._raw;
-      const newCapacity = Math.max(this.capacity * 2, targetSize);
-      this._raw = new Uint8Array(newCapacity);
-      this._raw.set(oldRaw);
-    }
-    this._raw.set(buf, this.length);
-    this.length += buf.length;
-  }
-  shift() {
-    const first = this._raw[0];
-    this._raw = this._raw.subarray(1);
-    this.length--;
-    return first;
-  }
-  shiftN(n = 1) {
-    const firstSubarray = this._raw.subarray(0, n);
-    this._raw = this._raw.subarray(n);
-    this.length -= n;
-    return firstSubarray;
-  }
-};
-function decodeVarInt(buf) {
-  let res = 0;
-  while (1) {
-    if (buf.length === 0)
-      throw Error("parse ends prematurely");
-    let byte = buf.shift();
-    res = res << 7 | byte & 127;
-    if ((byte & 128) === 0)
-      break;
-  }
-  return res;
-}
-function encodeVarInt(n) {
-  if (n === 0)
-    return new WrappedBuffer(new Uint8Array([0]));
-  let o = [];
-  while (n !== 0) {
-    o.push(n & 127);
-    n >>>= 7;
-  }
-  o.reverse();
-  for (let i2 = 0; i2 < o.length - 1; i2++)
-    o[i2] |= 128;
-  return new WrappedBuffer(new Uint8Array(o));
-}
-function getByte(buf) {
-  return getBytes(buf, 1)[0];
-}
-function getBytes(buf, n) {
-  if (buf.length < n)
-    throw Error("parse ends prematurely");
-  return buf.shiftN(n);
-}
-var Accumulator = class {
-  buf;
-  constructor() {
-    this.setToZero();
-  }
-  setToZero() {
-    this.buf = new Uint8Array(ID_SIZE);
-  }
-  add(otherBuf) {
-    let currCarry = 0, nextCarry = 0;
-    let p = new DataView(this.buf.buffer);
-    let po = new DataView(otherBuf.buffer);
-    for (let i2 = 0; i2 < 8; i2++) {
-      let offset = i2 * 4;
-      let orig = p.getUint32(offset, true);
-      let otherV = po.getUint32(offset, true);
-      let next = orig;
-      next += currCarry;
-      next += otherV;
-      if (next > 4294967295)
-        nextCarry = 1;
-      p.setUint32(offset, next & 4294967295, true);
-      currCarry = nextCarry;
-      nextCarry = 0;
-    }
-  }
-  negate() {
-    let p = new DataView(this.buf.buffer);
-    for (let i2 = 0; i2 < 8; i2++) {
-      let offset = i2 * 4;
-      p.setUint32(offset, ~p.getUint32(offset, true));
-    }
-    let one = new Uint8Array(ID_SIZE);
-    one[0] = 1;
-    this.add(one);
-  }
-  getFingerprint(n) {
-    let input = new WrappedBuffer();
-    input.extend(this.buf);
-    input.extend(encodeVarInt(n));
-    let hash = sha256(input.unwrap());
-    return hash.subarray(0, FINGERPRINT_SIZE);
-  }
-};
-var NegentropyStorageVector = class {
-  items;
-  sealed;
-  constructor() {
-    this.items = [];
-    this.sealed = false;
-  }
-  insert(timestamp, id) {
-    if (this.sealed)
-      throw Error("already sealed");
-    const idb = hexToBytes$1(id);
-    if (idb.byteLength !== ID_SIZE)
-      throw Error("bad id size for added item");
-    this.items.push({ timestamp, id: idb });
-  }
-  seal() {
-    if (this.sealed)
-      throw Error("already sealed");
-    this.sealed = true;
-    this.items.sort(itemCompare);
-    for (let i2 = 1; i2 < this.items.length; i2++) {
-      if (itemCompare(this.items[i2 - 1], this.items[i2]) === 0)
-        throw Error("duplicate item inserted");
-    }
-  }
-  unseal() {
-    this.sealed = false;
-  }
-  size() {
-    this._checkSealed();
-    return this.items.length;
-  }
-  getItem(i2) {
-    this._checkSealed();
-    if (i2 >= this.items.length)
-      throw Error("out of range");
-    return this.items[i2];
-  }
-  iterate(begin, end, cb) {
-    this._checkSealed();
-    this._checkBounds(begin, end);
-    for (let i2 = begin; i2 < end; ++i2) {
-      if (!cb(this.items[i2], i2))
-        break;
-    }
-  }
-  findLowerBound(begin, end, bound) {
-    this._checkSealed();
-    this._checkBounds(begin, end);
-    return this._binarySearch(this.items, begin, end, (a) => itemCompare(a, bound) < 0);
-  }
-  fingerprint(begin, end) {
-    let out = new Accumulator();
-    out.setToZero();
-    this.iterate(begin, end, (item) => {
-      out.add(item.id);
-      return true;
-    });
-    return out.getFingerprint(end - begin);
-  }
-  _checkSealed() {
-    if (!this.sealed)
-      throw Error("not sealed");
-  }
-  _checkBounds(begin, end) {
-    if (begin > end || end > this.items.length)
-      throw Error("bad range");
-  }
-  _binarySearch(arr, first, last, cmp) {
-    let count = last - first;
-    while (count > 0) {
-      let it = first;
-      let step = Math.floor(count / 2);
-      it += step;
-      if (cmp(arr[it])) {
-        first = ++it;
-        count -= step + 1;
-      } else {
-        count = step;
-      }
-    }
-    return first;
-  }
-};
-var Negentropy = class {
-  storage;
-  frameSizeLimit;
-  lastTimestampIn;
-  lastTimestampOut;
-  constructor(storage, frameSizeLimit = 6e4) {
-    if (frameSizeLimit < 4096)
-      throw Error("frameSizeLimit too small");
-    this.storage = storage;
-    this.frameSizeLimit = frameSizeLimit;
-    this.lastTimestampIn = 0;
-    this.lastTimestampOut = 0;
-  }
-  _bound(timestamp, id) {
-    return { timestamp, id: id || new Uint8Array(0) };
-  }
-  initiate() {
-    let output = new WrappedBuffer();
-    output.extend(new Uint8Array([PROTOCOL_VERSION]));
-    this.splitRange(0, this.storage.size(), this._bound(Number.MAX_VALUE), output);
-    return bytesToHex(output.unwrap());
-  }
-  reconcile(queryMsg, onhave, onneed) {
-    const query = new WrappedBuffer(hexToBytes$1(queryMsg));
-    this.lastTimestampIn = this.lastTimestampOut = 0;
-    let fullOutput = new WrappedBuffer();
-    fullOutput.extend(new Uint8Array([PROTOCOL_VERSION]));
-    let protocolVersion = getByte(query);
-    if (protocolVersion < 96 || protocolVersion > 111)
-      throw Error("invalid negentropy protocol version byte");
-    if (protocolVersion !== PROTOCOL_VERSION) {
-      throw Error("unsupported negentropy protocol version requested: " + (protocolVersion - 96));
-    }
-    let storageSize = this.storage.size();
-    let prevBound = this._bound(0);
-    let prevIndex = 0;
-    let skip = false;
-    while (query.length !== 0) {
-      let o = new WrappedBuffer();
-      let doSkip = () => {
-        if (skip) {
-          skip = false;
-          o.extend(this.encodeBound(prevBound));
-          o.extend(encodeVarInt(Mode.Skip));
-        }
-      };
-      let currBound = this.decodeBound(query);
-      let mode = decodeVarInt(query);
-      let lower = prevIndex;
-      let upper = this.storage.findLowerBound(prevIndex, storageSize, currBound);
-      if (mode === Mode.Skip) {
-        skip = true;
-      } else if (mode === Mode.Fingerprint) {
-        let theirFingerprint = getBytes(query, FINGERPRINT_SIZE);
-        let ourFingerprint = this.storage.fingerprint(lower, upper);
-        if (compareUint8Array(theirFingerprint, ourFingerprint) !== 0) {
-          doSkip();
-          this.splitRange(lower, upper, currBound, o);
-        } else {
-          skip = true;
-        }
-      } else if (mode === Mode.IdList) {
-        let numIds = decodeVarInt(query);
-        let theirElems = {};
-        for (let i2 = 0; i2 < numIds; i2++) {
-          let e = getBytes(query, ID_SIZE);
-          theirElems[bytesToHex(e)] = e;
-        }
-        skip = true;
-        this.storage.iterate(lower, upper, (item) => {
-          let k = item.id;
-          const id = bytesToHex(k);
-          if (!theirElems[id]) {
-            onhave?.(id);
-          } else {
-            delete theirElems[bytesToHex(k)];
-          }
-          return true;
-        });
-        if (onneed) {
-          for (let v of Object.values(theirElems)) {
-            onneed(bytesToHex(v));
-          }
-        }
-      } else {
-        throw Error("unexpected mode");
-      }
-      if (this.exceededFrameSizeLimit(fullOutput.length + o.length)) {
-        let remainingFingerprint = this.storage.fingerprint(upper, storageSize);
-        fullOutput.extend(this.encodeBound(this._bound(Number.MAX_VALUE)));
-        fullOutput.extend(encodeVarInt(Mode.Fingerprint));
-        fullOutput.extend(remainingFingerprint);
-        break;
-      } else {
-        fullOutput.extend(o);
-      }
-      prevIndex = upper;
-      prevBound = currBound;
-    }
-    return fullOutput.length === 1 ? null : bytesToHex(fullOutput.unwrap());
-  }
-  splitRange(lower, upper, upperBound, o) {
-    let numElems = upper - lower;
-    let buckets = 16;
-    if (numElems < buckets * 2) {
-      o.extend(this.encodeBound(upperBound));
-      o.extend(encodeVarInt(Mode.IdList));
-      o.extend(encodeVarInt(numElems));
-      this.storage.iterate(lower, upper, (item) => {
-        o.extend(item.id);
-        return true;
-      });
-    } else {
-      let itemsPerBucket = Math.floor(numElems / buckets);
-      let bucketsWithExtra = numElems % buckets;
-      let curr = lower;
-      for (let i2 = 0; i2 < buckets; i2++) {
-        let bucketSize = itemsPerBucket + (i2 < bucketsWithExtra ? 1 : 0);
-        let ourFingerprint = this.storage.fingerprint(curr, curr + bucketSize);
-        curr += bucketSize;
-        let nextBound;
-        if (curr === upper) {
-          nextBound = upperBound;
-        } else {
-          let prevItem;
-          let currItem;
-          this.storage.iterate(curr - 1, curr + 1, (item, index) => {
-            if (index === curr - 1)
-              prevItem = item;
-            else
-              currItem = item;
-            return true;
-          });
-          nextBound = this.getMinimalBound(prevItem, currItem);
-        }
-        o.extend(this.encodeBound(nextBound));
-        o.extend(encodeVarInt(Mode.Fingerprint));
-        o.extend(ourFingerprint);
-      }
-    }
-  }
-  exceededFrameSizeLimit(n) {
-    return n > this.frameSizeLimit - 200;
-  }
-  decodeTimestampIn(encoded) {
-    let timestamp = decodeVarInt(encoded);
-    timestamp = timestamp === 0 ? Number.MAX_VALUE : timestamp - 1;
-    if (this.lastTimestampIn === Number.MAX_VALUE || timestamp === Number.MAX_VALUE) {
-      this.lastTimestampIn = Number.MAX_VALUE;
-      return Number.MAX_VALUE;
-    }
-    timestamp += this.lastTimestampIn;
-    this.lastTimestampIn = timestamp;
-    return timestamp;
-  }
-  decodeBound(encoded) {
-    let timestamp = this.decodeTimestampIn(encoded);
-    let len = decodeVarInt(encoded);
-    if (len > ID_SIZE)
-      throw Error("bound key too long");
-    let id = getBytes(encoded, len);
-    return { timestamp, id };
-  }
-  encodeTimestampOut(timestamp) {
-    if (timestamp === Number.MAX_VALUE) {
-      this.lastTimestampOut = Number.MAX_VALUE;
-      return encodeVarInt(0);
-    }
-    let temp = timestamp;
-    timestamp -= this.lastTimestampOut;
-    this.lastTimestampOut = temp;
-    return encodeVarInt(timestamp + 1);
-  }
-  encodeBound(key) {
-    let output = new WrappedBuffer();
-    output.extend(this.encodeTimestampOut(key.timestamp));
-    output.extend(encodeVarInt(key.id.length));
-    output.extend(key.id);
-    return output;
-  }
-  getMinimalBound(prev, curr) {
-    if (curr.timestamp !== prev.timestamp) {
-      return this._bound(curr.timestamp);
-    } else {
-      let sharedPrefixBytes = 0;
-      let currKey = curr.id;
-      let prevKey = prev.id;
-      for (let i2 = 0; i2 < ID_SIZE; i2++) {
-        if (currKey[i2] !== prevKey[i2])
-          break;
-        sharedPrefixBytes++;
-      }
-      return this._bound(curr.timestamp, curr.id.subarray(0, sharedPrefixBytes + 1));
-    }
-  }
-};
-function compareUint8Array(a, b) {
-  for (let i2 = 0; i2 < a.byteLength; i2++) {
-    if (a[i2] < b[i2])
-      return -1;
-    if (a[i2] > b[i2])
-      return 1;
-  }
-  if (a.byteLength > b.byteLength)
-    return 1;
-  if (a.byteLength < b.byteLength)
-    return -1;
-  return 0;
-}
-function itemCompare(a, b) {
-  if (a.timestamp === b.timestamp) {
-    return compareUint8Array(a.id, b.id);
-  }
-  return a.timestamp - b.timestamp;
-}
-var NegentropySync = class {
-  relay;
-  storage;
-  neg;
-  filter;
-  subscription;
-  onhave;
-  onneed;
-  constructor(relay, storage, filter, params = {}) {
-    this.relay = relay;
-    this.storage = storage;
-    this.neg = new Negentropy(storage);
-    this.onhave = params.onhave;
-    this.onneed = params.onneed;
-    this.filter = filter;
-    this.subscription = this.relay.prepareSubscription([{}], { label: params.label || "negentropy" });
-    this.subscription.oncustom = (data) => {
-      switch (data[0]) {
-        case "NEG-MSG": {
-          if (data.length < 3) {
-            console.warn(`got invalid NEG-MSG from ${this.relay.url}: ${data}`);
-          }
-          try {
-            const response = this.neg.reconcile(data[2], this.onhave, this.onneed);
-            if (response) {
-              this.relay.send(`["NEG-MSG", "${this.subscription.id}", "${response}"]`);
-            } else {
-              this.close();
-              params.onclose?.();
-            }
-          } catch (error) {
-            console.error("negentropy reconcile error:", error);
-            params?.onclose?.(`reconcile error: ${error}`);
-          }
-          break;
-        }
-        case "NEG-CLOSE": {
-          const reason = data[2];
-          console.warn("negentropy error:", reason);
-          params.onclose?.(reason);
-          break;
-        }
-        case "NEG-ERR": {
-          params.onclose?.();
-        }
-      }
-    };
-  }
-  async start() {
-    const initMsg = this.neg.initiate();
-    this.relay.send(`["NEG-OPEN","${this.subscription.id}",${JSON.stringify(this.filter)},"${initMsg}"]`);
-  }
-  close() {
-    this.relay.send(`["NEG-CLOSE","${this.subscription.id}"]`);
-    this.subscription.close();
-  }
-};
-
-// nip98.ts
-var nip98_exports = {};
-__export(nip98_exports, {
-  getToken: () => getToken,
-  hashPayload: () => hashPayload,
-  unpackEventFromToken: () => unpackEventFromToken,
-  validateEvent: () => validateEvent2,
-  validateEventKind: () => validateEventKind,
-  validateEventMethodTag: () => validateEventMethodTag,
-  validateEventPayloadTag: () => validateEventPayloadTag,
-  validateEventTimestamp: () => validateEventTimestamp,
-  validateEventUrlTag: () => validateEventUrlTag,
-  validateToken: () => validateToken
-});
-var _authorizationScheme = "Nostr ";
-async function getToken(loginUrl, httpMethod, sign, includeAuthorizationScheme = false, payload) {
-  const event = {
-    kind: HTTPAuth,
-    tags: [
-      ["u", loginUrl],
-      ["method", httpMethod]
-    ],
-    created_at: Math.round(new Date().getTime() / 1e3),
-    content: ""
-  };
-  if (payload) {
-    event.tags.push(["payload", hashPayload(payload)]);
-  }
-  const signedEvent = await sign(event);
-  const authorizationScheme = includeAuthorizationScheme ? _authorizationScheme : "";
-  return authorizationScheme + base64.encode(utf8Encoder$1.encode(JSON.stringify(signedEvent)));
-}
-async function validateToken(token, url, method) {
-  const event = await unpackEventFromToken(token).catch((error) => {
-    throw error;
-  });
-  const valid = await validateEvent2(event, url, method).catch((error) => {
-    throw error;
-  });
-  return valid;
-}
-async function unpackEventFromToken(token) {
-  if (!token) {
-    throw new Error("Missing token");
-  }
-  token = token.replace(_authorizationScheme, "");
-  const eventB64 = utf8Decoder.decode(base64.decode(token));
-  if (!eventB64 || eventB64.length === 0 || !eventB64.startsWith("{")) {
-    throw new Error("Invalid token");
-  }
-  const event = JSON.parse(eventB64);
-  return event;
-}
-function validateEventTimestamp(event) {
-  if (!event.created_at) {
-    return false;
-  }
-  return Math.round(new Date().getTime() / 1e3) - event.created_at < 60;
-}
-function validateEventKind(event) {
-  return event.kind === HTTPAuth;
-}
-function validateEventUrlTag(event, url) {
-  const urlTag = event.tags.find((t) => t[0] === "u");
-  if (!urlTag) {
-    return false;
-  }
-  return urlTag.length > 0 && urlTag[1] === url;
-}
-function validateEventMethodTag(event, method) {
-  const methodTag = event.tags.find((t) => t[0] === "method");
-  if (!methodTag) {
-    return false;
-  }
-  return methodTag.length > 0 && methodTag[1].toLowerCase() === method.toLowerCase();
-}
-function hashPayload(payload) {
-  const hash = sha256(utf8Encoder$1.encode(JSON.stringify(payload)));
-  return bytesToHex$1(hash);
-}
-function validateEventPayloadTag(event, payload) {
-  const payloadTag = event.tags.find((t) => t[0] === "payload");
-  if (!payloadTag) {
-    return false;
-  }
-  const payloadHash = hashPayload(payload);
-  return payloadTag.length > 0 && payloadTag[1] === payloadHash;
-}
-async function validateEvent2(event, url, method, body) {
-  if (!verifyEvent(event)) {
-    throw new Error("Invalid nostr event, signature invalid");
-  }
-  if (!validateEventKind(event)) {
-    throw new Error("Invalid nostr event, kind invalid");
-  }
-  if (!validateEventTimestamp(event)) {
-    throw new Error("Invalid nostr event, created_at timestamp invalid");
-  }
-  if (!validateEventUrlTag(event, url)) {
-    throw new Error("Invalid nostr event, url tag invalid");
-  }
-  if (!validateEventMethodTag(event, method)) {
-    throw new Error("Invalid nostr event, method tag invalid");
-  }
-  if (Boolean(body) && typeof body === "object" && Object.keys(body).length > 0) {
-    if (!validateEventPayloadTag(event, body)) {
-      throw new Error("Invalid nostr event, payload tag does not match request body hash");
-    }
-  }
-  return true;
 }
 
 // pure.ts
@@ -43586,13 +39432,13 @@ var JS = class {
     return schnorr.utils.randomPrivateKey();
   }
   getPublicKey(secretKey) {
-    return bytesToHex$1(schnorr.getPublicKey(secretKey));
+    return bytesToHex(schnorr.getPublicKey(secretKey));
   }
   finalizeEvent(t, secretKey) {
     const event = t;
-    event.pubkey = bytesToHex$1(schnorr.getPublicKey(secretKey));
+    event.pubkey = bytesToHex(schnorr.getPublicKey(secretKey));
     event.id = getEventHash(event);
-    event.sig = bytesToHex$1(schnorr.sign(getEventHash(event), secretKey));
+    event.sig = bytesToHex(schnorr.sign(getEventHash(event), secretKey));
     event[verifiedSymbol] = true;
     return event;
   }
@@ -43621,7 +39467,7 @@ function serializeEvent(evt) {
 }
 function getEventHash(event) {
   let eventHash = sha256(utf8Encoder.encode(serializeEvent(event)));
-  return bytesToHex$1(eventHash);
+  return bytesToHex(eventHash);
 }
 var i = new JS();
 i.generateSecretKey;
@@ -43701,7 +39547,7 @@ useWebSocketImplementation(WebSocket$1);
  * @param {string[][]} tags
  */
 const createEvent = (privateKey, kind, content, tags) => {
-  const seckey = privateKey.startsWith('nsec') ? nip19_exports.decode(privateKey).data : hexToBytes(privateKey);
+  const seckey = privateKey.startsWith('nsec') ? decode(privateKey).data : hexToBytes(privateKey);
 
   const createdAt = Math.round(Date.now() / 1000);
   let event = {
@@ -43802,7 +39648,7 @@ async function run() {
     const privateKey = getInput('private-key');
     const content = getInput('content');
     const kind = Number(getInput('kind', { trimWhitespace: true }));
-    const tags = jsYaml.load(getInput('tags'));
+    const tags = load(getInput('tags'));
     setSecret(privateKey);
     const event = createEvent(privateKey, kind, content, tags);
     await publishEvent(relays, event);

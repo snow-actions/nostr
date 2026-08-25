@@ -1,5 +1,6 @@
 import WebSocket from 'ws';
-import { nip19, getPublicKey, finalizeEvent } from 'nostr-tools';
+import { finalizeEvent, getPublicKey } from 'nostr-tools/pure';
+import * as nip19 from 'nostr-tools/nip19';
 import { useWebSocketImplementation } from 'nostr-tools/pool';
 import { hexToBytes } from '@noble/hashes/utils';
 

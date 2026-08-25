@@ -1,5 +1,5 @@
 import * as core from '@actions/core';
-import yaml from 'js-yaml';
+import { load } from 'js-yaml';
 import { createEvent, publishEvent } from './nostr.js';
 
 export function isAllowedRelay(relay) {
@@ -23,7 +23,7 @@ async function run() {
     const privateKey = core.getInput('private-key');
     const content = core.getInput('content');
     const kind = Number(core.getInput('kind', { trimWhitespace: true }));
-    const tags = yaml.load(core.getInput('tags'));
+    const tags = load(core.getInput('tags'));
     core.setSecret(privateKey);
     const event = createEvent(privateKey, kind, content, tags);
     await publishEvent(relays, event);
