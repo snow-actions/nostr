@@ -1,6 +1,7 @@
 import * as core from '@actions/core';
 import { load } from 'js-yaml';
-import { createEvent, publishEvent } from './nostr.js';
+import { createEvent } from './event.js';
+import { publishEvent } from './publish.js';
 import { isAllowedRelay } from './relay.js';
 
 async function run() {
