@@ -11,8 +11,8 @@
   "scripts": {
     "lint": "eslint .",
     "package": "rimraf ./dist && rollup --config rollup.config.mjs",
-    "test": "node --test --test-isolation=none",
-    "test:coverage": "node --test --test-isolation=none --experimental-test-coverage --test-coverage-include=\"src/**/*.js\" --test-coverage-exclude=\"src/index.js\" --test-coverage-exclude=\"src/*.test.js\" --test-reporter=spec",
+    "test": "node --test",
+    "test:coverage": "node --test --experimental-test-coverage --test-coverage-include=\"src/**/*.js\" --test-coverage-exclude=\"src/index.js\" --test-coverage-exclude=\"src/*.test.js\" --test-reporter=spec",
     "all": "npm run lint && npm run package && npm run test"
   },
   "repository": {
