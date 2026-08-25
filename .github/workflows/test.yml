@@ -15,7 +15,24 @@ jobs:
         with:
           node-version: '24'
       - run: npm ci
-      - run: npm run test:coverage
+      - name: Test with coverage
+        shell: bash
+        run: |
+          set -o pipefail
+          npm run test:coverage | tee "$RUNNER_TEMP/test-coverage.log"
+      - name: Add coverage summary
+        shell: bash
+        run: |
+          {
+            echo '## Unit test coverage'
+            echo
+            echo '```text'
+            sed -n \
+              '/start of coverage report/,/end of coverage report/p' \
+              "$RUNNER_TEMP/test-coverage.log" |
+              sed '1d;$d'
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"
 
   e2e-test:
     runs-on: ubuntu-latest
