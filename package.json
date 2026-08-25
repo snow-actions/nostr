@@ -30,8 +30,8 @@
     "@actions/core": "^3.0.1",
     "@noble/hashes": "^1.6.1",
     "js-yaml": "^5.2.3",
-    "nostr-tools": "^2.19.4",
-    "ws": "^8.20.0"
+    "nostr-tools": "^2.24.1",
+    "ws": "^8.21.3"
   },
   "devDependencies": {
     "@jest/globals": "^30.3.0",
