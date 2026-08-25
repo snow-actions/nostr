@@ -6,30 +6,26 @@ import {
   verifyEvent,
 } from "nostr-tools";
 import { bytesToHex } from "@noble/hashes/utils.js";
+import { createEvent, publishEvent } from "./nostr.js";
 
 const mockWebSockets = [];
 const mockConnectionErrors = new Set();
 
-jest.unstable_mockModule("ws", () => {
-  class WebSocket {
-    constructor(url) {
-      if (mockConnectionErrors.has(url)) {
-        throw new Error("connection error");
-      }
-      this.url = url;
-      this.readyState = 1;
-      this.send = jest.fn();
-      this.close = jest.fn(() => {
-        this.readyState = WebSocket.CLOSED;
-      });
-      mockWebSockets.push(this);
+class FakeWebSocket {
+  constructor(url) {
+    if (mockConnectionErrors.has(url)) {
+      throw new Error("connection error");
     }
+    this.url = url;
+    this.readyState = 1;
+    this.send = jest.fn();
+    this.close = jest.fn(() => {
+      this.readyState = FakeWebSocket.CLOSED;
+    });
+    mockWebSockets.push(this);
   }
-  WebSocket.CLOSED = 3;
-  return { default: WebSocket };
-});
-
-const { createEvent, publishEvent } = await import("./nostr.js");
+}
+FakeWebSocket.CLOSED = 3;
 
 const event = { id: "event-id" };
 
@@ -91,7 +87,7 @@ test("createEvent rejects a malformed nsec", () => {
 });
 
 test("publishEvent resolves when all relays accept the event", async () => {
-  const result = publishEvent(["wss://relay-1", "wss://relay-2"], event);
+  const result = publishEvent(["wss://relay-1", "wss://relay-2"], event, FakeWebSocket);
 
   mockWebSockets.forEach(open);
   mockWebSockets.forEach((ws) => respond(ws, true));
@@ -106,7 +102,7 @@ test("publishEvent resolves when all relays accept the event", async () => {
 });
 
 test("publishEvent resolves when at least one relay accepts the event", async () => {
-  const result = publishEvent(["wss://relay-1", "wss://relay-2"], event);
+  const result = publishEvent(["wss://relay-1", "wss://relay-2"], event, FakeWebSocket);
 
   respond(mockWebSockets[0], false);
   respond(mockWebSockets[1], true);
@@ -115,7 +111,7 @@ test("publishEvent resolves when at least one relay accepts the event", async ()
 });
 
 test("publishEvent rejects when all relays reject the event", async () => {
-  const result = publishEvent(["wss://relay-1", "wss://relay-2"], event);
+  const result = publishEvent(["wss://relay-1", "wss://relay-2"], event, FakeWebSocket);
 
   mockWebSockets.forEach((ws) => respond(ws, false));
 
@@ -126,14 +122,14 @@ test("publishEvent rejects when WebSocket construction fails", async () => {
   jest.useFakeTimers();
   mockConnectionErrors.add("wss://relay-1");
 
-  await expect(publishEvent(["wss://relay-1"], event)).rejects.toBeUndefined();
+  await expect(publishEvent(["wss://relay-1"], event, FakeWebSocket)).rejects.toBeUndefined();
   expect(mockWebSockets).toHaveLength(0);
   expect(jest.getTimerCount()).toBe(0);
 });
 
 test("publishEvent rejects when relays time out", async () => {
   jest.useFakeTimers();
-  const result = publishEvent(["wss://relay-1"], event);
+  const result = publishEvent(["wss://relay-1"], event, FakeWebSocket);
 
   const expectation = expect(result).rejects.toBeUndefined();
   jest.advanceTimersByTime(3000);
@@ -144,7 +140,7 @@ test("publishEvent rejects when relays time out", async () => {
 
 test("publishEvent handles a WebSocket error and rejects on timeout", async () => {
   jest.useFakeTimers();
-  const result = publishEvent(["wss://relay-1"], event);
+  const result = publishEvent(["wss://relay-1"], event, FakeWebSocket);
   const error = new Error("socket error");
 
   mockWebSockets[0].onerror(error);
