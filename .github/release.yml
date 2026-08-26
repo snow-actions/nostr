@@ -1,0 +1,16 @@
+changelog:
+  exclude:
+    authors:
+      - snow-actions[bot]
+
+  categories:
+    - title: What's Changed
+      labels:
+        - "*"
+      exclude:
+        labels:
+          - dependencies
+
+    - title: Dependencies
+      labels:
+        - dependencies
