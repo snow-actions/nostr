@@ -27,8 +27,8 @@
   "dependencies": {
     "@actions/core": "^3.0.1",
     "@noble/hashes": "^2.3.0",
-    "js-yaml": "^5.2.3",
-    "nostr-tools": "^2.24.1"
+    "js-yaml": "^5.3.0",
+    "nostr-tools": "^2.24.2"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
